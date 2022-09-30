@@ -33,16 +33,12 @@ class Ego:
         with open('PSA_ADAS_W3_FC_2022-09-01_14-49_0054.MF4/Group_416.csv', 'rt') as f:
            reader = csv.reader(f)
            self.database = list(reader)
-           self.cameraPersonas = {}
-           self.leftRearRadarPersonas = {}
-           self.leftFrontRadarPersonas = {}
-           self.rightRearRadarPersonas = {}
-           self.rightFrontRadarPersonas = {}
-           self.vxvRef = vxvRef
-        self.axvRef = axvRef
-        self.vyvRef = vyvRef
-        self.ayvRef = ayvRef
-        self.psiDtOpt = psiDtOpt
+           self.T = {}
+           self.vxvRef = {}
+           self.axvRef = 1
+           self.vyvRef = {}
+           self.ayvRef = {}
+           self.psiDtOpt = {}
         for i in range(2,len(self.database[0])):
             sor = self.database[0][i].split('.')
             match sor[7]:

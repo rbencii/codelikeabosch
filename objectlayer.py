@@ -13,7 +13,10 @@ class Objects:
            self.rightRearRadarPersonas = {}
            self.rightFrontRadarPersonas = {}
         self.databaseLinePivot = 1
-        for i in range(2,len(self.database[0]),1):
+        self.cameraPosX = self.database[1][-3]
+        self.cameraPosY = self.database[1][-2]
+        self.cameraPosZ = self.database[1][-1]
+        for i in range(2,len(self.database[0])-3,1):
             sor = self.database[0][i].split('.')
             match sor[7]:
                 case "m_camData":
@@ -111,9 +114,7 @@ class Objects:
         self.__update__()
     def __update__(self):
         self.time = self.database[self.databaseLinePivot][1]
-        #for i in self.cameraPersonas:
-
-
-    
+        for i in self.cameraPersonas:
+            print(i,end="\n")
         self.databaseLinePivot = self.databaseLinePivot + 1
         pass
