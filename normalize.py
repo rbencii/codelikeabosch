@@ -1,18 +1,17 @@
 from operator import contains
 
 def normalize(key, value):
-    match key:
-        case contains('d'):  # distance
+        if 'd' in key:  # distance
             return value / 128
 
-        case contains('v'):  # velocity
+        elif 'v' in key:  # velocity
             return value / 256
 
-        case contains('a'):  # acceleration
+        elif 'a' in key:  # acceleration
             return value / 2048
 
-        case contains('y'):  # yaw
+        elif 'y' in key:  # yaw
             return value / 16384
 
-        case contains('p'):  # probability
+        elif 'p' in key:  # probability
             return value / 128
