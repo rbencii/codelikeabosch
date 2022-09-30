@@ -1,9 +1,7 @@
-from ui import UI
+from objectlayer import Objects
 
 if __name__ == '__main__':
     try:
-        UI = UI()
-        while True:
-            UI.update()
+       Objects()
     except KeyboardInterrupt:
         print("Script terminated")
