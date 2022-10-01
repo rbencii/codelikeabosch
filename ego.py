@@ -53,6 +53,9 @@ class Ego:
         limit=math.floor(float(self.T))+1
         while math.floor(float(self.T))<limit:
             self.iterator+=1
+            self.EndOfList = len(self.database)<=self.iterator
+            if(self.EndOfList):
+                return
             row = self.database[self.iterator]
             self.T = row[0]
 
