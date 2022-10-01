@@ -1,5 +1,6 @@
 
 import csv
+import math
 from normalize import normalize
 
 class Objects:
@@ -126,7 +127,16 @@ class Objects:
         if(self.EndOfList):
             return
         self.realObjects = []
-        self.time = self.database[self.databaseLinePivot][1]
+
+        self.time = self.database[self.databaseLinePivot][0]
+        limit=math.floor(float(self.time))+1
+        while math.floor(float(self.time))<limit:
+            self.databaseLinePivot+=1
+            self.EndOfList = len(self.database)<=self.databaseLinePivot
+            if(self.EndOfList):
+                return
+            self.time = self.database[self.databaseLinePivot][0]
+
         for i in self.cameraPersonas:
             self.cameraPersonas[i]["x"] = self.database[self.databaseLinePivot][self.cameraPersonas[i]["xIndex"]]
             self.cameraPersonas[i]["y"] = self.database[self.databaseLinePivot][self.cameraPersonas[i]["yIndex"]]
