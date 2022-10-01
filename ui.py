@@ -34,7 +34,7 @@ CARWIDTH = CARSIZE/2.4
 METERTOPIXEL = CARSIZE/4.65
 STREETSIZE = 500
 AXLEP = 3.43
-FPS = 60
+FPS = 20
 
 Files = [{"objektumok": "data/PSA_ADAS_W3_FC_2022-09-01_14-49_0054.MF4/Group_349.csv",
          "auto": 'data/PSA_ADAS_W3_FC_2022-09-01_14-49_0054.MF4/Group_416.csv'},
@@ -144,8 +144,8 @@ class MyGame(arcade.Window):
         if pause:
             return
 
-        egoObj.__update__(1.0/float(FPS))
-        objectLayer.__update__(1.0/float(FPS))
+        egoObj.__update__(1.0/FPS)
+        objectLayer.__update__(1.0/FPS)
         
         # v = s/t
         # egoObj.vxvRef = s meter / 1sec
@@ -205,7 +205,7 @@ class MyGame(arcade.Window):
         + "psiDtOpt: " + str(egoObj.psiDtOpt) + "\n"
         + "tAbsRefTime: " + str(egoObj.tAbsRefTime) + "\n"
         + "vxvRef: " + str(egoObj.vxvRef) + "\n"
-        + "vyvRef: " + str(egoObj.vyvRef))
+        + "vyvRef: " + str(egoObj.vyvRef) + "\n" + str(self.debugcnt))
 
         self.multi_line_breaks.text=cartext
         self.multi_line_breaks.x=screen_width-200
