@@ -10,9 +10,9 @@ from objectlayer import Objects
 
 SPRITE_SCALING = 0.5
 
-SCREEN_WIDTH = 800
-SCREEN_HEIGHT = 600
-SCREEN_TITLE = "Full Screen Example"
+SCREEN_WIDTH = 1200
+SCREEN_HEIGHT = 800
+SCREEN_TITLE = "Vehicle Radar Help System"
 
 # How many pixels to keep as a minimum margin between the character
 # and the edge of the screen.
@@ -40,7 +40,8 @@ Files = [{"objektumok":"data/PSA_ADAS_W3_FC_2022-09-01_14-49_0054.MF4/Group_349.
          "auto":'data/PSA_ADAS_W3_FC_2022-09-01_15-12_0059.MF4/Group_416.csv'},
          {"objektumok":"data/PSA_ADAS_W3_FC_2022-09-01_15-17_0060.MF4/Group_349.csv",
          "auto":'data/PSA_ADAS_W3_FC_2022-09-01_15-17_0060.MF4/Group_416.csv'}]
-ChoosenFile = 0
+Cars = ["car.png","car2.png"]
+ChoosenFile = 1
 """class Item(arcade.Sprite):
 
     def __init__(self, filename, sprite_scaling):
@@ -101,15 +102,20 @@ class MyGame(arcade.Window):
         width, height = self.get_size()
         self.set_viewport(0, width, 0, height)
         arcade.set_background_color(arcade.color.GRAY)
-        # self.set_update_rate(1/6000)
-        self.car = arcade.load_texture("car2.png")
         self.street = arcade.load_texture("street.png")
+        # self.set_update_rate(1/6000)
+        
+        self.setup()
+
+        self.create_buttons()
+
+    def setup(self,carType=0,):
+        self.car = arcade.load_texture(Cars[carType])
         self.streetX = 0
         self.streetY = 0
         self.slider = 100
         egoObj = Ego(Files[ChoosenFile]["auto"])
         objectLayer = Objects(Files[ChoosenFile]["objektumok"])
-        self.create_buttons()
 
     def on_update(self, delta_time):
         egoObj.__update__()
