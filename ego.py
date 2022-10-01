@@ -30,8 +30,8 @@ class Ego:
         self.ayvRef = ayvRef
         self.psiDtOpt = psiDtOpt """
     
-    def __init__(self, filePath):
-        with open('data/PSA_ADAS_W3_FC_2022-09-01_14-49_0054.MF4/Group_416.csv', 'rt') as f:
+    def __init__(self, filePath = 'data/PSA_ADAS_W3_FC_2022-09-01_14-49_0054.MF4/Group_416.csv'):
+        with open(filePath, 'rt') as f:
            self.iterator = 0
            reader = csv.reader(f)
            self.database = list(reader)
