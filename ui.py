@@ -1,11 +1,10 @@
 # win: pip3 install arcade
 
+import functools
 from glob import glob
 import arcade
 import arcade.gui
 import os
-import math
-#from tkinter import filedialog
 from ego import Ego
 from objectlayer import Objects
 
@@ -45,8 +44,8 @@ Files = [{"objektumok": "data/PSA_ADAS_W3_FC_2022-09-01_14-49_0054.MF4/Group_349
          {"objektumok": "data/PSA_ADAS_W3_FC_2022-09-01_15-17_0060.MF4/Group_349.csv",
          "auto": 'data/PSA_ADAS_W3_FC_2022-09-01_15-17_0060.MF4/Group_416.csv'}]
 Cars = ["car.png", "car2.png"]
-ChoosenFile = 1
-ChoosenCar = 0
+choosen_file = 1
+car_type = 1
 
 """class Item(arcade.Sprite):
 
@@ -115,15 +114,16 @@ class MyGame(arcade.Window):
 
         self.create_buttons()
 
-    def setup(self,carType=0):
+    def setup(self):
         global egoObj
         global objectLayer
-        self.car = arcade.load_texture(Cars[carType])
+        self.car = arcade.load_texture(Cars[car_type])
+        print(Cars[car_type])
         self.streetX = -100
         self.streetY = 0
         self.slider = 100
-        egoObj = Ego(Files[ChoosenFile]["auto"])
-        objectLayer = Objects(Files[ChoosenFile]["objektumok"])
+        egoObj = Ego(Files[choosen_file]["auto"])
+        objectLayer = Objects(Files[choosen_file]["objektumok"])
 
     def on_update(self, delta_time):
         egoObj.__update__()
@@ -409,15 +409,15 @@ class MyGame(arcade.Window):
         "font_color_pressed": arcade.color.WHITE,
     }
 
-    def choose_file(self, index):
-        global ChoosenFile
-        ChoosenFile = index
+    def select_file(self, event, index):
+        global choosen_file 
+        choosen_file = index
         self.setup()
 
-    def choose_car(self, index):
-        global ChoosenCar
-        ChoosenCar = index
-
+    def select_car(self, event, index):
+        global car_type 
+        car_type = index
+        self.setup()
 
     def create_buttons(self):
         BUTTON_WIDTH = 100
@@ -433,19 +433,19 @@ class MyGame(arcade.Window):
         self.v_box.add(start_button.with_space_around(
             top=PADDING, left=PADDING))
 
-        ind = 0
-        for ind in range(len(Files)):
+        for i in range(len(Files)):
             button = arcade.gui.UIFlatButton(
-                text="File_" + str(ind+1), width=BUTTON_WIDTH, style=self.button_style)
-            self.v_box.add(button.with_space_around(
-                top=PADDING, left=PADDING))
-            button.on_click = self.choose_file(ind)
+                text="Test_" + str(i), width=BUTTON_WIDTH, style=self.button_style)
+            button.on_click = functools.partial(self.select_file, index=i)
+            self.v_box.add(button.with_space_around(top=PADDING, left=PADDING))
 
-        for ind in range(len(Cars)):
-            button = arcade.gui.UIFlatButton(text=Cars[ind], width=BUTTON_WIDTH, style=self.button_style)
-            self.v_box.add(button.with_space_around(
-                top=PADDING, left=PADDING))
-            button.on_click = self.choose_car(ind)
+        for i in range(len(Cars)):
+            button = arcade.gui.UIFlatButton(
+                text=Cars[i], width=BUTTON_WIDTH, style=self.button_style)
+            button.on_click = functools.partial(self.select_car, index=i)
+            self.v_box.add(button.with_space_around(top=PADDING, left=PADDING))
+            
+            
 
         self.button_manager.add(
             arcade.gui.UIAnchorWidget(
