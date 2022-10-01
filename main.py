@@ -5,4 +5,4 @@ if __name__ == '__main__':
     try:
         ui_run()
     except KeyboardInterrupt:
-        print("Script terminated")
+        print("The Vehicle Radar Help System has been forcefuly terminated.")
