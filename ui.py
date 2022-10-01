@@ -34,6 +34,7 @@ CARWIDTH = CARSIZE/2.4
 METERTOPIXEL = CARSIZE/4.65
 STREETSIZE = 500
 AXLEP = 3.43
+FPS = 60
 
 Files = [{"objektumok": "data/PSA_ADAS_W3_FC_2022-09-01_14-49_0054.MF4/Group_349.csv",
          "auto": 'data/PSA_ADAS_W3_FC_2022-09-01_14-49_0054.MF4/Group_416.csv'},
@@ -109,7 +110,18 @@ class MyGame(arcade.Window):
         self.set_viewport(0, width, 0, height)
         arcade.set_background_color(arcade.color.GRAY)
         self.street = arcade.load_texture("street.png")
-        self.set_update_rate(1)
+        self.set_update_rate(1/FPS)
+        self.debugcnt=0.0
+
+        self.objt=arcade.Text("", 0, 0, arcade.color.BABY_BLUE, 12, multiline=True, width=300,anchor_y="bottom")
+        self.multi_line_breaks = arcade.Text(
+            "",
+            0,0,
+            arcade.color.BLACK,
+            22 / 2,
+            multiline=True,
+            width=300,
+        )
 
         self.setup()
 
@@ -127,12 +139,14 @@ class MyGame(arcade.Window):
         objectLayer = Objects(Files[choosen_file]["objektumok"])
 
     def on_update(self, delta_time):
+        self.debugcnt+=1.0
         global pause
         if pause:
             return
 
-        egoObj.__update__()
-        objectLayer.__update__()
+        egoObj.__update__(1.0/float(FPS))
+        objectLayer.__update__(1.0/float(FPS))
+        
         # v = s/t
         # egoObj.vxvRef = s meter / 1sec
         # s = egoObj.vxvRef
@@ -192,17 +206,11 @@ class MyGame(arcade.Window):
         + "tAbsRefTime: " + str(egoObj.tAbsRefTime) + "\n"
         + "vxvRef: " + str(egoObj.vxvRef) + "\n"
         + "vyvRef: " + str(egoObj.vyvRef))
-                         
-        multi_line_breaks = arcade.Text(
-            cartext,
-            screen_width-200, screen_height-20,
-            arcade.color.BLACK,
-            22 / 2,
-            multiline=True,
-            width=300,
-        )
 
-        multi_line_breaks.draw()
+        self.multi_line_breaks.text=cartext
+        self.multi_line_breaks.x=screen_width-200
+        self.multi_line_breaks.y=screen_height-20
+        self.multi_line_breaks.draw()
         # Objects
 
         # koordinatarendszer
@@ -221,6 +229,7 @@ class MyGame(arcade.Window):
 
         #Objects
         #print(len(objectLayer.realObjects)) 
+        objectText=""
         for i in range(len(objectLayer.realObjects)):
             objektumx, objektumy = carspacetoscreenspace(
                 origox, origoy, 1000*objectLayer.realObjects[i]["x"], 1000*objectLayer.realObjects[i]["y"], METERTOPIXEL)
@@ -255,7 +264,7 @@ class MyGame(arcade.Window):
                 arcade.draw_point(objektumx, objektumy,
                                   arcade.color.ROSE_RED, 25)
             # Object text
-            objectText = ("Object id: " + str(i))
+            objectText += ("Object id: " + str(i))
             if (objectLayer.realObjects[i].keys().__contains__("type")):
                 if (objectLayer.realObjects[i]["type"] == "0"):
                     objectText += (
@@ -287,7 +296,10 @@ class MyGame(arcade.Window):
             objectText += (
                 "vy: " + str(objectLayer.realObjects[i]["vy"]) + "\n")
 
-            arcade.Text(objectText, screen_width-200, screen_height-600, arcade.color.BABY_BLUE, 12, multiline=True, width=300)
+        
+        self.objt.x=screen_width-300
+        self.objt.text=objectText
+        self.objt.draw()
 
         # radarjobbelso
         radarcarx, radarcary = carspacetoscreenspace(origox, origoy,
@@ -391,6 +403,9 @@ class MyGame(arcade.Window):
 
         arcade.draw_lines(point_list, arcade.color.RED_DEVIL, 3)
 
+        arcade.draw_point(100,self.debugcnt,arcade.color.BLACK,30)
+
+        # draw manager for buttons
         self.button_manager.draw()
 
 
