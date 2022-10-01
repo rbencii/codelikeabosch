@@ -109,7 +109,7 @@ class MyGame(arcade.Window):
         self.set_viewport(0, width, 0, height)
         arcade.set_background_color(arcade.color.GRAY)
         self.street = arcade.load_texture("street.png")
-        # self.set_update_rate(1/6000)
+        self.set_update_rate(1)
 
         self.setup()
 
@@ -168,21 +168,27 @@ class MyGame(arcade.Window):
         # auto
         arcade.draw_texture_rectangle(
             centerX, centerY, CARSIZE, CARSIZE, self.car)
-        arcade.draw_text("iterator: " + str(egoObj.iterator),
-                         screen_width-200, screen_height-20)
-        arcade.draw_text("T: " + egoObj.T, screen_width-200, screen_height-50)
-        arcade.draw_text("axvRef: " + str(egoObj.axvRef),
-                         screen_width-200, screen_height-80)
-        arcade.draw_text("ayvRef: " + str(egoObj.ayvRef),
-                         screen_width-200, screen_height-110)
-        arcade.draw_text("psiDtOpt: " + str(egoObj.psiDtOpt),
-                         screen_width-200, screen_height-140)
-        arcade.draw_text("tAbsRefTime: " + str(egoObj.tAbsRefTime),
-                         screen_width-200, screen_height-170)
-        arcade.draw_text("vxvRef: " + str(egoObj.vxvRef),
-                         screen_width-200, screen_height-200)
-        arcade.draw_text("vyvRef: " + str(egoObj.vyvRef),
-                         screen_width-200, screen_height-230)
+
+        cartext=""
+        cartext+=("iterator: " + str(egoObj.iterator) + "\n"
+        + "T: " + egoObj.T + "\n"
+        + "axvRef: " + str(egoObj.axvRef) + "\n"
+        + "ayvRef: " + str(egoObj.ayvRef) + "\n"
+        + "psiDtOpt: " + str(egoObj.psiDtOpt) + "\n"
+        + "tAbsRefTime: " + str(egoObj.tAbsRefTime) + "\n"
+        + "vxvRef: " + str(egoObj.vxvRef) + "\n"
+        + "vyvRef: " + str(egoObj.vyvRef))
+                         
+        multi_line_breaks = arcade.Text(
+            cartext,
+            screen_width-200, screen_height-20,
+            arcade.color.BLACK,
+            22 / 2,
+            multiline=True,
+            width=300,
+        )
+
+        multi_line_breaks.draw()
         # Objects
 
         # koordinatarendszer
