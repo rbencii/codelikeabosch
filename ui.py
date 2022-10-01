@@ -105,7 +105,7 @@ class MyGame(arcade.Window):
 
         carheight=500
         carwidth=carheight/2.4
-        axlep=2.8
+        axlep=3.43
         arcade.draw_texture_rectangle(screen_width/2.0, screen_height/2.0, carheight, carheight, self.car)
 
         #koordinatarendszer
@@ -117,7 +117,7 @@ class MyGame(arcade.Window):
         
         
 
-        metertopixel=118
+        metertopixel=carheight/4.65
 
         #radarbalelso
         radarcarx=carspacetoscreenspace(origox,origoy,
