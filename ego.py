@@ -1,4 +1,5 @@
 import csv
+import math
 from normalize import normalize
 
 class Ego:
@@ -48,6 +49,13 @@ class Ego:
             return
         row = self.database[self.iterator]
         self.T = row[0]
+
+        limit=math.floor(float(self.T))+1
+        while math.floor(float(self.T))<limit:
+            self.iterator+=1
+            row = self.database[self.iterator]
+            self.T = row[0]
+
         self.axvRef = normalize("acceleration", row[1])
         self.ayvRef = normalize("acceleration", row[2])
         self.psiDtOpt = normalize("yaw", row[3])
