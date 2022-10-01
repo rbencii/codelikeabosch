@@ -443,7 +443,7 @@ class MyGame(arcade.Window):
         self.objt.text=objectText
         self.objt.draw()
         if pause:
-            arcade.draw_text("Pause", 10, 20, arcade.color.BLACK, 14)
+            arcade.draw_text("Pause", 20, 50, arcade.color.BLACK, 14)
         # draw manager for buttons
         self.button_manager.draw()
         self.slider_manager.draw()
@@ -688,7 +688,7 @@ class MyGame(arcade.Window):
         self.slider_manager.enable()
         STEPS = 100
         ui_slider = UISlider(value=float(egoObj.iterator)/float(egoObj.highestit)*100, width=400, height=50)
-        label = arcade.gui.UILabel(text=f"Iteration: {egoObj.iterator:02.0f}")
+        label = arcade.gui.UILabel(text=f"Iteration: {egoObj.iterator:02.0f}", width=400, height=50, align="center")
 
         @ui_slider.event()
         def on_change(event: UIOnChangeEvent):  
