@@ -193,14 +193,6 @@ class MyGame(arcade.Window):
 
         origox = centerX
         origoy = centerY-CARSIZE/AXLEP
-        # radarbalelso
-        radarcarx, radarcary = carspacetoscreenspace(origox, origoy,
-                                                     egoObj.X_POSITION_CORNER_RADAR_LEFT_FRONT,
-                                                     egoObj.Y_POSITION_CORNER_RADAR_LEFT_FRONT, METERTOPIXEL)
-        arcade.draw_point(radarcarx, radarcary, arcade.color.AMARANTH_PINK, 10)
-
-        origox = centerX
-        origoy = centerY-CARSIZE/AXLEP
 
 
         cameraposX,cameraposY=carspacetoscreenspace(origox,origoy,float(objectLayer.cameraPosX),float(objectLayer.cameraPosY),METERTOPIXEL)
