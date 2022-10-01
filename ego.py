@@ -1,4 +1,5 @@
 import csv
+from normalize import normalize
 
 class Ego:
     ANGLE_AZIMUTH_CORNER_RADAR_LEFT_FRONT = 42
@@ -41,25 +42,25 @@ class Ego:
         self.iterator += 1;
         row = self.database[self.iterator]
         self.T = row[0]
-        self.axvRef = row[1]
-        self.ayvRef = row[2]
-        self.psiDtOpt = row[3]
+        self.axvRef = normalize("acceleration", row[1])
+        self.ayvRef = normalize("acceleration", row[2])
+        self.psiDtOpt = normalize("yaw", row[3])
         self.tAbsRefTime = row[4]
-        self.vxvRef = row[5]
-        self.vyvRef = row[6]
+        self.vxvRef = normalize("velocity", row[5])
+        self.vyvRef = normalize("velocity", row[6])
 
     def printCurrent(self):
         print("iterator: " + str(self.iterator))
         print("T: " + self.T)
-        print("axvRef: " + self.axvRef)
-        print("ayvRef: " + self.ayvRef)
-        print("psiDtOpt: " + self.psiDtOpt)
-        print("tAbsRefTime: " + self.tAbsRefTime)
-        print("vxvRef: " + self.vxvRef)
-        print("vyvRef: " + self.vyvRef)
+        print("axvRef: " + str(self.axvRef))
+        print("ayvRef: " + str(self.ayvRef))
+        print("psiDtOpt: " + str(self.psiDtOpt))
+        print("tAbsRefTime: " + str(self.tAbsRefTime))
+        print("vxvRef: " + str(self.vxvRef))
+        print("vyvRef: " + str(self.vyvRef))
         
                 
-"""
+#"""
 #sample
 
 x = Ego(None)
