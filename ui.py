@@ -36,16 +36,18 @@ METERTOPIXEL = CARSIZE/4.65
 STREETSIZE = 500
 AXLEP = 3.43
 
-Files = [{"objektumok":"data/PSA_ADAS_W3_FC_2022-09-01_14-49_0054.MF4/Group_349.csv",
-         "auto":'data/PSA_ADAS_W3_FC_2022-09-01_14-49_0054.MF4/Group_416.csv'},
-         {"objektumok":"data/PSA_ADAS_W3_FC_2022-09-01_15-03_0057.MF4/Group_349.csv",
-         "auto":'data/PSA_ADAS_W3_FC_2022-09-01_15-03_0057.MF4/Group_416.csv'},
-         {"objektumok":"data/PSA_ADAS_W3_FC_2022-09-01_15-12_0059.MF4/Group_349.csv",
-         "auto":'data/PSA_ADAS_W3_FC_2022-09-01_15-12_0059.MF4/Group_416.csv'},
-         {"objektumok":"data/PSA_ADAS_W3_FC_2022-09-01_15-17_0060.MF4/Group_349.csv",
-         "auto":'data/PSA_ADAS_W3_FC_2022-09-01_15-17_0060.MF4/Group_416.csv'}]
-Cars = ["car.png","car2.png"]
+Files = [{"objektumok": "data/PSA_ADAS_W3_FC_2022-09-01_14-49_0054.MF4/Group_349.csv",
+         "auto": 'data/PSA_ADAS_W3_FC_2022-09-01_14-49_0054.MF4/Group_416.csv'},
+         {"objektumok": "data/PSA_ADAS_W3_FC_2022-09-01_15-03_0057.MF4/Group_349.csv",
+         "auto": 'data/PSA_ADAS_W3_FC_2022-09-01_15-03_0057.MF4/Group_416.csv'},
+         {"objektumok": "data/PSA_ADAS_W3_FC_2022-09-01_15-12_0059.MF4/Group_349.csv",
+         "auto": 'data/PSA_ADAS_W3_FC_2022-09-01_15-12_0059.MF4/Group_416.csv'},
+         {"objektumok": "data/PSA_ADAS_W3_FC_2022-09-01_15-17_0060.MF4/Group_349.csv",
+         "auto": 'data/PSA_ADAS_W3_FC_2022-09-01_15-17_0060.MF4/Group_416.csv'}]
+Cars = ["car.png", "car2.png"]
 ChoosenFile = 1
+ChoosenCar = 0
+
 """class Item(arcade.Sprite):
 
     def __init__(self, filename, sprite_scaling):
@@ -108,12 +110,12 @@ class MyGame(arcade.Window):
         arcade.set_background_color(arcade.color.GRAY)
         self.street = arcade.load_texture("street.png")
         # self.set_update_rate(1/6000)
-        
+
         self.setup()
 
         self.create_buttons()
 
-    def setup(self,carType=0,):
+    def setup(self,carType=0):
         global egoObj
         global objectLayer
         self.car = arcade.load_texture(Cars[carType])
@@ -197,82 +199,110 @@ class MyGame(arcade.Window):
                                                      egoObj.Y_POSITION_CORNER_RADAR_LEFT_FRONT, METERTOPIXEL)
         arcade.draw_point(radarcarx, radarcary, arcade.color.AMARANTH_PINK, 10)
 
-        origox=centerX
-        origoy=centerY-CARSIZE/AXLEP
+        origox = centerX
+        origoy = centerY-CARSIZE/AXLEP
+
+
+        cameraposX,cameraposY=carspacetoscreenspace(origox,origoy,float(objectLayer.cameraPosX),float(objectLayer.cameraPosY),METERTOPIXEL)
+        arcade.draw_point(cameraposX,cameraposY,arcade.color.LIME_GREEN,20)
+        arcade.draw_text("Camera",cameraposX,cameraposY,anchor_x="center",anchor_y="center")
 
         #Objects
         #print(len(objectLayer.realObjects)) 
         for i in range(len(objectLayer.realObjects)):
-            objektumx,objektumy=carspacetoscreenspace(origox,origoy,1000*objectLayer.realObjects[i]["x"],1000*objectLayer.realObjects[i]["y"],METERTOPIXEL)
+            objektumx, objektumy = carspacetoscreenspace(
+                origox, origoy, 1000*objectLayer.realObjects[i]["x"], 1000*objectLayer.realObjects[i]["y"], METERTOPIXEL)
             #print(str(i),end=": ")
-            #print(objectLayer.realObjects[i])
-            if(objectLayer.realObjects[i]["x"] > -0.5 and objectLayer.realObjects[i]["x"] < 2):
+            # print(objectLayer.realObjects[i])
+            if (objectLayer.realObjects[i]["x"] > -0.5 and objectLayer.realObjects[i]["x"] < 2):
                 continue
-            #Object texture
-            if(objectLayer.realObjects[i].keys().__contains__("type")):
-                if(objectLayer.realObjects[i]["type"]=="0"):
-                    arcade.draw_point(objektumx,objektumy,arcade.color.ROSE_RED,20)
-                elif(objectLayer.realObjects[i]["type"]=="1"):
-                    arcade.draw_point(objektumx,objektumy,arcade.color.DARK_BLUE,35)
-                elif(objectLayer.realObjects[i]["type"]=="2"):
-                    arcade.draw_point(objektumx,objektumy,arcade.color.FERN_GREEN,29)
-                elif(objectLayer.realObjects[i]["type"]=="3"):
-                    arcade.draw_point(objektumx,objektumy,arcade.color.AMARANTH_PURPLE,22)
-                elif(objectLayer.realObjects[i]["type"]=="4"):
-                    arcade.draw_point(objektumx,objektumy,arcade.color.ANDROID_GREEN,22)
-                elif(objectLayer.realObjects[i]["type"]=="5"):
-                    arcade.draw_point(objektumx,objektumy,arcade.color.BABY_PINK,16)
-                elif(objectLayer.realObjects[i]["type"]=="6"):
-                    arcade.draw_point(objektumx,objektumy,arcade.color.STAR_COMMAND_BLUE,32)
+            # Object texture
+            if (objectLayer.realObjects[i].keys().__contains__("type")):
+                if (objectLayer.realObjects[i]["type"] == "0"):
+                    arcade.draw_point(objektumx, objektumy,
+                                      arcade.color.ROSE_RED, 20)
+                elif (objectLayer.realObjects[i]["type"] == "1"):
+                    arcade.draw_point(objektumx, objektumy,
+                                      arcade.color.DARK_BLUE, 35)
+                elif (objectLayer.realObjects[i]["type"] == "2"):
+                    arcade.draw_point(objektumx, objektumy,
+                                      arcade.color.FERN_GREEN, 29)
+                elif (objectLayer.realObjects[i]["type"] == "3"):
+                    arcade.draw_point(objektumx, objektumy,
+                                      arcade.color.AMARANTH_PURPLE, 22)
+                elif (objectLayer.realObjects[i]["type"] == "4"):
+                    arcade.draw_point(objektumx, objektumy,
+                                      arcade.color.ANDROID_GREEN, 22)
+                elif (objectLayer.realObjects[i]["type"] == "5"):
+                    arcade.draw_point(objektumx, objektumy,
+                                      arcade.color.BABY_PINK, 16)
+                elif (objectLayer.realObjects[i]["type"] == "6"):
+                    arcade.draw_point(objektumx, objektumy,
+                                      arcade.color.STAR_COMMAND_BLUE, 32)
             else:
-                arcade.draw_point(objektumx,objektumy,arcade.color.ROSE_RED,25)
-            #Object text
-            arcade.draw_text("Object id: " + str(i),screen_width-310,33*i+40)
-            if(objectLayer.realObjects[i].keys().__contains__("type")):
-                if(objectLayer.realObjects[i]["type"]=="0"):
-                    arcade.draw_text("Type: unknown" ,screen_width-220,33*i+40,arcade.color.ROSE_RED)
-                elif(objectLayer.realObjects[i]["type"]=="1"):
-                    arcade.draw_text("Type: truck" ,screen_width-220,33*i+40,arcade.color.DARK_BLUE)
-                elif(objectLayer.realObjects[i]["type"]=="2"):
-                    arcade.draw_text("Type: car" ,screen_width-220,33*i+40,arcade.color.FERN_GREEN)
-                elif(objectLayer.realObjects[i]["type"]=="3"):
-                    arcade.draw_text("Type: motorbike" ,screen_width-220,33*i+40,arcade.color.AMARANTH_PURPLE)
-                elif(objectLayer.realObjects[i]["type"]=="4"):
-                    arcade.draw_text("Type: cyclist" ,screen_width-220,33*i+40,arcade.color.ANDROID_GREEN)
-                elif(objectLayer.realObjects[i]["type"]=="5"):
-                    arcade.draw_text("Type: pedestrian" ,screen_width-220,33*i+40,arcade.color.BABY_PINK)
-                elif(objectLayer.realObjects[i]["type"]=="6"):
-                    arcade.draw_text("Type: truck/car" ,screen_width-220,33*i+40,arcade.color.STAR_COMMAND_BLUE)
+                arcade.draw_point(objektumx, objektumy,
+                                  arcade.color.ROSE_RED, 25)
+            # Object text
+            arcade.draw_text("Object id: " + str(i), screen_width-310, 33*i+40)
+            if (objectLayer.realObjects[i].keys().__contains__("type")):
+                if (objectLayer.realObjects[i]["type"] == "0"):
+                    arcade.draw_text(
+                        "Type: unknown", screen_width-220, 33*i+40, arcade.color.ROSE_RED)
+                elif (objectLayer.realObjects[i]["type"] == "1"):
+                    arcade.draw_text("Type: truck", screen_width -
+                                     220, 33*i+40, arcade.color.DARK_BLUE)
+                elif (objectLayer.realObjects[i]["type"] == "2"):
+                    arcade.draw_text("Type: car", screen_width -
+                                     220, 33*i+40, arcade.color.FERN_GREEN)
+                elif (objectLayer.realObjects[i]["type"] == "3"):
+                    arcade.draw_text(
+                        "Type: motorbike", screen_width-220, 33*i+40, arcade.color.AMARANTH_PURPLE)
+                elif (objectLayer.realObjects[i]["type"] == "4"):
+                    arcade.draw_text(
+                        "Type: cyclist", screen_width-220, 33*i+40, arcade.color.ANDROID_GREEN)
+                elif (objectLayer.realObjects[i]["type"] == "5"):
+                    arcade.draw_text(
+                        "Type: pedestrian", screen_width-220, 33*i+40, arcade.color.BABY_PINK)
+                elif (objectLayer.realObjects[i]["type"] == "6"):
+                    arcade.draw_text(
+                        "Type: truck/car", screen_width-220, 33*i+40, arcade.color.STAR_COMMAND_BLUE)
             else:
-                arcade.draw_text("Type: unknown" ,screen_width-220,33*i+40,arcade.color.ROSE_RED)
-            arcade.draw_text("vx: " + str(objectLayer.realObjects[i]["vx"]),screen_width-110,33*i+40) 
-            arcade.draw_text("X: " + str(objectLayer.realObjects[i]["x"]),screen_width-310,33*i+22)
-            arcade.draw_text("Y: " + str(objectLayer.realObjects[i]["y"]),screen_width-220,33*i+22)
-            arcade.draw_text("vy: " + str(objectLayer.realObjects[i]["vy"]),screen_width-110,33*i+22)
+                arcade.draw_text("Type: unknown", screen_width -
+                                 220, 33*i+40, arcade.color.ROSE_RED)
+            arcade.draw_text(
+                "vx: " + str(objectLayer.realObjects[i]["vx"]), screen_width-110, 33*i+40)
+            arcade.draw_text(
+                "X: " + str(objectLayer.realObjects[i]["x"]), screen_width-310, 33*i+22)
+            arcade.draw_text(
+                "Y: " + str(objectLayer.realObjects[i]["y"]), screen_width-220, 33*i+22)
+            arcade.draw_text(
+                "vy: " + str(objectLayer.realObjects[i]["vy"]), screen_width-110, 33*i+22)
 
-        #radarjobbelso
-        radarcarx,radarcary=carspacetoscreenspace(origox,origoy,
-        egoObj.X_POSITION_CORNER_RADAR_RIGHT_FRONT,
-        egoObj.Y_POSITION_CORNER_RADAR_RIGHT_FRONT,METERTOPIXEL)
-        arcade.draw_point(radarcarx,radarcary,arcade.color.AMARANTH_PINK,10)
+        # radarjobbelso
+        radarcarx, radarcary = carspacetoscreenspace(origox, origoy,
+                                                     egoObj.X_POSITION_CORNER_RADAR_RIGHT_FRONT,
+                                                     egoObj.Y_POSITION_CORNER_RADAR_RIGHT_FRONT, METERTOPIXEL)
+        arcade.draw_point(radarcarx, radarcary, arcade.color.AMARANTH_PINK, 10)
 
         radarAngle = 90+egoObj.ANGLE_AZIMUTH_CORNER_RADAR_RIGHT_FRONT
-        tmpList=[radarAngle,90]
+        tmpList = [radarAngle, 90]
         tmpList.sort()
         startAngle,endAngle=tuple(tmpList)
         arcade.draw_arc_filled(radarcarx,radarcary,500,500,arcade.color.AMARANTH_PINK,startAngle,endAngle)
+        arcade.draw_text("RFCorner Radar",radarcarx,radarcary,anchor_x="left",anchor_y="bottom",multiline=True,width=50)
 
-        #radarbalelso
-        radarcarx,radarcary=carspacetoscreenspace(origox,origoy,
-        egoObj.X_POSITION_CORNER_RADAR_LEFT_FRONT,
-        egoObj.Y_POSITION_CORNER_RADAR_LEFT_FRONT,METERTOPIXEL)
-        arcade.draw_point(radarcarx,radarcary,arcade.color.AMARANTH_PINK,10)
+        # radarbalelso
+        radarcarx, radarcary = carspacetoscreenspace(origox, origoy,
+                                                     egoObj.X_POSITION_CORNER_RADAR_LEFT_FRONT,
+                                                     egoObj.Y_POSITION_CORNER_RADAR_LEFT_FRONT, METERTOPIXEL)
+        arcade.draw_point(radarcarx, radarcary, arcade.color.AMARANTH_PINK, 10)
 
         radarAngle = 90+egoObj.ANGLE_AZIMUTH_CORNER_RADAR_LEFT_FRONT
-        tmpList=[radarAngle,90]
+        tmpList = [radarAngle, 90]
         tmpList.sort()
         startAngle,endAngle=tuple(tmpList)
         arcade.draw_arc_filled(radarcarx,radarcary,500,500,arcade.color.AMARANTH_PINK,startAngle,endAngle)
+        arcade.draw_text("LFCorner Radar",radarcarx,radarcary,anchor_x="right",anchor_y="bottom",multiline=True,width=50)
 
         # radarbalhatso
         radarcarx, radarcary = carspacetoscreenspace(origox, origoy,
@@ -281,10 +311,11 @@ class MyGame(arcade.Window):
         arcade.draw_point(radarcarx, radarcary, arcade.color.AMARANTH_PINK, 10)
 
         radarAngle = 90+egoObj.ANGLE_AZIMUTH_CORNER_RADAR_LEFT_REAR
-        tmpList=[radarAngle,270]
+        tmpList = [radarAngle, 270]
         tmpList.sort()
         startAngle,endAngle=tuple(tmpList)
         arcade.draw_arc_filled(radarcarx,radarcary,500,500,arcade.color.AMARANTH_PINK,startAngle,endAngle)
+        arcade.draw_text("LRCorner Radar",radarcarx,radarcary,anchor_x="right",anchor_y="top",multiline=True,width=50)
 
         # radarjobbhatso
         radarcarx, radarcary = carspacetoscreenspace(origox, origoy,
@@ -293,10 +324,11 @@ class MyGame(arcade.Window):
         arcade.draw_point(radarcarx, radarcary, arcade.color.AMARANTH_PINK, 10)
 
         radarAngle = 180-egoObj.ANGLE_AZIMUTH_CORNER_RADAR_RIGHT_REAR
-        tmpList=[radarAngle,270]
+        tmpList = [radarAngle, 270]
         tmpList.sort()
         startAngle,endAngle=tuple(tmpList)
         arcade.draw_arc_filled(radarcarx,radarcary,500,500,arcade.color.AMARANTH_PINK,startAngle,endAngle)
+        arcade.draw_text("RRCorner Radar",radarcarx,radarcary,anchor_x="left",anchor_y="top",multiline=True,width=50)
 
         #turn signal
 
@@ -311,41 +343,42 @@ class MyGame(arcade.Window):
         arcade.draw_parabola_filled(signalcarx+17, signalcary-35,signalcarx-24, 17, arcade.color.YELLOW_ORANGE,55)
 
         # holtter
-        point_list = tuple(map(lambda t : 
-        (carspacetoscreenspace(origox,origoy,t[0],t[1],METERTOPIXEL)[0],
-        carspacetoscreenspace(origox,origoy,t[0],t[1],METERTOPIXEL)[1])
-        ,((-300, 800),
-              (-300, 2300),
-              
-              (2000, 800),
-              (2000, 2300),
+        point_list = tuple(map(lambda t:
+                               (carspacetoscreenspace(origox, origoy, t[0], t[1], METERTOPIXEL)[0],
+                                carspacetoscreenspace(origox, origoy, t[0], t[1], METERTOPIXEL)[1]), ((-300, 800),
+                                                                                                      (-300,
+                                                                                                       2300),
 
-              (-300, 800),
-              (2000, 800),
+                                                                                                      (2000, 800),
+                                                                                                      (2000, 2300),
 
-              (-300, 2300),
-              (2000, 2300)
-              )))
+                                                                                                      (-300,
+                                                                                                       800),
+                                                                                                      (2000, 800),
 
-        arcade.draw_lines(point_list, arcade.color.RED_DEVIL,3)
+                                                                                                      (-300,
+                                                                                                       2300),
+                                                                                                      (2000, 2300)
+                                                                                                      )))
 
-        point_list = tuple(map(lambda t : 
-        (carspacetoscreenspace(origox,origoy,t[0],t[1],METERTOPIXEL)[0],
-        carspacetoscreenspace(origox,origoy,t[0],t[1],METERTOPIXEL)[1])
-        ,((-300, -800),
-              (-300, -2300),
-              
-              (2000, -800),
-              (2000, -2300),
+        arcade.draw_lines(point_list, arcade.color.RED_DEVIL, 3)
 
-              (-300, -800),
-              (2000, -800),
+        point_list = tuple(map(lambda t:
+                               (carspacetoscreenspace(origox, origoy, t[0], t[1], METERTOPIXEL)[0],
+                                carspacetoscreenspace(origox, origoy, t[0], t[1], METERTOPIXEL)[1]), ((-300, -800),
+                                                                                                      (-300, -2300),
 
-              (-300, -2300),
-              (2000, -2300)
-              )))
+                                                                                                      (2000, -800),
+                                                                                                      (2000, -2300),
 
-        arcade.draw_lines(point_list, arcade.color.RED_DEVIL,3)
+                                                                                                      (-300, -800),
+                                                                                                      (2000, -800),
+
+                                                                                                      (-300, -2300),
+                                                                                                      (2000, -2300)
+                                                                                                      )))
+
+        arcade.draw_lines(point_list, arcade.color.RED_DEVIL, 3)
 
         # draw manager for buttons
         self.button_manager.draw()
@@ -389,6 +422,9 @@ class MyGame(arcade.Window):
         egoObj = Ego(Files[ChoosenFile]["auto"])
         objectLayer = Objects(Files[ChoosenFile]["objektumok"])
 
+    def choose_car(self, index):
+        ChoosenCar = index
+
 
     def create_buttons(self):
         BUTTON_WIDTH = 100
@@ -405,13 +441,18 @@ class MyGame(arcade.Window):
             top=PADDING, left=PADDING))
 
         ind = 0
-        for ind in range(len(Files)):      
+        for ind in range(len(Files)):
             button = arcade.gui.UIFlatButton(
                 text="File_" + str(ind+1), width=BUTTON_WIDTH, style=self.button_style)
             self.v_box.add(button.with_space_around(
                 top=PADDING, left=PADDING))
             button.on_click = self.choose_file(ind)
 
+        for ind in range(len(Cars)):
+            button = arcade.gui.UIFlatButton(text=Cars[ind], width=BUTTON_WIDTH, style=self.button_style)
+            self.v_box.add(button.with_space_around(
+                top=PADDING, left=PADDING))
+            button.on_click = self.choose_car(ind)
 
         self.button_manager.add(
             arcade.gui.UIAnchorWidget(
