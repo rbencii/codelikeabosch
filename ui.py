@@ -5,7 +5,7 @@ from math import floor
 import arcade
 import arcade.gui
 from arcade.experimental.uislider import UISlider
-from arcade.gui.events import UIOnChangeEvent
+from arcade.gui.events import UIOnChangeEvent, UIOnClickEvent
 import os
 from ego import Ego
 from objectlayer import Objects
@@ -22,6 +22,7 @@ VIEWPORT_MARGIN = 40
 
 MOVEMENT_SPEED = 5
 
+
 # FILE VALASZTAS
 #egoObj = Ego(filedialog.askopenfilename())
 egoObj = {}
@@ -37,6 +38,7 @@ METERTOPIXEL = CARSIZE/4.65
 STREETSIZE = 500
 AXLEP = 3.43
 FPS = 60.0
+STARTT = 0
 
 Files = [{"objektumok": "data/PSA_ADAS_W3_FC_2022-09-01_14-49_0054.MF4/Group_349.csv",
          "auto": 'data/PSA_ADAS_W3_FC_2022-09-01_14-49_0054.MF4/Group_416.csv'},
@@ -78,7 +80,8 @@ pause = False
         if self.top > SCREEN_HEIGHT:
             self.change_y *= -1
 """
-
+def lerp(A,B,t):
+    return A+(B-A)*t
 
 def carspacetoscreenspace(screencarcenterX, screencarcenterY, carSpaceX, carSpaceY, METERTOPIXEL):
     return (
@@ -113,7 +116,7 @@ class MyGame(arcade.Window):
         arcade.set_background_color(arcade.color.GRAY)
         self.street = arcade.load_texture("street.png")
         self.set_update_rate(1/FPS)
-        self.debugcnt=0.0
+        self.timecnt=0.0
         self.debugcnt2=0.0
 
         self.objt=arcade.Text("", 0, 0, arcade.color.BABY_BLUE, 12, multiline=True, width=300,anchor_y="bottom")
@@ -131,6 +134,9 @@ class MyGame(arcade.Window):
 
         self.create_buttons()
 
+        global STARTITERATION
+        STARTT = egoObj.T
+
     def setup(self):
         global egoObj
         global objectLayer
@@ -138,15 +144,19 @@ class MyGame(arcade.Window):
         self.streetX = -100
         self.streetY = 0
         self.slider = 100
+        self.objectit = 1
         egoObj = Ego(Files[choosen_file]["auto"])
         objectLayer = Objects(Files[choosen_file]["objektumok"])
 
     def on_update(self, delta_time):
         global alert
-        self.debugcnt+=delta_time
+        self.timecnt+=delta_time
         self.debugcnt2=delta_time
+        
         global pause
         if pause:
+            if (self.timecnt % 1) > 0.8:
+                objectLayer.setState(self.objectit)
             return
 
         egoObj.__update__(delta_time)
@@ -460,6 +470,7 @@ class MyGame(arcade.Window):
         global pause
         if pause:
             pause = False
+            objectLayer.setState(self.objectit)
         else:
             pause = True
         self.create_buttons()
@@ -655,17 +666,22 @@ class MyGame(arcade.Window):
     def create_slider(self):
         self.slider_manager = arcade.gui.UIManager()
         self.slider_manager.enable()
-        ui_slider = UISlider(value=float(egoObj.T), width=300, height=50, )
-        label = arcade.gui.UILabel(text=f"{ui_slider.value:02.0f}")
+        STEPS = 100
+        ui_slider = UISlider(value=float(egoObj.iterator)/float(egoObj.highestit)*100, width=400, height=50)
+        label = arcade.gui.UILabel(text=f"Iteration: {egoObj.iterator:02.0f}")
 
         @ui_slider.event()
-        def on_change(event: UIOnChangeEvent):
-            egoObj.T = event.value
-            label.text = f"{ui_slider.value:02.0f}"
+        def on_change(event: UIOnChangeEvent):  
+            egoObj.setState(int(lerp(1, egoObj.highestit, ui_slider.value/100)))
+            self.objectit = int(lerp(1, objectLayer.highestit, ui_slider.value/100))
+            label.text = f"Iteration: {egoObj.iterator:02.0f}"
             label.fit_content()
+
+        
 
         self.slider_manager.add(arcade.gui.UIAnchorWidget(child=ui_slider, anchor_x="left", anchor_y="bottom"))
         self.slider_manager.add(arcade.gui.UIAnchorWidget(child=label, anchor_x="left", anchor_y="bottom"))
+        
         
 def ui_run():
     MyGame()

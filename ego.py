@@ -34,6 +34,7 @@ class Ego:
     def __init__(self, filePath = 'data/PSA_ADAS_W3_FC_2022-09-01_15-12_0059.MF4/Group_416.csv'):
         with open(filePath, 'rt') as f:
            self.iterator = 1
+           self.highestit = 1
            reader = csv.reader(f)
            self.database = list(reader)
            self.EndOfList = len(self.database)<=self.iterator
@@ -55,6 +56,7 @@ class Ego:
         found = False
         while math.floor(float(self.T)*1000.0)/1000.0<limit and not self.EndOfList:
             self.iterator+=1
+            self.highestit=self.iterator if self.iterator>self.highestit else self.highestit
             self.EndOfList = len(self.database)<=self.iterator
             if not self.EndOfList:
                 self.T=self.database[self.iterator][0]
@@ -79,6 +81,20 @@ class Ego:
         self.tAbsRefTime = row[4]
         self.vxvRef = normalize("velocity", row[5])
         self.vyvRef = normalize("velocity", row[6])
+
+
+    def setState(self, value):
+        self.iterator = value
+        row = self.database[value]
+        self.axvRef = normalize("acceleration", row[1])
+        self.ayvRef = normalize("acceleration", row[2])
+        self.psiDtOpt = normalize("yaw", row[3])
+        self.tAbsRefTime = row[4]
+        self.vxvRef = normalize("velocity", row[5])
+        self.vyvRef = normalize("velocity", row[6])
+
+    
+
 
     def printCurrent(self):
         print("iterator: " + str(self.iterator))
