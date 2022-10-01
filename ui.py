@@ -86,7 +86,7 @@ class MyGame(arcade.Window):
         """
         # Open a window in full screen mode. Remove fullscreen=True if
         # you don't want to start this way.
-        super().__init__(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE, fullscreen=True)
+        super().__init__(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE, fullscreen=False)
 
         # Set the working directory (where we expect to find files) to the same
         # directory this .py file is in. You can leave this out of your own
@@ -326,8 +326,8 @@ class MyGame(arcade.Window):
         # draw manager for buttons
         self.button_manager.draw()
 
-    def on_key_press(self, key, modifiers):
-        """Called whenever a key is pressed. """
+    """def on_key_press(self, key, modifiers):
+        #Called whenever a key is pressed.
         if key == arcade.key.F:
             # User hits f. Flip between full and not full screen.
             self.set_fullscreen(not self.fullscreen)
@@ -337,7 +337,7 @@ class MyGame(arcade.Window):
             width, height = self.get_size()
             self.set_viewport(0, width, 0, height)
         if key == arcade.key.UP:
-            self.slider += 1
+            self.slider += 1"""
 
     # style for buttons
     teal_style = {
