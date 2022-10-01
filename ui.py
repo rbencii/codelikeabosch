@@ -210,38 +210,50 @@ class MyGame(arcade.Window):
 
     # style for buttons
     teal_style = {
-            "font_name": ("calibri", "arial"),
-            "font_size": 15,
-            "font_color": arcade.color.WHITE,
-            "bg_color": arcade.color.TEAL_BLUE,
+        "font_name": ("calibri", "arial"),
+        "font_size": 15,
+        "font_color": arcade.color.WHITE,
+        "bg_color": arcade.color.TEAL_BLUE,
+    
 
-            "bg_color_pressed": arcade.color.DARK_GRAY,
-            "border_color_pressed": arcade.color.DARK_GRAY,
-            "font_color_pressed": arcade.color.WHITE,
-        }
+        "bg_color_pressed": arcade.color.DARK_GRAY,
+        "border_color_pressed": arcade.color.DARK_GRAY,
+        "font_color_pressed": arcade.color.WHITE,
+    }
 
     def create_buttons(self):
+        BUTTON_WIDTH = 100
+        PADDING = 10
+
         self.button_manager = arcade.gui.UIManager()
         self.button_manager.enable()
 
         self.v_box = arcade.gui.UIBoxLayout()
 
-        start_button = arcade.gui.UIFlatButton(text="Start", width=200, style=self.teal_style)
-        
+        start_button = arcade.gui.UIFlatButton(
+            text="Start", width=BUTTON_WIDTH, style=self.teal_style)
         self.v_box.add(start_button.with_space_around(
-            top=10, left=10))
-        test1_button = arcade.gui.UIFlatButton(text="Test1", width=200, style=self.teal_style)
+            top=PADDING, left=PADDING))
+
+        test1_button = arcade.gui.UIFlatButton(
+            text="Test1", width=BUTTON_WIDTH, style=self.teal_style)
         self.v_box.add(test1_button.with_space_around(
-            top=10, left=10))
-        test2_button = arcade.gui.UIFlatButton(text="Test2", width=200, style=self.teal_style)
+            top=PADDING, left=PADDING))
+
+        test2_button = arcade.gui.UIFlatButton(
+            text="Test2", width=BUTTON_WIDTH, style=self.teal_style)
         self.v_box.add(test2_button.with_space_around(
-            top=10, left=10))
-        test3_button = arcade.gui.UIFlatButton(text="Test3", width=200, style=self.teal_style)
+            top=PADDING, left=PADDING))
+
+        test3_button = arcade.gui.UIFlatButton(
+            text="Test3", width=BUTTON_WIDTH, style=self.teal_style)
         self.v_box.add(test3_button.with_space_around(
-            top=10, left=10))
-        test4_button = arcade.gui.UIFlatButton(text="Test4", width=200, style=self.teal_style)
+            top=PADDING, left=PADDING))
+
+        test4_button = arcade.gui.UIFlatButton(
+            text="Test4", width=BUTTON_WIDTH, style=self.teal_style)
         self.v_box.add(test4_button.with_space_around(
-            top=10, left=10))
+            top=PADDING, left=PADDING))
 
         self.button_manager.add(
             arcade.gui.UIAnchorWidget(
