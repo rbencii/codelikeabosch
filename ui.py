@@ -142,8 +142,6 @@ class MyGame(arcade.Window):
         arcade.draw_text("tAbsRefTime: " + str(egoObj.tAbsRefTime),screen_width-200,screen_height-170)
         arcade.draw_text("vxvRef: " + str(egoObj.vxvRef),screen_width-200,screen_height-200)
         arcade.draw_text("vyvRef: " + str(egoObj.vyvRef),screen_width-200,screen_height-230)
-        #Objects
-
 
         #koordinatarendszer
         arcade.draw_line(centerX-CARWIDTH/2.0,centerY-CARSIZE/AXLEP,centerX+CARWIDTH/2.0,centerY-CARSIZE/AXLEP,arcade.color.YELLOW,5)
@@ -151,6 +149,57 @@ class MyGame(arcade.Window):
 
         origox=centerX
         origoy=centerY-CARSIZE/AXLEP
+
+        #Objects
+        #print(len(objectLayer.realObjects)) 
+        for i in range(len(objectLayer.realObjects)):
+            objektumx,objektumy=carspacetoscreenspace(origox,origoy,1000*objectLayer.realObjects[i]["x"],1000*objectLayer.realObjects[i]["y"],METERTOPIXEL)
+            #print(str(i),end=": ")
+            #print(objectLayer.realObjects[i])
+            if(objectLayer.realObjects[i]["x"] > -0.5 and objectLayer.realObjects[i]["x"] < 2):
+                continue
+            #Object texture
+            if(objectLayer.realObjects[i].keys().__contains__("type")):
+                if(objectLayer.realObjects[i]["type"]=="0"):
+                    arcade.draw_point(objektumx,objektumy,arcade.color.ROSE_RED,20)
+                elif(objectLayer.realObjects[i]["type"]=="1"):
+                    arcade.draw_point(objektumx,objektumy,arcade.color.DARK_BLUE,35)
+                elif(objectLayer.realObjects[i]["type"]=="2"):
+                    arcade.draw_point(objektumx,objektumy,arcade.color.FERN_GREEN,29)
+                elif(objectLayer.realObjects[i]["type"]=="3"):
+                    arcade.draw_point(objektumx,objektumy,arcade.color.AMARANTH_PURPLE,22)
+                elif(objectLayer.realObjects[i]["type"]=="4"):
+                    arcade.draw_point(objektumx,objektumy,arcade.color.ANDROID_GREEN,22)
+                elif(objectLayer.realObjects[i]["type"]=="5"):
+                    arcade.draw_point(objektumx,objektumy,arcade.color.BABY_PINK,16)
+                elif(objectLayer.realObjects[i]["type"]=="6"):
+                    arcade.draw_point(objektumx,objektumy,arcade.color.STAR_COMMAND_BLUE,32)
+            else:
+                arcade.draw_point(objektumx,objektumy,arcade.color.ROSE_RED,25)
+            #Object text
+            arcade.draw_text("Object id: " + str(i),screen_width-310,33*i+40)
+            if(objectLayer.realObjects[i].keys().__contains__("type")):
+                if(objectLayer.realObjects[i]["type"]=="0"):
+                    arcade.draw_text("Type: unknown" ,screen_width-220,33*i+40,arcade.color.ROSE_RED)
+                elif(objectLayer.realObjects[i]["type"]=="1"):
+                    arcade.draw_text("Type: truck" ,screen_width-220,33*i+40,arcade.color.DARK_BLUE)
+                elif(objectLayer.realObjects[i]["type"]=="2"):
+                    arcade.draw_text("Type: car" ,screen_width-220,33*i+40,arcade.color.FERN_GREEN)
+                elif(objectLayer.realObjects[i]["type"]=="3"):
+                    arcade.draw_text("Type: motorbike" ,screen_width-220,33*i+40,arcade.color.AMARANTH_PURPLE)
+                elif(objectLayer.realObjects[i]["type"]=="4"):
+                    arcade.draw_text("Type: cyclist" ,screen_width-220,33*i+40,arcade.color.ANDROID_GREEN)
+                elif(objectLayer.realObjects[i]["type"]=="5"):
+                    arcade.draw_text("Type: pedestrian" ,screen_width-220,33*i+40,arcade.color.BABY_PINK)
+                elif(objectLayer.realObjects[i]["type"]=="6"):
+                    arcade.draw_text("Type: truck/car" ,screen_width-220,33*i+40,arcade.color.STAR_COMMAND_BLUE)
+            else:
+                arcade.draw_text("Type: unknown" ,screen_width-220,33*i+40,arcade.color.ROSE_RED)
+            arcade.draw_text("vx: " + str(objectLayer.realObjects[i]["vx"]),screen_width-110,33*i+40) 
+            arcade.draw_text("X: " + str(objectLayer.realObjects[i]["x"]),screen_width-310,33*i+22)
+            arcade.draw_text("Y: " + str(objectLayer.realObjects[i]["y"]),screen_width-220,33*i+22)
+            arcade.draw_text("vy: " + str(objectLayer.realObjects[i]["vy"]),screen_width-110,33*i+22)
+  
         #radarbalelso
         radarcarx,radarcary=carspacetoscreenspace(origox,origoy,
         egoObj.X_POSITION_CORNER_RADAR_LEFT_FRONT,

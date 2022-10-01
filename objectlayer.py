@@ -178,7 +178,7 @@ class Objects:
                     j["vx"] = normalize('v',self.cameraPersonas[i]["vx"])
                     j["vy"] = normalize('v',self.cameraPersonas[i]["vy"])
                     j["type"] = self.cameraPersonas[i]["type"]
-            if(van and self.cameraPersonas[i]["x"]!=0 and self.cameraPersonas[i]["y"]!=0):
+            if(van and normalize('d',self.cameraPersonas[i]["x"])!=0 and normalize('d',self.cameraPersonas[i]["y"])!=0):
                 self.realObjects.append({"x":normalize('d',self.cameraPersonas[i]["x"]),"y":normalize('d',self.cameraPersonas[i]["y"]),"vx":normalize('v',self.cameraPersonas[i]["vx"]),"vy":normalize('v',self.cameraPersonas[i]["vy"]),"type":self.cameraPersonas[i]["type"]})
         for i in self.leftFrontRadarPersonas:
             van = True
@@ -192,7 +192,7 @@ class Objects:
                     j["vy"] = normalize('v',self.leftFrontRadarPersonas[i]["vy"])
                     j["ax"] = normalize('a',self.leftFrontRadarPersonas[i]["ax"])
                     j["ay"] = normalize('a',self.leftFrontRadarPersonas[i]["ay"])
-            if(van and self.leftFrontRadarPersonas[i]["x"]!=0 and self.leftFrontRadarPersonas[i]["y"]!=0):
+            if(van and normalize('d',self.leftFrontRadarPersonas[i]["x"]) != 0 and normalize('d',self.leftFrontRadarPersonas[i]["y"])!=0):
                 self.realObjects.append({"z":normalize('d',self.leftFrontRadarPersonas[i]["z"]),"x":normalize('d',self.leftFrontRadarPersonas[i]["x"]),"y":normalize('d',self.leftFrontRadarPersonas[i]["y"]),"vx":normalize('v',self.leftFrontRadarPersonas[i]["vx"]),"vy":normalize('v',self.leftFrontRadarPersonas[i]["vy"]),"ax":normalize('a',self.leftFrontRadarPersonas[i]["ax"]),"ay":normalize('a',self.leftFrontRadarPersonas[i]["ay"])})
         for i in self.leftRearRadarPersonas:
             van = True
@@ -206,7 +206,7 @@ class Objects:
                     j["vy"] = normalize('v',self.leftRearRadarPersonas[i]["vy"])
                     j["ax"] = normalize('a',self.leftRearRadarPersonas[i]["ax"])
                     j["ay"] = normalize('a',self.leftRearRadarPersonas[i]["ay"])
-            if(van and self.leftRearRadarPersonas[i]["x"]!=0 and self.leftRearRadarPersonas[i]["y"]!=0):
+            if(van and normalize('d',self.leftRearRadarPersonas[i]["x"])!=0 and normalize('d',self.leftRearRadarPersonas[i]["y"])!=0):
                 self.realObjects.append({"z":normalize('d',self.leftRearRadarPersonas[i]["z"]),"x":normalize('d',self.leftRearRadarPersonas[i]["x"]),"y":normalize('d',self.leftRearRadarPersonas[i]["y"]),"vx":normalize('v',self.leftRearRadarPersonas[i]["vx"]),"vy":normalize('v',self.leftRearRadarPersonas[i]["vy"]),"ax":normalize('a',self.leftRearRadarPersonas[i]["ax"]),"ay":normalize('a',self.leftRearRadarPersonas[i]["ay"])})
         for i in self.rightFrontRadarPersonas:
             van = True
@@ -220,7 +220,7 @@ class Objects:
                     j["vy"] = normalize('v',self.rightFrontRadarPersonas[i]["vy"])
                     j["ax"] = normalize('a',self.rightFrontRadarPersonas[i]["ax"])
                     j["ay"] = normalize('a',self.rightFrontRadarPersonas[i]["ay"])
-            if(van and self.rightFrontRadarPersonas[i]["x"]!=0 and self.rightFrontRadarPersonas[i]["y"]!=0):
+            if(van and normalize('d',self.rightFrontRadarPersonas[i]["x"])!=0 and normalize('d',self.rightFrontRadarPersonas[i]["y"])!=0):
                 self.realObjects.append({"z":normalize('d',self.rightFrontRadarPersonas[i]["z"]),"x":normalize('d',self.rightFrontRadarPersonas[i]["x"]),"y":normalize('d',self.rightFrontRadarPersonas[i]["y"]),"vx":normalize('v',self.rightFrontRadarPersonas[i]["vx"]),"vy":normalize('v',self.rightFrontRadarPersonas[i]["vy"]),"ax":normalize('a',self.rightFrontRadarPersonas[i]["ax"]),"ay":normalize('a',self.rightFrontRadarPersonas[i]["ay"])})
         for i in self.rightRearRadarPersonas:
             van = True
@@ -234,7 +234,8 @@ class Objects:
                     j["vy"] = normalize('v',self.rightRearRadarPersonas[i]["vy"])
                     j["ax"] = normalize('a',self.rightRearRadarPersonas[i]["ax"])
                     j["ay"] = normalize('a',self.rightRearRadarPersonas[i]["ay"])
-            if(van and self.rightRearRadarPersonas[i]["x"]!=0 and self.rightRearRadarPersonas[i]["y"]!=0):
+            if(van and normalize('d',self.rightRearRadarPersonas[i]["x"])!=0 and normalize('d',self.rightRearRadarPersonas[i]["y"])!=0):
                 self.realObjects.append({"z":normalize('d',self.rightRearRadarPersonas[i]["z"]),"x":normalize('d',self.rightRearRadarPersonas[i]["x"]),"y":normalize('d',self.rightRearRadarPersonas[i]["y"]),"vx":normalize('v',self.rightRearRadarPersonas[i]["vx"]),"vy":normalize('v',self.rightRearRadarPersonas[i]["vy"]),"ax":normalize('a',self.rightRearRadarPersonas[i]["ax"]),"ay":normalize('a',self.rightRearRadarPersonas[i]["ay"])})
         self.databaseLinePivot = self.databaseLinePivot + 1
+        print(len(self.realObjects))
         pass
