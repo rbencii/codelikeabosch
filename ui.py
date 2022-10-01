@@ -34,7 +34,7 @@ CARWIDTH = CARSIZE/2.4
 METERTOPIXEL = CARSIZE/4.65
 STREETSIZE = 500
 AXLEP = 3.43
-FPS = 30
+FPS = 60.0
 
 Files = [{"objektumok": "data/PSA_ADAS_W3_FC_2022-09-01_14-49_0054.MF4/Group_349.csv",
          "auto": 'data/PSA_ADAS_W3_FC_2022-09-01_14-49_0054.MF4/Group_416.csv'},
@@ -112,6 +112,7 @@ class MyGame(arcade.Window):
         self.street = arcade.load_texture("street.png")
         self.set_update_rate(1/FPS)
         self.debugcnt=0.0
+        self.debugcnt2=0.0
 
         self.objt=arcade.Text("", 0, 0, arcade.color.BABY_BLUE, 12, multiline=True, width=300,anchor_y="bottom")
         self.multi_line_breaks = arcade.Text(
@@ -139,13 +140,14 @@ class MyGame(arcade.Window):
         objectLayer = Objects(Files[choosen_file]["objektumok"])
 
     def on_update(self, delta_time):
-        self.debugcnt+=1.0
+        self.debugcnt+=delta_time
+        self.debugcnt2=delta_time
         global pause
         if pause:
             return
 
-        egoObj.__update__(1.0/FPS)
-        objectLayer.__update__(1.0/FPS)
+        egoObj.__update__(delta_time)
+        objectLayer.__update__(delta_time)
         
         # v = s/t
         # egoObj.vxvRef = s meter / 1sec
@@ -205,7 +207,7 @@ class MyGame(arcade.Window):
         + "psiDtOpt: " + str(egoObj.psiDtOpt) + "\n"
         + "tAbsRefTime: " + str(egoObj.tAbsRefTime) + "\n"
         + "vxvRef: " + str(egoObj.vxvRef) + "\n"
-        + "vyvRef: " + str(egoObj.vyvRef) + "\n" + str(self.debugcnt))
+        + "vyvRef: " + str(egoObj.vyvRef) + "\n" + str(self.debugcnt) + "\n" + str(self.debugcnt2))
 
         self.multi_line_breaks.text=cartext
         self.multi_line_breaks.x=screen_width-200
@@ -227,79 +229,6 @@ class MyGame(arcade.Window):
         arcade.draw_point(cameraposX,cameraposY,arcade.color.LIME_GREEN,20)
         arcade.draw_text("Camera",cameraposX,cameraposY,anchor_x="center",anchor_y="center")
 
-        #Objects
-        #print(len(objectLayer.realObjects)) 
-        objectText=""
-        for i in range(len(objectLayer.realObjects)):
-            objektumx, objektumy = carspacetoscreenspace(
-                origox, origoy, 1000*objectLayer.realObjects[i]["x"], 1000*objectLayer.realObjects[i]["y"], METERTOPIXEL)
-            #print(str(i),end=": ")
-            # print(objectLayer.realObjects[i])
-            if (objectLayer.realObjects[i]["x"] > -0.5 and objectLayer.realObjects[i]["x"] < 2):
-                continue
-            # Object texture
-            if (objectLayer.realObjects[i].keys().__contains__("type")):
-                if (objectLayer.realObjects[i]["type"] == "0"):
-                    arcade.draw_point(objektumx, objektumy,
-                                      arcade.color.ROSE_RED, 20)
-                elif (objectLayer.realObjects[i]["type"] == "1"):
-                    arcade.draw_point(objektumx, objektumy,
-                                      arcade.color.DARK_BLUE, 35)
-                elif (objectLayer.realObjects[i]["type"] == "2"):
-                    arcade.draw_point(objektumx, objektumy,
-                                      arcade.color.FERN_GREEN, 29)
-                elif (objectLayer.realObjects[i]["type"] == "3"):
-                    arcade.draw_point(objektumx, objektumy,
-                                      arcade.color.AMARANTH_PURPLE, 22)
-                elif (objectLayer.realObjects[i]["type"] == "4"):
-                    arcade.draw_point(objektumx, objektumy,
-                                      arcade.color.ANDROID_GREEN, 22)
-                elif (objectLayer.realObjects[i]["type"] == "5"):
-                    arcade.draw_point(objektumx, objektumy,
-                                      arcade.color.BABY_PINK, 16)
-                elif (objectLayer.realObjects[i]["type"] == "6"):
-                    arcade.draw_point(objektumx, objektumy,
-                                      arcade.color.STAR_COMMAND_BLUE, 32)
-            else:
-                arcade.draw_point(objektumx, objektumy,
-                                  arcade.color.ROSE_RED, 25)
-            # Object text
-            objectText += ("Object id: " + str(i))
-            if (objectLayer.realObjects[i].keys().__contains__("type")):
-                if (objectLayer.realObjects[i]["type"] == "0"):
-                    objectText += (
-                        "Type: unknown")
-                elif (objectLayer.realObjects[i]["type"] == "1"):
-                    objectText += ("Type: truck")
-                elif (objectLayer.realObjects[i]["type"] == "2"):
-                    objectText += ("Type: car")
-                elif (objectLayer.realObjects[i]["type"] == "3"):
-                    objectText += (
-                        "Type: motorbike")
-                elif (objectLayer.realObjects[i]["type"] == "4"):
-                    objectText += (
-                        "Type: cyclist")
-                elif (objectLayer.realObjects[i]["type"] == "5"):
-                    objectText += (
-                        "Type: pedestrian")
-                elif (objectLayer.realObjects[i]["type"] == "6"):
-                    objectText += (
-                        "Type: truck/car")
-            else:
-                objectText += ("Type: unknown")
-            objectText += (
-                "vx: " + str(objectLayer.realObjects[i]["vx"]) + "\n")
-            objectText += (
-                "X: " + str(objectLayer.realObjects[i]["x"]))
-            objectText += (
-                "Y: " + str(objectLayer.realObjects[i]["y"]))
-            objectText += (
-                "vy: " + str(objectLayer.realObjects[i]["vy"]) + "\n")
-
-        
-        self.objt.x=screen_width-300
-        self.objt.text=objectText
-        self.objt.draw()
 
         # radarjobbelso
         radarcarx, radarcary = carspacetoscreenspace(origox, origoy,
@@ -404,6 +333,82 @@ class MyGame(arcade.Window):
         arcade.draw_lines(point_list, arcade.color.RED_DEVIL, 3)
 
         arcade.draw_point(100,self.debugcnt,arcade.color.BLACK,30)
+
+
+        
+        #Objects
+        #print(len(objectLayer.realObjects)) 
+        objectText=""
+        for i in range(len(objectLayer.realObjects)):
+            objektumx, objektumy = carspacetoscreenspace(
+                origox, origoy, 1000*objectLayer.realObjects[i]["x"], 1000*objectLayer.realObjects[i]["y"], METERTOPIXEL)
+            #print(str(i),end=": ")
+            # print(objectLayer.realObjects[i])
+            if (objectLayer.realObjects[i]["x"] > -0.5 and objectLayer.realObjects[i]["x"] < 2):
+                continue
+            # Object texture
+            if (objectLayer.realObjects[i].keys().__contains__("type")):
+                if (objectLayer.realObjects[i]["type"] == "0"):
+                    arcade.draw_point(objektumx, objektumy,
+                                      arcade.color.ROSE_RED, 20)
+                elif (objectLayer.realObjects[i]["type"] == "1"):
+                    arcade.draw_point(objektumx, objektumy,
+                                      arcade.color.DARK_BLUE, 35)
+                elif (objectLayer.realObjects[i]["type"] == "2"):
+                    arcade.draw_point(objektumx, objektumy,
+                                      arcade.color.FERN_GREEN, 29)
+                elif (objectLayer.realObjects[i]["type"] == "3"):
+                    arcade.draw_point(objektumx, objektumy,
+                                      arcade.color.AMARANTH_PURPLE, 22)
+                elif (objectLayer.realObjects[i]["type"] == "4"):
+                    arcade.draw_point(objektumx, objektumy,
+                                      arcade.color.ANDROID_GREEN, 22)
+                elif (objectLayer.realObjects[i]["type"] == "5"):
+                    arcade.draw_point(objektumx, objektumy,
+                                      arcade.color.BABY_PINK, 16)
+                elif (objectLayer.realObjects[i]["type"] == "6"):
+                    arcade.draw_point(objektumx, objektumy,
+                                      arcade.color.STAR_COMMAND_BLUE, 32)
+            else:
+                arcade.draw_point(objektumx, objektumy,
+                                  arcade.color.ROSE_RED, 25)
+            # Object text
+            objectText += ("Object id: " + str(i))
+            if (objectLayer.realObjects[i].keys().__contains__("type")):
+                if (objectLayer.realObjects[i]["type"] == "0"):
+                    objectText += (
+                        "Type: unknown")
+                elif (objectLayer.realObjects[i]["type"] == "1"):
+                    objectText += ("Type: truck")
+                elif (objectLayer.realObjects[i]["type"] == "2"):
+                    objectText += ("Type: car")
+                elif (objectLayer.realObjects[i]["type"] == "3"):
+                    objectText += (
+                        "Type: motorbike")
+                elif (objectLayer.realObjects[i]["type"] == "4"):
+                    objectText += (
+                        "Type: cyclist")
+                elif (objectLayer.realObjects[i]["type"] == "5"):
+                    objectText += (
+                        "Type: pedestrian")
+                elif (objectLayer.realObjects[i]["type"] == "6"):
+                    objectText += (
+                        "Type: truck/car")
+            else:
+                objectText += ("Type: unknown")
+            objectText += (
+                "vx: " + str(objectLayer.realObjects[i]["vx"]) + "\n")
+            objectText += (
+                "X: " + str(objectLayer.realObjects[i]["x"]))
+            objectText += (
+                "Y: " + str(objectLayer.realObjects[i]["y"]))
+            objectText += (
+                "vy: " + str(objectLayer.realObjects[i]["vy"]) + "\n")
+
+        
+        self.objt.x=screen_width-300
+        self.objt.text=objectText
+        self.objt.draw()
 
         # draw manager for buttons
         self.button_manager.draw()
