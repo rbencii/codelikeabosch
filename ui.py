@@ -1,6 +1,7 @@
 # win: pip3 install arcade
 
 import functools
+from math import floor
 import arcade
 import arcade.gui
 import os
@@ -168,6 +169,8 @@ class MyGame(arcade.Window):
         # if(egoObj.iterator >300):
         #    egoObj.EndOfList = True
 
+        #ALERT SYSTEM
+
     def on_draw(self):
         global pause
         
@@ -280,18 +283,6 @@ class MyGame(arcade.Window):
         arcade.draw_arc_filled(radarcarx,radarcary,500,500,(15, 145, 242, 70),startAngle,endAngle)
         arcade.draw_text("RRCorner Radar",radarcarx,radarcary,anchor_x="left",anchor_y="top",multiline=True,width=50)
 
-        #turn signal
-
-        """signalcarx,signalcary=carspacetoscreenspace(origox,origoy,
-        egoObj.X_POSITION_CORNER_RADAR_RIGHT_FRONT,
-        egoObj.Y_POSITION_CORNER_RADAR_RIGHT_FRONT,METERTOPIXEL)
-        arcade.draw_parabola_filled(signalcarx-17, signalcary-35,signalcarx+24 , 17, arcade.color.YELLOW_ORANGE,-55)
-
-        signalcarx,signalcary=carspacetoscreenspace(origox,origoy,
-        egoObj.X_POSITION_CORNER_RADAR_LEFT_FRONT,
-        egoObj.Y_POSITION_CORNER_RADAR_LEFT_FRONT,METERTOPIXEL)
-        arcade.draw_parabola_filled(signalcarx+17, signalcary-35,signalcarx-24, 17, arcade.color.YELLOW_ORANGE,55)"""
-
         # holtter
         point_list = tuple(map(lambda t:
                                (carspacetoscreenspace(origox, origoy, t[0], t[1], METERTOPIXEL)[0],
@@ -333,8 +324,6 @@ class MyGame(arcade.Window):
         # draw black debug point
         # arcade.draw_point(100,self.debugcnt,arcade.color.BLACK,30)
 
-
-        
         #Objects
         #print(len(objectLayer.realObjects)) 
         objectText=""
@@ -412,14 +401,11 @@ class MyGame(arcade.Window):
             arcade.draw_text("Pause", 10, 20, arcade.color.BLACK, 14)
         # draw manager for buttons
         self.button_manager.draw()
-        self.alert_Driver('Stop')
-        self.alert_Driver('TLeft')
-        self.alert_Driver('TRight')
-        self.alert_Driver('TooCloseFront')
-        self.alert_Driver('TooCloseRear')
+
+        self.alert_Driver_draw()
 
         
-
+    #  legacy fullscreen stuff
     """def on_key_press(self, key, modifiers):
         #Called whenever a key is pressed.
         if key == arcade.key.F:
@@ -478,32 +464,42 @@ class MyGame(arcade.Window):
         global alert
         left, screen_width, bottom, screen_height = self.get_viewport()
         alert = {
-            "Stop": False,
-            "TLeft": False,
-            "TRight": False,
-            "TooCloseFront": False,
-            "TooCloseRear": False,
+            "Stop":{"status": False,"time": 0},
+            "TLeft": {"status": False,"time": 0},
+            "TRight": {"status": False,"time": 0},
+            "TooCloseFront": {"status": False,"time": 0},
+            "TooCloseRear": {"status": False,"time": 0},
         }
-        global StopSign, DangerOnRight, DangerOnLeft, DangerOnFront, DangerOnRear, TurnRight, TurnLeft
+        global StopSign, DangerOnRight, DangerOnLeft, DangerOnFront, DangerOnRear, TurnRight, TurnLeft, StopText, SlowText, CarefulOnRear
         point_list = (
                     (240, screen_height-300),
                     (340, screen_height-300),
                     (340, screen_height-250),
-                    (390, screen_height-350),
+                    (400, screen_height-350),
                     (340, screen_height-450),
                     (340, screen_height-400),
                     (240, screen_height-400))
         TurnRight = arcade.create_polygon(point_list, arcade.color.YELLOW)
         point_list = (
-                    (240, screen_height-300),
-                    (270, screen_height-330),
-                    (312, screen_height-330),
-                    (342, screen_height-300),
-                    (342, screen_height-258),
-                    (312, screen_height-228),
-                    (270, screen_height-228),
-                    (240, screen_height-258))
+                    (230, screen_height-350),
+                    (290, screen_height-250),
+                    (290, screen_height-300),
+                    (390, screen_height-300),
+                    (390, screen_height-400),
+                    (290, screen_height-400),
+                    (290, screen_height-450))
+        TurnLeft = arcade.create_polygon(point_list, arcade.color.YELLOW)
+        point_list = (
+                    (230, screen_height-400),
+                    (230, screen_height-300),
+                    (300, screen_height-238),
+                    (382, screen_height-238),
+                    (454, screen_height-300),
+                    (454, screen_height-400),
+                    (382, screen_height-462),
+                    (300, screen_height-462))
         StopSign = arcade.create_polygon(point_list, arcade.color.RUBY_RED)
+        StopText = arcade.Text("STOP!!",screen_width/2.0-20,screen_height-70,arcade.color.RED, 50,bold=True)
         point_list = ((screen_width-330, 20),
                     (screen_width-340, 30),
                     (screen_width-350, 300),
@@ -525,6 +521,7 @@ class MyGame(arcade.Window):
                     (screen_width-340, screen_height-22),
                     (screen_width-330, screen_height-10))
         DangerOnFront = arcade.create_polygon(point_list, arcade.color.SPANISH_RED)
+        SlowText = arcade.Text("Slow Down!!",screen_width/2.0-70,screen_height-70,arcade.color.RED, 50,bold=True)
         point_list = ((170, 10),
                     (180, 22),
                     (screen_width/2.0-170, 30),
@@ -532,31 +529,66 @@ class MyGame(arcade.Window):
                     (screen_width-340, 22),
                     (screen_width-330, 10))
         DangerOnRear = arcade.create_polygon(point_list, arcade.color.SPANISH_RED)
-    def alert_Driver(self,key = 'Stop'):
+        CarefulOnRear = arcade.Text("An object is close behind you!!",screen_width/2.0-70,screen_height-70,arcade.color.RED, 40,bold=True)
+    def alert_Driver_draw(self):
         global alert
-        global StopSign, DangerOnRight, DangerOnLeft, DangerOnFront, DangerOnRear
-        match key:
-            case 'Stop':
-                TurnRight.draw()
-                #StopSign.draw()
-                return
-            case 'TRight':
-                DangerOnRight.draw()
-                return
-            case 'TLeft':
-                DangerOnLeft.draw()
-                return
-            case 'TooCloseFront':
-                DangerOnFront.draw()
-                return
-            case 'TooCloseRear':
-                DangerOnRear.draw()
-                return
-            case other:
-                raise ValueError('Unknown key: {}'.format(key))
+        global StopSign, DangerOnRight, DangerOnLeft, DangerOnFront, DangerOnRear, TurnRight, TurnLeft, StopText, SlowText, CarefulOnRear
+        for i in alert:
+            if alert[i]['status'] == True:
+                diff = floor(float(egoObj.T)) - alert[i]['time']
+                if diff % 2 == 0:
+                    if i == 'Stop':
+                        StopSign.color = arcade.color.SPANISH_RED
+                        StopSign.draw()
+                        
+                    elif i == 'TLeft':
+                        TurnLeft.color = arcade.color.YELLOW_ORANGE
+                        TurnLeft.draw()
+                    elif i == 'TRight':
+                        TurnRight.color = arcade.color.YELLOW_ORANGE
+                        TurnRight.draw()
+                    elif i == 'TooCloseFront':
+                        SlowText.draw()
+                        DangerOnFront.color = arcade.color.RUBY_RED
+                        DangerOnFront.draw()
+                    elif i == 'TooCloseRear':
+                        CarefulOnRear.draw()
+                        DangerOnRear.color = arcade.color.RUBY_RED
+                        DangerOnRear.draw()
+                    elif i == 'TooCloseLeft':
+                        DangerOnLeft.color = arcade.color.RUBY_RED
+                        DangerOnLeft.draw()
+                    elif i == 'TooCloseRight':
+                        DangerOnRight.color = arcade.color.RUBY_RED
+                        DangerOnRight.draw()
+                else:
+                    if i == 'Stop':
+                        StopSign.color = arcade.color.RUBY_RED
+                        StopSign.draw()
+                    elif i == 'TLeft':
+                        TurnLeft.color = arcade.color.YELLOW
+                        TurnLeft.draw()
+                    elif i == 'TRight':
+                        TurnRight.color = arcade.color.YELLOW
+                        TurnRight.draw()
+                    elif i == 'TooCloseFront':
+                        SlowText.draw()
+                        DangerOnFront.color = arcade.color.SPANISH_RED
+                        DangerOnFront.draw()
+                    elif i == 'TooCloseRear':
+                        CarefulOnRear.draw()
+                        DangerOnRear.color = arcade.color.SPANISH_RED
+                        DangerOnRear.draw()
+                    elif i == 'TooCloseLeft':
+                        DangerOnLeft.color = arcade.color.SPANISH_RED
+                        DangerOnLeft.draw()
+                    elif i == 'TooCloseRight':
+                        DangerOnRight.color = arcade.color.SPANISH_RED
+                        DangerOnRight.draw()         
+                if diff <= 0:
+                    alert[i]['status'] = False
+                    alert[i]['time'] = 0
         
-        
-
     def create_buttons(self):
         global pause
         BUTTON_WIDTH = 100
