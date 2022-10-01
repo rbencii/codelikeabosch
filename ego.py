@@ -33,7 +33,7 @@ class Ego:
     
     def __init__(self, filePath = 'data/PSA_ADAS_W3_FC_2022-09-01_15-12_0059.MF4/Group_416.csv'):
         with open(filePath, 'rt') as f:
-           self.iterator = 0
+           self.iterator = 1
            reader = csv.reader(f)
            self.database = list(reader)
            self.EndOfList = len(self.database)<=self.iterator
