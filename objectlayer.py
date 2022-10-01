@@ -127,7 +127,6 @@ class Objects:
         if(self.EndOfList):
             return
         self.realObjects = []
-
         self.time = self.database[self.databaseLinePivot][0]
         limit=math.floor(float(self.time))+limitMargin
         found = False

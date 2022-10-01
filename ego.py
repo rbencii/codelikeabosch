@@ -43,7 +43,6 @@ class Ego:
     def __update__(self,limitMargin = 0.2):
         if(self.EndOfList):
             return
-        self.iterator += 1
         self.EndOfList = len(self.database)<=self.iterator
         if(self.EndOfList):
             return

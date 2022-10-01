@@ -169,7 +169,9 @@ class MyGame(arcade.Window):
 
     def on_draw(self):
         global pause
+        # draw manager for buttons
         if pause:
+            self.button_manager.draw()
             arcade.draw_text("Pause", 10, 20, arcade.color.BLACK, 14)
             return
         
@@ -406,6 +408,9 @@ class MyGame(arcade.Window):
         # draw manager for buttons
         self.button_manager.draw()
 
+
+        
+
     """def on_key_press(self, key, modifiers):
         #Called whenever a key is pressed.
         if key == arcade.key.F:
@@ -446,7 +451,7 @@ class MyGame(arcade.Window):
             pause = False
         else:
             pause = True
-
+        self.create_buttons()
 
 
     def select_file(self, event, index):
@@ -462,6 +467,7 @@ class MyGame(arcade.Window):
         self.setup()
 
     def create_buttons(self):
+        global pause
         BUTTON_WIDTH = 100
         PADDING = 10
 
@@ -471,7 +477,7 @@ class MyGame(arcade.Window):
         self.v_box = arcade.gui.UIBoxLayout()
 
         start_button = arcade.gui.UIFlatButton(
-            text="Start", width=BUTTON_WIDTH, style=self.button_style)
+            text="Start" if pause else "Pause", width=BUTTON_WIDTH, style=self.button_style)
         start_button.on_click = self.pause_resume
         self.v_box.add(start_button.with_space_around(
             top=PADDING, left=PADDING))
