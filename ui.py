@@ -235,40 +235,39 @@ class MyGame(arcade.Window):
                 arcade.draw_point(objektumx, objektumy,
                                   arcade.color.ROSE_RED, 25)
             # Object text
-            arcade.draw_text("Object id: " + str(i), screen_width-310, 33*i+40)
+            objeobjectText += ("Object id: " + str(i))
             if (objectLayer.realObjects[i].keys().__contains__("type")):
                 if (objectLayer.realObjects[i]["type"] == "0"):
-                    arcade.draw_text(
-                        "Type: unknown", screen_width-220, 33*i+40, arcade.color.ROSE_RED)
+                    objectText += (
+                        "Type: unknown")
                 elif (objectLayer.realObjects[i]["type"] == "1"):
-                    arcade.draw_text("Type: truck", screen_width -
-                                     220, 33*i+40, arcade.color.DARK_BLUE)
+                    objectText += ("Type: truck")
                 elif (objectLayer.realObjects[i]["type"] == "2"):
-                    arcade.draw_text("Type: car", screen_width -
-                                     220, 33*i+40, arcade.color.FERN_GREEN)
+                    objectText += ("Type: car")
                 elif (objectLayer.realObjects[i]["type"] == "3"):
-                    arcade.draw_text(
-                        "Type: motorbike", screen_width-220, 33*i+40, arcade.color.AMARANTH_PURPLE)
+                    objectText += (
+                        "Type: motorbike")
                 elif (objectLayer.realObjects[i]["type"] == "4"):
-                    arcade.draw_text(
-                        "Type: cyclist", screen_width-220, 33*i+40, arcade.color.ANDROID_GREEN)
+                    objectText += (
+                        "Type: cyclist")
                 elif (objectLayer.realObjects[i]["type"] == "5"):
-                    arcade.draw_text(
-                        "Type: pedestrian", screen_width-220, 33*i+40, arcade.color.BABY_PINK)
+                    objectText += (
+                        "Type: pedestrian")
                 elif (objectLayer.realObjects[i]["type"] == "6"):
-                    arcade.draw_text(
-                        "Type: truck/car", screen_width-220, 33*i+40, arcade.color.STAR_COMMAND_BLUE)
+                    objectText += (
+                        "Type: truck/car")
             else:
-                arcade.draw_text("Type: unknown", screen_width -
-                                 220, 33*i+40, arcade.color.ROSE_RED)
-            arcade.draw_text(
-                "vx: " + str(objectLayer.realObjects[i]["vx"]), screen_width-110, 33*i+40)
-            arcade.draw_text(
-                "X: " + str(objectLayer.realObjects[i]["x"]), screen_width-310, 33*i+22)
-            arcade.draw_text(
-                "Y: " + str(objectLayer.realObjects[i]["y"]), screen_width-220, 33*i+22)
-            arcade.draw_text(
-                "vy: " + str(objectLayer.realObjects[i]["vy"]), screen_width-110, 33*i+22)
+                objectText += ("Type: unknown")
+            objectText += (
+                "vx: " + str(objectLayer.realObjects[i]["vx"]) + "\n")
+            objectText += (
+                "X: " + str(objectLayer.realObjects[i]["x"]))
+            objectText += (
+                "Y: " + str(objectLayer.realObjects[i]["y"]))
+            objectText += (
+                "vy: " + str(objectLayer.realObjects[i]["vy"]) + "\n")
+
+            arcade.Text(objectText, screen_width-200, screen_height-600, arcade.color.BABY_BLUE, 12, multiline=True, width=300)
 
         # radarjobbelso
         radarcarx, radarcary = carspacetoscreenspace(origox, origoy,
