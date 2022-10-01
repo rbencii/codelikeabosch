@@ -4,6 +4,8 @@ import functools
 from math import floor
 import arcade
 import arcade.gui
+from arcade.experimental.uislider import UISlider
+from arcade.gui.events import UIOnChangeEvent
 import os
 from ego import Ego
 from objectlayer import Objects
@@ -169,6 +171,9 @@ class MyGame(arcade.Window):
         # tesztelés
         # if(egoObj.iterator >300):
         #    egoObj.EndOfList = True
+
+        self.create_slider()
+       
 
         #ALERT SYSTEM
         """"for i in objectLayer.realObjects:
@@ -411,6 +416,7 @@ class MyGame(arcade.Window):
             arcade.draw_text("Pause", 10, 20, arcade.color.BLACK, 14)
         # draw manager for buttons
         self.button_manager.draw()
+        self.slider_manager.draw()
 
         self.alert_Driver_draw()
 
@@ -635,6 +641,8 @@ class MyGame(arcade.Window):
             button.on_click = functools.partial(self.select_car, index=i)
             self.v_box.add(button.with_space_around(top=PADDING, left=PADDING))
             
+        self.create_slider()
+
             
 
         self.button_manager.add(
@@ -643,6 +651,21 @@ class MyGame(arcade.Window):
                 anchor_y="top",
                 child=self.v_box)
         )
+
+    def create_slider(self):
+        self.slider_manager = arcade.gui.UIManager()
+        self.slider_manager.enable()
+        ui_slider = UISlider(value=float(egoObj.T), width=300, height=50, )
+        label = arcade.gui.UILabel(text=f"{ui_slider.value:02.0f}")
+
+        @ui_slider.event()
+        def on_change(event: UIOnChangeEvent):
+            egoObj.T = event.value
+            label.text = f"{ui_slider.value:02.0f}"
+            label.fit_content()
+
+        self.slider_manager.add(arcade.gui.UIAnchorWidget(child=ui_slider, anchor_x="left", anchor_y="bottom"))
+        self.slider_manager.add(arcade.gui.UIAnchorWidget(child=label, anchor_x="left", anchor_y="bottom"))
         
 def ui_run():
     MyGame()
