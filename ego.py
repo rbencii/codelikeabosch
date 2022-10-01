@@ -30,30 +30,42 @@ class Ego:
         self.psiDtOpt = psiDtOpt """
     
     def __init__(self, filePath):
-        with open('PSA_ADAS_W3_FC_2022-09-01_14-49_0054.MF4/Group_416.csv', 'rt') as f:
+        with open('data/PSA_ADAS_W3_FC_2022-09-01_14-49_0054.MF4/Group_416.csv', 'rt') as f:
+           self.iterator = 0
            reader = csv.reader(f)
            self.database = list(reader)
-           self.T = {}
-           self.vxvRef = {}
-           self.axvRef = 1
-           self.vyvRef = {}
-           self.ayvRef = {}
-           self.psiDtOpt = {}
-        for i in range(2,len(self.database[0])):
-            sor = self.database[0][i].split('.')
-            match sor[7]:
-                case "m_camData":
-                    match sor[-1]:
-                        case "_m_dx":
-                            self.cameraPersonas[sor[-2]]["xIndex"] = i
-                        case "_m_dy":
-                            self.cameraPersonas[sor[-2]]["yIndex"] = i
-                        case "_m_vx":
-                            self.cameraPersonas[sor[-2]]["vxIndex"] = i
-                        case "_m_vy":
-                            self.cameraPersonas[sor[-2]]["vyIndex"] = i
-                        case "_m_ax":
-                            self.cameraPersonas[sor[-2]]["axIndex"] = i
-                        case "_m_az":
-                            self.cameraPersonas[sor[-2]]["azIndex"] = i
+           self.__update__()
+
+    
+    def __update__(self):
+        self.iterator += 1;
+        row = self.database[self.iterator]
+        self.T = row[0]
+        self.axvRef = row[1]
+        self.ayvRef = row[2]
+        self.psiDtOpt = row[3]
+        self.tAbsRefTime = row[4]
+        self.vxvRef = row[5]
+        self.vyvRef = row[6]
+
+    def printCurrent(self):
+        print("iterator: " + str(self.iterator))
+        print("T: " + self.T)
+        print("axvRef: " + self.axvRef)
+        print("ayvRef: " + self.ayvRef)
+        print("psiDtOpt: " + self.psiDtOpt)
+        print("tAbsRefTime: " + self.tAbsRefTime)
+        print("vxvRef: " + self.vxvRef)
+        print("vyvRef: " + self.vyvRef)
+        
                 
+"""
+#sample
+
+x = Ego(None)
+x.printCurrent()
+x.__update__()
+print()
+x.printCurrent() 
+
+#"""
