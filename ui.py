@@ -2,6 +2,8 @@
 
 import functools
 from glob import glob
+from math import cos, degrees, radians, sin
+import math
 import arcade
 import arcade.gui
 import os
@@ -32,7 +34,7 @@ origoy = 0
 CARSIZE = 250
 CARWIDTH = CARSIZE/2.4
 METERTOPIXEL = CARSIZE/4.65
-STREETSIZE = 500
+STREETSIZE = 27
 AXLEP = 3.43
 FPS = 60.0
 
@@ -77,7 +79,9 @@ pause = False
             self.change_y *= -1
 """
 
-
+def lerp(A,B,t):
+    return A+(B-A)*t
+    
 def carspacetoscreenspace(screencarcenterX, screencarcenterY, carSpaceX, carSpaceY, METERTOPIXEL):
     return (
         screencarcenterX+(-1*(carSpaceY/1000.0)*METERTOPIXEL),
@@ -162,7 +166,7 @@ class MyGame(arcade.Window):
             else:
                 egoObj.vxvRef = 0
                 self.streetY = 0
-        self.streetY -= egoObj.vxvRef
+        #self.streetY -= egoObj.vxvRef
         if self.streetY <= -500:
             self.streetY = 0
         # tesztelés
@@ -191,9 +195,26 @@ class MyGame(arcade.Window):
         centerX = screen_width/2.0
         centerY = screen_height/2.0
         # Draw some boxes on the bottom so we can see how they change
-        for i in range(4):
-            arcade.draw_texture_rectangle(
-                centerX+self.streetX, i*STREETSIZE+self.streetY, STREETSIZE, STREETSIZE, self.street, egoObj.psiDtOpt)
+        # for i in range(41):
+        #     anglePart=lerp(egoObj.psiDtOpt/2.0,(math.pi-egoObj.psiDtOpt)/2.0,i/40.0)
+        #     arcade.draw_point(cos(anglePart)*(i-20)*27+centerX,centerY+sin(anglePart)*(i-20)*27,arcade.color.BLACK,20)
+        #          #centerX, i*STREETSIZE, STREETSIZE, STREETSIZE, self.street, lerp(degrees(egoObj.psiDtOpt),360-degrees(egoObj.psiDtOpt),1/40*(i+1)))
+        
+        topPoints = []
+        n=20
+        for i in range(n):
+            curAngle=lerp(math.pi/2.0,math.pi/2.0+egoObj.psiDtOpt/2.0,i*(1/(n-1)))
+            #arcade.draw_point(centerX+cos(curAngle)*(i/(n-1))*screen_width/2.0,centerY+sin(curAngle)*(i/(n-1))*screen_height/2.0,arcade.color.PINK_LAVENDER,20)
+            topPoints.append((centerX-CARWIDTH+cos(curAngle)*(i/(n-1))*screen_width/2.0,centerY+sin(curAngle)*(i/(n-1))*screen_height/2.0)) 
+
+        bottomPoints = []
+        for i in range(n):
+            curAngle=lerp(math.pi/2.0,math.pi/2.0+egoObj.psiDtOpt/2.0,i*(1/(n-1)))
+            #arcade.draw_point(centerX+cos(curAngle)*(i/(n-1))*screen_width/2.0,centerY-sin(curAngle)*(i/(n-1))*screen_height/2.0,arcade.color.PINK_LAVENDER,20)
+            bottomPoints.append((centerX-CARWIDTH+cos(curAngle)*(i/(n-1))*screen_width/2.0,centerY-sin(curAngle)*(i/(n-1))*screen_height/2.0))
+        
+        arcade.draw_lines(topPoints,arcade.color.WHITE,15)
+        arcade.draw_lines(bottomPoints[1:-1],arcade.color.WHITE,15)
 
         # auto
         arcade.draw_texture_rectangle(
