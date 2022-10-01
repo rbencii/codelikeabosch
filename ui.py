@@ -46,6 +46,7 @@ Files = [{"objektumok": "data/PSA_ADAS_W3_FC_2022-09-01_14-49_0054.MF4/Group_349
 Cars = ["car.png", "car2.png"]
 choosen_file = 1
 car_type = 1
+pause = False
 
 """class Item(arcade.Sprite):
 
@@ -108,7 +109,7 @@ class MyGame(arcade.Window):
         self.set_viewport(0, width, 0, height)
         arcade.set_background_color(arcade.color.GRAY)
         self.street = arcade.load_texture("street.png")
-        # self.set_update_rate(1/6000)
+        self.set_update_rate(1)
 
         self.setup()
 
@@ -126,6 +127,10 @@ class MyGame(arcade.Window):
         objectLayer = Objects(Files[choosen_file]["objektumok"])
 
     def on_update(self, delta_time):
+        global pause
+        if pause:
+            return
+
         egoObj.__update__()
         objectLayer.__update__()
         # v = s/t
@@ -149,12 +154,19 @@ class MyGame(arcade.Window):
         #    egoObj.EndOfList = True
 
     def on_draw(self):
+        global pause
+        if pause:
+            arcade.draw_text("Pause", 10, 20, arcade.color.BLACK, 14)
+            return
+        
         """
         Render the screen.
         """
         global origox
         global origoy
         self.clear()
+
+        
 
         # Get viewport dimensions
         left, screen_width, bottom, screen_height = self.get_viewport()
@@ -168,21 +180,27 @@ class MyGame(arcade.Window):
         # auto
         arcade.draw_texture_rectangle(
             centerX, centerY, CARSIZE, CARSIZE, self.car)
-        arcade.draw_text("iterator: " + str(egoObj.iterator),
-                         screen_width-200, screen_height-20)
-        arcade.draw_text("T: " + egoObj.T, screen_width-200, screen_height-50)
-        arcade.draw_text("axvRef: " + str(egoObj.axvRef),
-                         screen_width-200, screen_height-80)
-        arcade.draw_text("ayvRef: " + str(egoObj.ayvRef),
-                         screen_width-200, screen_height-110)
-        arcade.draw_text("psiDtOpt: " + str(egoObj.psiDtOpt),
-                         screen_width-200, screen_height-140)
-        arcade.draw_text("tAbsRefTime: " + str(egoObj.tAbsRefTime),
-                         screen_width-200, screen_height-170)
-        arcade.draw_text("vxvRef: " + str(egoObj.vxvRef),
-                         screen_width-200, screen_height-200)
-        arcade.draw_text("vyvRef: " + str(egoObj.vyvRef),
-                         screen_width-200, screen_height-230)
+
+        cartext=""
+        cartext+=("iterator: " + str(egoObj.iterator) + "\n"
+        + "T: " + egoObj.T + "\n"
+        + "axvRef: " + str(egoObj.axvRef) + "\n"
+        + "ayvRef: " + str(egoObj.ayvRef) + "\n"
+        + "psiDtOpt: " + str(egoObj.psiDtOpt) + "\n"
+        + "tAbsRefTime: " + str(egoObj.tAbsRefTime) + "\n"
+        + "vxvRef: " + str(egoObj.vxvRef) + "\n"
+        + "vyvRef: " + str(egoObj.vyvRef))
+                         
+        multi_line_breaks = arcade.Text(
+            cartext,
+            screen_width-200, screen_height-20,
+            arcade.color.BLACK,
+            22 / 2,
+            multiline=True,
+            width=300,
+        )
+
+        multi_line_breaks.draw()
         # Objects
 
         # koordinatarendszer
@@ -408,14 +426,25 @@ class MyGame(arcade.Window):
         "font_color_pressed": arcade.color.WHITE,
     }
 
+    def pause_resume(self, event):
+        global pause
+        if pause:
+            pause = False
+        else:
+            pause = True
+
+
+
     def select_file(self, event, index):
         global choosen_file 
         choosen_file = index
+        self.create_buttons()
         self.setup()
 
     def select_car(self, event, index):
         global car_type 
         car_type = index
+        self.create_buttons()
         self.setup()
 
     def create_buttons(self):
@@ -429,18 +458,27 @@ class MyGame(arcade.Window):
 
         start_button = arcade.gui.UIFlatButton(
             text="Start", width=BUTTON_WIDTH, style=self.button_style)
+        start_button.on_click = self.pause_resume
         self.v_box.add(start_button.with_space_around(
             top=PADDING, left=PADDING))
 
         for i in range(len(Files)):
-            button = arcade.gui.UIFlatButton(
-                text="Test_" + str(i), width=BUTTON_WIDTH, style=self.button_style)
+            if(i == choosen_file):
+                button = arcade.gui.UIFlatButton(
+                    text="Test_" + str(i), width=BUTTON_WIDTH, style=self.selected_button_style)
+            else:
+                button = arcade.gui.UIFlatButton(
+                    text="Test_" + str(i), width=BUTTON_WIDTH, style=self.button_style)
             button.on_click = functools.partial(self.select_file, index=i)
             self.v_box.add(button.with_space_around(top=PADDING, left=PADDING))
 
         for i in range(len(Cars)):
-            button = arcade.gui.UIFlatButton(
-                text=Cars[i], width=BUTTON_WIDTH, style=self.button_style)
+            if(i == car_type):
+                button = arcade.gui.UIFlatButton(
+                    text="Car_" + str(i + 1), width=BUTTON_WIDTH, style=self.selected_button_style)
+            else:
+                button = arcade.gui.UIFlatButton(
+                    text="Car_" + str(i + 1), width=BUTTON_WIDTH, style=self.button_style)
             button.on_click = functools.partial(self.select_car, index=i)
             self.v_box.add(button.with_space_around(top=PADDING, left=PADDING))
             
