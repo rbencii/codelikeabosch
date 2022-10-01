@@ -187,6 +187,11 @@ class MyGame(arcade.Window):
         origox=centerX
         origoy=centerY-CARSIZE/AXLEP
 
+
+        cameraposX,cameraposY=carspacetoscreenspace(origox,origoy,float(objectLayer.cameraPosX),float(objectLayer.cameraPosY),METERTOPIXEL)
+        arcade.draw_point(cameraposX,cameraposY,arcade.color.LIME_GREEN,20)
+        arcade.draw_text("Camera",cameraposX,cameraposY,anchor_x="center",anchor_y="center")
+
         #Objects
         #print(len(objectLayer.realObjects)) 
         for i in range(len(objectLayer.realObjects)):
@@ -248,6 +253,7 @@ class MyGame(arcade.Window):
         tmpList.sort()
         startAngle,endAngle=tuple(tmpList)
         arcade.draw_arc_filled(radarcarx,radarcary,500,500,arcade.color.AMARANTH_PINK,startAngle,endAngle)
+        arcade.draw_text("RFCorner Radar",radarcarx,radarcary,anchor_x="left",anchor_y="bottom",multiline=True,width=50)
 
         #radarbalelso
         radarcarx,radarcary=carspacetoscreenspace(origox,origoy,
@@ -260,6 +266,7 @@ class MyGame(arcade.Window):
         tmpList.sort()
         startAngle,endAngle=tuple(tmpList)
         arcade.draw_arc_filled(radarcarx,radarcary,500,500,arcade.color.AMARANTH_PINK,startAngle,endAngle)
+        arcade.draw_text("LFCorner Radar",radarcarx,radarcary,anchor_x="right",anchor_y="bottom",multiline=True,width=50)
 
         # radarbalhatso
         radarcarx, radarcary = carspacetoscreenspace(origox, origoy,
@@ -272,6 +279,7 @@ class MyGame(arcade.Window):
         tmpList.sort()
         startAngle,endAngle=tuple(tmpList)
         arcade.draw_arc_filled(radarcarx,radarcary,500,500,arcade.color.AMARANTH_PINK,startAngle,endAngle)
+        arcade.draw_text("LRCorner Radar",radarcarx,radarcary,anchor_x="right",anchor_y="top",multiline=True,width=50)
 
         # radarjobbhatso
         radarcarx, radarcary = carspacetoscreenspace(origox, origoy,
@@ -284,6 +292,7 @@ class MyGame(arcade.Window):
         tmpList.sort()
         startAngle,endAngle=tuple(tmpList)
         arcade.draw_arc_filled(radarcarx,radarcary,500,500,arcade.color.AMARANTH_PINK,startAngle,endAngle)
+        arcade.draw_text("RRCorner Radar",radarcarx,radarcary,anchor_x="left",anchor_y="top",multiline=True,width=50)
 
 
         # holtter
