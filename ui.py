@@ -34,7 +34,7 @@ CARWIDTH = CARSIZE/2.4
 METERTOPIXEL = CARSIZE/4.65
 STREETSIZE = 500
 AXLEP = 3.43
-FPS = 20
+FPS = 30
 
 Files = [{"objektumok": "data/PSA_ADAS_W3_FC_2022-09-01_14-49_0054.MF4/Group_349.csv",
          "auto": 'data/PSA_ADAS_W3_FC_2022-09-01_14-49_0054.MF4/Group_416.csv'},

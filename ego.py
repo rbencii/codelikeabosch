@@ -41,18 +41,27 @@ class Ego:
 
     
     def __update__(self,limitMargin = 0.2):
-        if(self.EndOfList):
-            return
         self.EndOfList = len(self.database)<=self.iterator
+
         if(self.EndOfList):
             return
+
         row = self.database[self.iterator]
         self.T = row[0]
 
-        limit=math.floor(float(self.T))+limitMargin
+        curT=math.floor(float(self.T)*1000.0)/1000.0
+        limit=curT+limitMargin
+
         found = False
-        while math.floor(float(self.T))<limit and not found:
+        while math.floor(float(self.T)*1000.0)/1000.0<limit and not self.EndOfList:
             self.iterator+=1
+            self.EndOfList = len(self.database)<=self.iterator
+            if not self.EndOfList:
+                self.T=self.database[self.iterator][0]
+            else:
+                return
+        
+            '''self.iterator+=1
             self.EndOfList = len(self.database)<=self.iterator
             if(self.EndOfList):
                 self.T = self.database[self.iterator-1][0]
@@ -61,7 +70,8 @@ class Ego:
                 found = True
                 if(limit - float(self.database[self.iterator-1][0]) < float(self.database[self.iterator][0]) - limit):
                     self.iterator-=1
-                    self.T = self.database[self.iterator][0]
+                    self.T = self.database[self.iterator][0]'''
+
         row = self.database[self.iterator]
         self.axvRef = normalize("acceleration", row[1])
         self.ayvRef = normalize("acceleration", row[2])

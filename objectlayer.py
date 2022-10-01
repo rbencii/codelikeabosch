@@ -120,18 +120,31 @@ class Objects:
                                 case "_m_ay":
                                     self.rightRearRadarPersonas[sor[-2]]["ayIndex"] = i
         self.__update__()
+
     def __update__(self,limitMargin = 0.2):
-        if(self.EndOfList):
-            return
         self.EndOfList = len(self.database)<=self.databaseLinePivot
+
         if(self.EndOfList):
             return
+
         self.realObjects = []
         self.time = self.database[self.databaseLinePivot][0]
-        limit=math.floor(float(self.time))+limitMargin
-        found = False
-        while math.floor(float(self.time))<limit and not found:
+
+        limit=math.floor(float(self.time)*1000.0)/1000.0+limitMargin
+        
+        while math.floor(float(self.time)*1000.0)/1000.0<limit and not self.EndOfList:
             self.databaseLinePivot+=1
+            self.EndOfList = len(self.database)<=self.databaseLinePivot
+            if not self.EndOfList:
+                self.time=self.database[self.databaseLinePivot][0]
+            else:
+                return
+
+
+
+
+
+            '''self.databaseLinePivot+=1
             self.EndOfList = len(self.database)<=self.databaseLinePivot
             if(self.EndOfList):
                 self.time = self.database[self.databaseLinePivot-1][0]
@@ -141,7 +154,7 @@ class Objects:
                 found = True
                 if(limit - float(self.database[self.databaseLinePivot-1][0]) < float(self.database[self.databaseLinePivot][0]) - limit):
                     self.databaseLinePivot-=1
-                    self.time = self.database[self.databaseLinePivot][0]
+                    self.time = self.database[self.databaseLinePivot][0]'''
 
         for i in self.cameraPersonas:
             self.cameraPersonas[i]["x"] = self.database[self.databaseLinePivot][self.cameraPersonas[i]["xIndex"]]
