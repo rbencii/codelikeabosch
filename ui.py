@@ -123,6 +123,7 @@ class MyGame(arcade.Window):
             multiline=True,
             width=300,
         )
+        self.innit_Alerts()
 
         self.setup()
 
@@ -237,10 +238,10 @@ class MyGame(arcade.Window):
         arcade.draw_point(radarcarx, radarcary, arcade.color.AMARANTH_PINK, 10)
 
         radarAngle = 90+egoObj.ANGLE_AZIMUTH_CORNER_RADAR_RIGHT_FRONT
-        tmpList = [radarAngle, 90]
+        tmpList = [radarAngle-62, 92]
         tmpList.sort()
         startAngle,endAngle=tuple(tmpList)
-        arcade.draw_arc_filled(radarcarx,radarcary,500,500,arcade.color.AMARANTH_PINK,startAngle,endAngle)
+        arcade.draw_arc_filled(radarcarx,radarcary,500,500,(15, 145, 242, 70),startAngle,endAngle)
         arcade.draw_text("RFCorner Radar",radarcarx,radarcary,anchor_x="left",anchor_y="bottom",multiline=True,width=50)
 
         # radarbalelso
@@ -250,10 +251,10 @@ class MyGame(arcade.Window):
         arcade.draw_point(radarcarx, radarcary, arcade.color.AMARANTH_PINK, 10)
 
         radarAngle = 90+egoObj.ANGLE_AZIMUTH_CORNER_RADAR_LEFT_FRONT
-        tmpList = [radarAngle, 90]
+        tmpList = [radarAngle+62, 88]
         tmpList.sort()
         startAngle,endAngle=tuple(tmpList)
-        arcade.draw_arc_filled(radarcarx,radarcary,500,500,arcade.color.AMARANTH_PINK,startAngle,endAngle)
+        arcade.draw_arc_filled(radarcarx,radarcary,500,500,(15, 145, 242, 70),startAngle,endAngle)
         arcade.draw_text("LFCorner Radar",radarcarx,radarcary,anchor_x="right",anchor_y="bottom",multiline=True,width=50)
 
         # radarbalhatso
@@ -263,10 +264,10 @@ class MyGame(arcade.Window):
         arcade.draw_point(radarcarx, radarcary, arcade.color.AMARANTH_PINK, 10)
 
         radarAngle = 90+egoObj.ANGLE_AZIMUTH_CORNER_RADAR_LEFT_REAR
-        tmpList = [radarAngle, 270]
+        tmpList = [radarAngle-42, 270]
         tmpList.sort()
         startAngle,endAngle=tuple(tmpList)
-        arcade.draw_arc_filled(radarcarx,radarcary,500,500,arcade.color.AMARANTH_PINK,startAngle,endAngle)
+        arcade.draw_arc_filled(radarcarx,radarcary,500,500,(15, 145, 242, 70),startAngle,endAngle)
         arcade.draw_text("LRCorner Radar",radarcarx,radarcary,anchor_x="right",anchor_y="top",multiline=True,width=50)
 
         # radarjobbhatso
@@ -275,16 +276,16 @@ class MyGame(arcade.Window):
                                                      egoObj.Y_POSITION_CORNER_RADAR_RIGHT_REAR, METERTOPIXEL)
         arcade.draw_point(radarcarx, radarcary, arcade.color.AMARANTH_PINK, 10)
 
-        radarAngle = 180-egoObj.ANGLE_AZIMUTH_CORNER_RADAR_RIGHT_REAR
-        tmpList = [radarAngle, 270]
+        radarAngle = 180-(egoObj.ANGLE_AZIMUTH_CORNER_RADAR_RIGHT_REAR)
+        tmpList = [radarAngle+42, 270-2]
         tmpList.sort()
         startAngle,endAngle=tuple(tmpList)
-        arcade.draw_arc_filled(radarcarx,radarcary,500,500,arcade.color.AMARANTH_PINK,startAngle,endAngle)
+        arcade.draw_arc_filled(radarcarx,radarcary,500,500,(15, 145, 242, 70),startAngle,endAngle)
         arcade.draw_text("RRCorner Radar",radarcarx,radarcary,anchor_x="left",anchor_y="top",multiline=True,width=50)
 
         #turn signal
 
-        signalcarx,signalcary=carspacetoscreenspace(origox,origoy,
+        """signalcarx,signalcary=carspacetoscreenspace(origox,origoy,
         egoObj.X_POSITION_CORNER_RADAR_RIGHT_FRONT,
         egoObj.Y_POSITION_CORNER_RADAR_RIGHT_FRONT,METERTOPIXEL)
         arcade.draw_parabola_filled(signalcarx-17, signalcary-35,signalcarx+24 , 17, arcade.color.YELLOW_ORANGE,-55)
@@ -292,7 +293,7 @@ class MyGame(arcade.Window):
         signalcarx,signalcary=carspacetoscreenspace(origox,origoy,
         egoObj.X_POSITION_CORNER_RADAR_LEFT_FRONT,
         egoObj.Y_POSITION_CORNER_RADAR_LEFT_FRONT,METERTOPIXEL)
-        arcade.draw_parabola_filled(signalcarx+17, signalcary-35,signalcarx-24, 17, arcade.color.YELLOW_ORANGE,55)
+        arcade.draw_parabola_filled(signalcarx+17, signalcary-35,signalcarx-24, 17, arcade.color.YELLOW_ORANGE,55)"""
 
         # holtter
         point_list = tuple(map(lambda t:
@@ -412,7 +413,11 @@ class MyGame(arcade.Window):
 
         # draw manager for buttons
         self.button_manager.draw()
-
+        self.alert_Driver('Stop')
+        self.alert_Driver('TLeft')
+        self.alert_Driver('TRight')
+        self.alert_Driver('TooCloseFront')
+        self.alert_Driver('TooCloseRear')
 
         
 
@@ -470,6 +475,88 @@ class MyGame(arcade.Window):
         car_type = index
         self.create_buttons()
         self.setup()
+    def innit_Alerts(self):
+        global alert
+        left, screen_width, bottom, screen_height = self.get_viewport()
+        alert = {
+            "Stop": False,
+            "TLeft": False,
+            "TRight": False,
+            "TooCloseFront": False,
+            "TooCloseRear": False,
+        }
+        global StopSign, DangerOnRight, DangerOnLeft, DangerOnFront, DangerOnRear, TurnRight, TurnLeft
+        point_list = (
+                    (240, screen_height-300),
+                    (340, screen_height-300),
+                    (340, screen_height-250),
+                    (390, screen_height-350),
+                    (340, screen_height-450),
+                    (340, screen_height-400),
+                    (240, screen_height-400))
+        TurnRight = arcade.create_polygon(point_list, arcade.color.YELLOW)
+        point_list = (
+                    (240, screen_height-300),
+                    (270, screen_height-330),
+                    (312, screen_height-330),
+                    (342, screen_height-300),
+                    (342, screen_height-258),
+                    (312, screen_height-228),
+                    (270, screen_height-228),
+                    (240, screen_height-258))
+        StopSign = arcade.create_polygon(point_list, arcade.color.RUBY_RED)
+        point_list = ((screen_width-330, 20),
+                    (screen_width-340, 30),
+                    (screen_width-350, 300),
+                    (screen_width-350, screen_height-300),
+                    (screen_width-340, screen_height-30),
+                    (screen_width-330, screen_height-20))
+        DangerOnRight = arcade.create_polygon(point_list, arcade.color.SPANISH_RED)
+        point_list = ((160, 20),
+                    (170, 30),
+                    (180, 300),
+                    (180, screen_height-300),
+                    (170, screen_height-30),
+                    (160, screen_height-20))
+        DangerOnLeft = arcade.create_polygon(point_list, arcade.color.SPANISH_RED)
+        point_list = ((170, screen_height-10),
+                    (180, screen_height-22),
+                    (screen_width/2.0-170, screen_height-30),
+                    (screen_width/2.0+70, screen_height-30),
+                    (screen_width-340, screen_height-22),
+                    (screen_width-330, screen_height-10))
+        DangerOnFront = arcade.create_polygon(point_list, arcade.color.SPANISH_RED)
+        point_list = ((170, 10),
+                    (180, 22),
+                    (screen_width/2.0-170, 30),
+                    (screen_width/2.0+70, 30),
+                    (screen_width-340, 22),
+                    (screen_width-330, 10))
+        DangerOnRear = arcade.create_polygon(point_list, arcade.color.SPANISH_RED)
+    def alert_Driver(self,key = 'Stop'):
+        global alert
+        global StopSign, DangerOnRight, DangerOnLeft, DangerOnFront, DangerOnRear
+        match key:
+            case 'Stop':
+                TurnRight.draw()
+                #StopSign.draw()
+                return
+            case 'TRight':
+                DangerOnRight.draw()
+                return
+            case 'TLeft':
+                DangerOnLeft.draw()
+                return
+            case 'TooCloseFront':
+                DangerOnFront.draw()
+                return
+            case 'TooCloseRear':
+                DangerOnRear.draw()
+                return
+            case other:
+                raise ValueError('Unknown key: {}'.format(key))
+        
+        
 
     def create_buttons(self):
         global pause
