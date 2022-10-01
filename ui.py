@@ -346,17 +346,31 @@ class MyGame(arcade.Window):
             self.slider += 1"""
 
     # style for buttons
-    teal_style = {
+    button_style = {
         "font_name": ("calibri", "arial"),
         "font_size": 15,
         "font_color": arcade.color.WHITE,
-        "bg_color": arcade.color.TEAL_BLUE,
-    
-
+        "bg_color": arcade.color.BLUE,
         "bg_color_pressed": arcade.color.DARK_GRAY,
         "border_color_pressed": arcade.color.DARK_GRAY,
         "font_color_pressed": arcade.color.WHITE,
     }
+
+    selected_button_style = {
+        "font_name": ("calibri", "arial"),
+        "font_size": 15,
+        "font_color": arcade.color.WHITE,
+        "bg_color": arcade.color.RED,
+        "bg_color_pressed": arcade.color.DARK_GRAY,
+        "border_color_pressed": arcade.color.DARK_GRAY,
+        "font_color_pressed": arcade.color.WHITE,
+    }
+
+    def choose_file(self, index):
+        ChoosenFile = index
+        egoObj = Ego(Files[ChoosenFile]["auto"])
+        objectLayer = Objects(Files[ChoosenFile]["objektumok"])
+
 
     def create_buttons(self):
         BUTTON_WIDTH = 100
@@ -368,29 +382,18 @@ class MyGame(arcade.Window):
         self.v_box = arcade.gui.UIBoxLayout()
 
         start_button = arcade.gui.UIFlatButton(
-            text="Start", width=BUTTON_WIDTH, style=self.teal_style)
+            text="Start", width=BUTTON_WIDTH, style=self.button_style)
         self.v_box.add(start_button.with_space_around(
             top=PADDING, left=PADDING))
 
-        test1_button = arcade.gui.UIFlatButton(
-            text="Test1", width=BUTTON_WIDTH, style=self.teal_style)
-        self.v_box.add(test1_button.with_space_around(
-            top=PADDING, left=PADDING))
+        ind = 0
+        for ind in range(len(Files)):      
+            button = arcade.gui.UIFlatButton(
+                text="File_" + str(ind+1), width=BUTTON_WIDTH, style=self.button_style)
+            self.v_box.add(button.with_space_around(
+                top=PADDING, left=PADDING))
+            button.on_click = self.choose_file(ind)
 
-        test2_button = arcade.gui.UIFlatButton(
-            text="Test2", width=BUTTON_WIDTH, style=self.teal_style)
-        self.v_box.add(test2_button.with_space_around(
-            top=PADDING, left=PADDING))
-
-        test3_button = arcade.gui.UIFlatButton(
-            text="Test3", width=BUTTON_WIDTH, style=self.teal_style)
-        self.v_box.add(test3_button.with_space_around(
-            top=PADDING, left=PADDING))
-
-        test4_button = arcade.gui.UIFlatButton(
-            text="Test4", width=BUTTON_WIDTH, style=self.teal_style)
-        self.v_box.add(test4_button.with_space_around(
-            top=PADDING, left=PADDING))
 
         self.button_manager.add(
             arcade.gui.UIAnchorWidget(
