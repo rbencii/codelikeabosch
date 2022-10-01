@@ -60,7 +60,7 @@ class Ego:
             self.T = self.database[self.iterator][0]
             if(math.floor(float(self.T))>=limit):
                 found = True
-                if(limit - self.database[self.iterator-1][0] < self.database[self.iterator][0] - limit):
+                if(limit - float(self.database[self.iterator-1][0]) < float(self.database[self.iterator][0]) - limit):
                     self.iterator-=1
                     self.T = self.database[self.iterator][0]
         row = self.database[self.iterator]

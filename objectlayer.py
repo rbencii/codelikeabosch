@@ -139,7 +139,7 @@ class Objects:
             self.time = self.database[self.databaseLinePivot][0]
             if(math.floor(float(self.time))>=limit):
                 found = True
-                if(limit - self.database[self.databaseLinePivot-1][0] < self.database[self.databaseLinePivot][0] - limit):
+                if(limit - float(self.database[self.databaseLinePivot-1][0]) < float(self.database[self.databaseLinePivot][0]) - limit):
                     self.databaseLinePivot-=1
                     self.time = self.database[self.databaseLinePivot][0]
 
