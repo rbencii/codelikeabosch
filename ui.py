@@ -23,9 +23,9 @@ MOVEMENT_SPEED = 5
 
 # FILE VALASZTAS
 #egoObj = Ego(filedialog.askopenfilename())
-egoObj = Ego()
+egoObj = {}
 
-objectLayer = Objects()
+objectLayer = {}
 
 origox = 0
 origoy = 0
