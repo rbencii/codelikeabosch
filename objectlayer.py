@@ -237,5 +237,5 @@ class Objects:
             if(van and normalize('d',self.rightRearRadarPersonas[i]["x"])!=0 and normalize('d',self.rightRearRadarPersonas[i]["y"])!=0):
                 self.realObjects.append({"z":normalize('d',self.rightRearRadarPersonas[i]["z"]),"x":normalize('d',self.rightRearRadarPersonas[i]["x"]),"y":normalize('d',self.rightRearRadarPersonas[i]["y"]),"vx":normalize('v',self.rightRearRadarPersonas[i]["vx"]),"vy":normalize('v',self.rightRearRadarPersonas[i]["vy"]),"ax":normalize('a',self.rightRearRadarPersonas[i]["ax"]),"ay":normalize('a',self.rightRearRadarPersonas[i]["ay"])})
         self.databaseLinePivot = self.databaseLinePivot + 1
-        print(len(self.realObjects))
+        #print(len(self.realObjects))
         pass

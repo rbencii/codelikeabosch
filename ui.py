@@ -1,5 +1,5 @@
 # win: pip3 install arcade
-from turtle import bgcolor, st
+
 import arcade
 import arcade.gui
 import os
@@ -226,7 +226,13 @@ class MyGame(arcade.Window):
             arcade.draw_text("X: " + str(objectLayer.realObjects[i]["x"]),screen_width-310,33*i+22)
             arcade.draw_text("Y: " + str(objectLayer.realObjects[i]["y"]),screen_width-220,33*i+22)
             arcade.draw_text("vy: " + str(objectLayer.realObjects[i]["vy"]),screen_width-110,33*i+22)
-  
+
+        #radarjobbelso
+        radarcarx,radarcary=carspacetoscreenspace(origox,origoy,
+        egoObj.X_POSITION_CORNER_RADAR_RIGHT_FRONT,
+        egoObj.Y_POSITION_CORNER_RADAR_RIGHT_FRONT,METERTOPIXEL)
+        arcade.draw_point(radarcarx,radarcary,arcade.color.AMARANTH_PINK,10)
+
         #radarbalelso
         radarcarx,radarcary=carspacetoscreenspace(origox,origoy,
         egoObj.X_POSITION_CORNER_RADAR_LEFT_FRONT,
