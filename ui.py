@@ -32,6 +32,15 @@ METERTOPIXEL = CARSIZE/4.65
 STREETSIZE = 500
 AXLEP = 3.43
 
+Files = [{"objektumok":"data/PSA_ADAS_W3_FC_2022-09-01_14-49_0054.MF4/Group_349.csv",
+         "auto":'data/PSA_ADAS_W3_FC_2022-09-01_14-49_0054.MF4/Group_416.csv'},
+         {"objektumok":"data/PSA_ADAS_W3_FC_2022-09-01_15-03_0057.MF4/Group_349.csv",
+         "auto":'data/PSA_ADAS_W3_FC_2022-09-01_15-03_0057.MF4/Group_416.csv'},
+         {"objektumok":"data/PSA_ADAS_W3_FC_2022-09-01_15-12_0059.MF4/Group_349.csv",
+         "auto":'data/PSA_ADAS_W3_FC_2022-09-01_15-12_0059.MF4/Group_416.csv'},
+         {"objektumok":"data/PSA_ADAS_W3_FC_2022-09-01_15-17_0060.MF4/Group_349.csv",
+         "auto":'data/PSA_ADAS_W3_FC_2022-09-01_15-17_0060.MF4/Group_416.csv'}]
+ChoosenFile = 0
 """class Item(arcade.Sprite):
 
     def __init__(self, filename, sprite_scaling):
@@ -98,7 +107,8 @@ class MyGame(arcade.Window):
         self.streetX = 0
         self.streetY = 0
         self.slider = 100
-
+        egoObj = Ego(Files[ChoosenFile]["auto"])
+        objectLayer = Objects(Files[ChoosenFile]["objektumok"])
         self.create_buttons()
 
     def on_update(self, delta_time):
