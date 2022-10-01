@@ -35,11 +35,17 @@ class Ego:
            self.iterator = 0
            reader = csv.reader(f)
            self.database = list(reader)
+           self.EndOfList = len(self.database)<=self.iterator
            self.__update__()
 
     
     def __update__(self):
+        if(self.EndOfList):
+            return
         self.iterator += 1
+        self.EndOfList = len(self.database)<=self.iterator
+        if(self.EndOfList):
+            return
         row = self.database[self.iterator]
         self.T = row[0]
         self.axvRef = normalize("acceleration", row[1])

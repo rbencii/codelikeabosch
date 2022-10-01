@@ -2,8 +2,9 @@
 import arcade
 import os
 import math
-from tkinter import filedialog
+#from tkinter import filedialog
 from ego import Ego
+from objectlayer import Objects
 
 SPRITE_SCALING = 0.5
 
@@ -21,6 +22,7 @@ MOVEMENT_SPEED = 5
 #egoObj = Ego(filedialog.askopenfilename())
 egoObj = Ego()
 
+objectLayer = Objects()
 
 CARSIZE = 250
 CARWIDTH=CARSIZE/2.4
@@ -94,14 +96,26 @@ class MyGame(arcade.Window):
 
     def on_update(self, delta_time):
         egoObj.__update__()
+        objectLayer.__update__()
         # v = s/t
         # egoObj.vxvRef = s meter / 1sec
         # s = egoObj.vxvRef
         #self.streetX-=egoObj.vyvRef
         #self.streetx-=math.cos
+        if(egoObj.EndOfList):
+            if(egoObj.vxvRef < 1):
+                egoObj.vxvRef += 0.1
+            elif(egoObj.vxvRef > 1):
+                egoObj.vxvRef -= 0.1
+            else:
+                egoObj.vxvRef = 0
+                self.streetY = 0
         self.streetY-=egoObj.vxvRef
         if self.streetY<=-500:
             self.streetY=0
+        #tesztelés
+        #if(egoObj.iterator >300):
+        #    egoObj.EndOfList = True
 
     def on_draw(self):
         """
@@ -120,14 +134,16 @@ class MyGame(arcade.Window):
 
         #auto
         arcade.draw_texture_rectangle(centerX, centerY, CARSIZE, CARSIZE, self.car)
-        arcade.draw_text("iterator: " + str(egoObj.iterator),300,1000)
-        arcade.draw_text("T: " + egoObj.T,300,900)
-        arcade.draw_text("axvRef: " + str(egoObj.axvRef),300,800)
-        arcade.draw_text("ayvRef: " + str(egoObj.ayvRef),300,700)
-        arcade.draw_text("psiDtOpt: " + str(egoObj.psiDtOpt),300,600)
-        arcade.draw_text("tAbsRefTime: " + str(egoObj.tAbsRefTime),300,500)
-        arcade.draw_text("vxvRef: " + str(egoObj.vxvRef),300,400)
-        arcade.draw_text("vyvRef: " + str(egoObj.vyvRef),300,300)
+        arcade.draw_text("iterator: " + str(egoObj.iterator),screen_width-200,screen_height-20)
+        arcade.draw_text("T: " + egoObj.T,screen_width-200,screen_height-50)
+        arcade.draw_text("axvRef: " + str(egoObj.axvRef),screen_width-200,screen_height-80)
+        arcade.draw_text("ayvRef: " + str(egoObj.ayvRef),screen_width-200,screen_height-110)
+        arcade.draw_text("psiDtOpt: " + str(egoObj.psiDtOpt),screen_width-200,screen_height-140)
+        arcade.draw_text("tAbsRefTime: " + str(egoObj.tAbsRefTime),screen_width-200,screen_height-170)
+        arcade.draw_text("vxvRef: " + str(egoObj.vxvRef),screen_width-200,screen_height-200)
+        arcade.draw_text("vyvRef: " + str(egoObj.vyvRef),screen_width-200,screen_height-230)
+        #Objects
+
 
         #koordinatarendszer
         arcade.draw_line(centerX-CARWIDTH/2.0,centerY-CARSIZE/AXLEP,centerX+CARWIDTH/2.0,centerY-CARSIZE/AXLEP,arcade.color.YELLOW,5)
