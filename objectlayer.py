@@ -135,7 +135,8 @@ class Objects:
             self.EndOfList = len(self.database)<=self.databaseLinePivot
             if(self.EndOfList):
                 self.time = self.database[self.databaseLinePivot-1][0]
-            self.time = self.database[self.databaseLinePivot][0]
+            else:
+                self.time = self.database[self.databaseLinePivot][0]
             if(math.floor(float(self.time))>=limit):
                 found = True
                 if(limit - float(self.database[self.databaseLinePivot-1][0]) < float(self.database[self.databaseLinePivot][0]) - limit):
