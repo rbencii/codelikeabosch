@@ -130,7 +130,7 @@ class MyGame(arcade.Window):
         global pause
         if pause:
             return
-            
+
         egoObj.__update__()
         objectLayer.__update__()
         # v = s/t
@@ -433,11 +433,13 @@ class MyGame(arcade.Window):
     def select_file(self, event, index):
         global choosen_file 
         choosen_file = index
+        self.create_buttons()
         self.setup()
 
     def select_car(self, event, index):
         global car_type 
         car_type = index
+        self.create_buttons()
         self.setup()
 
     def create_buttons(self):
@@ -456,14 +458,22 @@ class MyGame(arcade.Window):
             top=PADDING, left=PADDING))
 
         for i in range(len(Files)):
-            button = arcade.gui.UIFlatButton(
-                text="Test_" + str(i), width=BUTTON_WIDTH, style=self.button_style)
+            if(i == choosen_file):
+                button = arcade.gui.UIFlatButton(
+                    text="Test_" + str(i), width=BUTTON_WIDTH, style=self.selected_button_style)
+            else:
+                button = arcade.gui.UIFlatButton(
+                    text="Test_" + str(i), width=BUTTON_WIDTH, style=self.button_style)
             button.on_click = functools.partial(self.select_file, index=i)
             self.v_box.add(button.with_space_around(top=PADDING, left=PADDING))
 
         for i in range(len(Cars)):
-            button = arcade.gui.UIFlatButton(
-                text=Cars[i], width=BUTTON_WIDTH, style=self.button_style)
+            if(i == car_type):
+                button = arcade.gui.UIFlatButton(
+                    text="Car_" + str(i + 1), width=BUTTON_WIDTH, style=self.selected_button_style)
+            else:
+                button = arcade.gui.UIFlatButton(
+                    text="Car_" + str(i + 1), width=BUTTON_WIDTH, style=self.button_style)
             button.on_click = functools.partial(self.select_car, index=i)
             self.v_box.add(button.with_space_around(top=PADDING, left=PADDING))
             
