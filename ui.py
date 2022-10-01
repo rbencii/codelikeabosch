@@ -131,7 +131,6 @@ class MyGame(arcade.Window):
         global egoObj
         global objectLayer
         self.car = arcade.load_texture(Cars[car_type])
-        print(Cars[car_type])
         self.streetX = -100
         self.streetY = 0
         self.slider = 100
@@ -202,7 +201,10 @@ class MyGame(arcade.Window):
         + "psiDtOpt: " + str(egoObj.psiDtOpt) + "\n"
         + "tAbsRefTime: " + str(egoObj.tAbsRefTime) + "\n"
         + "vxvRef: " + str(egoObj.vxvRef) + "\n"
-        + "vyvRef: " + str(egoObj.vyvRef) + "\n" + str(self.debugcnt) + "\n" + str(self.debugcnt2))
+        + "vyvRef: " + str(egoObj.vyvRef) + "\n" 
+        # draw debugcounters
+        # + str(self.debugcnt) + "\n" + str(self.debugcnt2)
+        )
 
         self.multi_line_breaks.text=cartext
         self.multi_line_breaks.x=screen_width-200
@@ -327,7 +329,8 @@ class MyGame(arcade.Window):
 
         arcade.draw_lines(point_list, arcade.color.RED_DEVIL, 3)
 
-        arcade.draw_point(100,self.debugcnt,arcade.color.BLACK,30)
+        # draw black debug point
+        # arcade.draw_point(100,self.debugcnt,arcade.color.BLACK,30)
 
 
         
@@ -368,7 +371,7 @@ class MyGame(arcade.Window):
                 arcade.draw_point(objektumx, objektumy,
                                   arcade.color.ROSE_RED, 25)
             # Object text
-            objectText += ("Object id: " + str(i))
+            objectText += ("Object id: " + str(i)+" ")
             if (objectLayer.realObjects[i].keys().__contains__("type")):
                 if (objectLayer.realObjects[i]["type"] == "0"):
                     objectText += (
@@ -392,11 +395,11 @@ class MyGame(arcade.Window):
             else:
                 objectText += ("Type: unknown")
             objectText += (
-                "vx: " + str(objectLayer.realObjects[i]["vx"]) + "\n")
+                " vx: " + str(objectLayer.realObjects[i]["vx"]) + "\n")
             objectText += (
-                "X: " + str(objectLayer.realObjects[i]["x"]))
+                "X: " + str(objectLayer.realObjects[i]["x"]) + " ")
             objectText += (
-                "Y: " + str(objectLayer.realObjects[i]["y"]))
+                "Y: " + str(objectLayer.realObjects[i]["y"]) + " ")
             objectText += (
                 "vy: " + str(objectLayer.realObjects[i]["vy"]) + "\n")
 
