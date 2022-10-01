@@ -149,8 +149,8 @@ class MyGame(arcade.Window):
         self.streetY = 0
         self.slider = 100
         self.objectit = 1
-        self.topPoints=[(0,0),(0,0)]
-        self.bottomPoints=[(0,0)(0,0)]
+        self.topPoints=[]
+        self.bottomPoints=[]
         egoObj = Ego(Files[choosen_file]["auto"])
         objectLayer = Objects(Files[choosen_file]["objektumok"])
 
@@ -242,9 +242,9 @@ class MyGame(arcade.Window):
         #          #centerX, i*STREETSIZE, STREETSIZE, STREETSIZE, self.street, lerp(degrees(egoObj.psiDtOpt),360-degrees(egoObj.psiDtOpt),1/40*(i+1)))
         
         
-        
-        arcade.draw_lines(list(map(lambda t: (centerX-CARWIDTH+t[0],centerY+t[1]), self.topPoints)),arcade.color.WHITE,15)
-        arcade.draw_lines(list(map(lambda t: (centerX-CARWIDTH+t[0],centerY-t[1]), self.bottomPoints[1:-1])),arcade.color.WHITE,15)
+        if len(self.topPoints)>0:
+            arcade.draw_lines(list(map(lambda t: (centerX-CARWIDTH+t[0],centerY+t[1]), self.topPoints)),arcade.color.WHITE,15)
+            arcade.draw_lines(list(map(lambda t: (centerX-CARWIDTH+t[0],centerY-t[1]), self.bottomPoints[1:-1])),arcade.color.WHITE,15)
 
         # auto
         arcade.draw_texture_rectangle(
