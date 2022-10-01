@@ -58,7 +58,7 @@ class Ego:
             if(self.EndOfList):
                 self.T = self.database[self.iterator-1][0]
             self.T = self.database[self.iterator][0]
-            if(math.floor(float(self.time))>=limit):
+            if(math.floor(float(self.T))>=limit):
                 found = True
                 if(limit - self.database[self.iterator-1][0] < self.database[self.iterator][0] - limit):
                     self.iterator-=1
