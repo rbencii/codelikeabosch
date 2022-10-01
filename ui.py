@@ -253,7 +253,7 @@ class MyGame(arcade.Window):
                 arcade.draw_point(objektumx, objektumy,
                                   arcade.color.ROSE_RED, 25)
             # Object text
-            objeobjectText += ("Object id: " + str(i))
+            objectText = ("Object id: " + str(i))
             if (objectLayer.realObjects[i].keys().__contains__("type")):
                 if (objectLayer.realObjects[i]["type"] == "0"):
                     objectText += (
