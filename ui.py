@@ -1,5 +1,6 @@
 # win: pip3 install arcade
 
+from glob import glob
 import arcade
 import arcade.gui
 import os
@@ -25,6 +26,9 @@ MOVEMENT_SPEED = 5
 egoObj = Ego()
 
 objectLayer = Objects()
+
+origox = 0
+origoy = 0
 
 CARSIZE = 250
 CARWIDTH = CARSIZE/2.4
@@ -110,8 +114,10 @@ class MyGame(arcade.Window):
         self.create_buttons()
 
     def setup(self,carType=0,):
+        global egoObj
+        global objectLayer
         self.car = arcade.load_texture(Cars[carType])
-        self.streetX = 0
+        self.streetX = -100
         self.streetY = 0
         self.slider = 100
         egoObj = Ego(Files[ChoosenFile]["auto"])
@@ -144,7 +150,8 @@ class MyGame(arcade.Window):
         """
         Render the screen.
         """
-
+        global origox
+        global origoy
         self.clear()
 
         # Get viewport dimensions
@@ -291,6 +298,17 @@ class MyGame(arcade.Window):
         startAngle,endAngle=tuple(tmpList)
         arcade.draw_arc_filled(radarcarx,radarcary,500,500,arcade.color.AMARANTH_PINK,startAngle,endAngle)
 
+        #turn signal
+
+        signalcarx,signalcary=carspacetoscreenspace(origox,origoy,
+        egoObj.X_POSITION_CORNER_RADAR_RIGHT_FRONT,
+        egoObj.Y_POSITION_CORNER_RADAR_RIGHT_FRONT,METERTOPIXEL)
+        arcade.draw_parabola_filled(signalcarx-17, signalcary-35,signalcarx+24 , 17, arcade.color.YELLOW_ORANGE,-55)
+
+        signalcarx,signalcary=carspacetoscreenspace(origox,origoy,
+        egoObj.X_POSITION_CORNER_RADAR_LEFT_FRONT,
+        egoObj.Y_POSITION_CORNER_RADAR_LEFT_FRONT,METERTOPIXEL)
+        arcade.draw_parabola_filled(signalcarx+17, signalcary-35,signalcarx-24, 17, arcade.color.YELLOW_ORANGE,55)
 
         # holtter
         point_list = tuple(map(lambda t : 
@@ -401,8 +419,7 @@ class MyGame(arcade.Window):
                 anchor_y="top",
                 child=self.v_box)
         )
-
-
+        
 def ui_run():
     MyGame()
     arcade.run()
