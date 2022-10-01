@@ -261,6 +261,44 @@ class MyGame(arcade.Window):
                                                      egoObj.Y_POSITION_CORNER_RADAR_RIGHT_REAR, METERTOPIXEL)
         arcade.draw_point(radarcarx, radarcary, arcade.color.AMARANTH_PINK, 10)
 
+
+        # holtter
+        point_list = tuple(map(lambda t : 
+        (carspacetoscreenspace(origox,origoy,t[0],t[1],METERTOPIXEL)[0],
+        carspacetoscreenspace(origox,origoy,t[0],t[1],METERTOPIXEL)[1])
+        ,((-300, 800),
+              (-300, 2300),
+              
+              (2000, 800),
+              (2000, 2300),
+
+              (-300, 800),
+              (2000, 800),
+
+              (-300, 2300),
+              (2000, 2300)
+              )))
+
+        arcade.draw_lines(point_list, arcade.color.RED_DEVIL,3)
+
+        point_list = tuple(map(lambda t : 
+        (carspacetoscreenspace(origox,origoy,t[0],t[1],METERTOPIXEL)[0],
+        carspacetoscreenspace(origox,origoy,t[0],t[1],METERTOPIXEL)[1])
+        ,((-300, -800),
+              (-300, -2300),
+              
+              (2000, -800),
+              (2000, -2300),
+
+              (-300, -800),
+              (2000, -800),
+
+              (-300, -2300),
+              (2000, -2300)
+              )))
+
+        arcade.draw_lines(point_list, arcade.color.RED_DEVIL,3)
+
         # draw manager for buttons
         self.button_manager.draw()
 
