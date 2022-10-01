@@ -46,6 +46,7 @@ Files = [{"objektumok": "data/PSA_ADAS_W3_FC_2022-09-01_14-49_0054.MF4/Group_349
 Cars = ["car.png", "car2.png"]
 choosen_file = 1
 car_type = 1
+pause = False
 
 """class Item(arcade.Sprite):
 
@@ -126,6 +127,10 @@ class MyGame(arcade.Window):
         objectLayer = Objects(Files[choosen_file]["objektumok"])
 
     def on_update(self, delta_time):
+        global pause
+        if pause:
+            return
+            
         egoObj.__update__()
         objectLayer.__update__()
         # v = s/t
@@ -149,12 +154,19 @@ class MyGame(arcade.Window):
         #    egoObj.EndOfList = True
 
     def on_draw(self):
+        global pause
+        if pause:
+            arcade.draw_text("Pause", 10, 20, arcade.color.BLACK, 14)
+            return
+        
         """
         Render the screen.
         """
         global origox
         global origoy
         self.clear()
+
+        
 
         # Get viewport dimensions
         left, screen_width, bottom, screen_height = self.get_viewport()
@@ -409,6 +421,15 @@ class MyGame(arcade.Window):
         "font_color_pressed": arcade.color.WHITE,
     }
 
+    def pause_resume(self, event):
+        global pause
+        if pause:
+            pause = False
+        else:
+            pause = True
+
+
+
     def select_file(self, event, index):
         global choosen_file 
         choosen_file = index
@@ -430,6 +451,7 @@ class MyGame(arcade.Window):
 
         start_button = arcade.gui.UIFlatButton(
             text="Start", width=BUTTON_WIDTH, style=self.button_style)
+        start_button.on_click = self.pause_resume
         self.v_box.add(start_button.with_space_around(
             top=PADDING, left=PADDING))
 
