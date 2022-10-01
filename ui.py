@@ -1,5 +1,7 @@
-#win: pip3 install arcade
+# win: pip3 install arcade
+from turtle import bgcolor, st
 import arcade
+import arcade.gui
 import os
 import math
 #from tkinter import filedialog
@@ -18,17 +20,17 @@ VIEWPORT_MARGIN = 40
 
 MOVEMENT_SPEED = 5
 
-#FILE VALASZTAS
+# FILE VALASZTAS
 #egoObj = Ego(filedialog.askopenfilename())
 egoObj = Ego()
 
 objectLayer = Objects()
 
 CARSIZE = 250
-CARWIDTH=CARSIZE/2.4
-METERTOPIXEL=CARSIZE/4.65
+CARWIDTH = CARSIZE/2.4
+METERTOPIXEL = CARSIZE/4.65
 STREETSIZE = 500
-AXLEP=3.43
+AXLEP = 3.43
 
 """class Item(arcade.Sprite):
 
@@ -57,11 +59,14 @@ AXLEP=3.43
         if self.top > SCREEN_HEIGHT:
             self.change_y *= -1
 """
-def carspacetoscreenspace(screencarcenterX,screencarcenterY,carSpaceX,carSpaceY,METERTOPIXEL):
+
+
+def carspacetoscreenspace(screencarcenterX, screencarcenterY, carSpaceX, carSpaceY, METERTOPIXEL):
     return (
         screencarcenterX+(-1*(carSpaceY/1000.0)*METERTOPIXEL),
         screencarcenterY+((carSpaceX/1000.0)*METERTOPIXEL)
     )
+
 
 class MyGame(arcade.Window):
     """ Main application class. """
@@ -86,13 +91,15 @@ class MyGame(arcade.Window):
         # you want something different, then use those coordinates instead.
         width, height = self.get_size()
         self.set_viewport(0, width, 0, height)
-        arcade.set_background_color(arcade.color.BABY_BLUE)
-        #self.set_update_rate(1/6000)
+        arcade.set_background_color(arcade.color.GRAY)
+        # self.set_update_rate(1/6000)
         self.car = arcade.load_texture("car2.png")
         self.street = arcade.load_texture("street.png")
         self.streetX = 0
         self.streetY = 0
-        self.slider=100
+        self.slider = 100
+
+        self.create_buttons()
 
     def on_update(self, delta_time):
         egoObj.__update__()
@@ -100,21 +107,21 @@ class MyGame(arcade.Window):
         # v = s/t
         # egoObj.vxvRef = s meter / 1sec
         # s = egoObj.vxvRef
-        #self.streetX-=egoObj.vyvRef
-        #self.streetx-=math.cos
-        if(egoObj.EndOfList):
-            if(egoObj.vxvRef < 1):
+        # self.streetX-=egoObj.vyvRef
+        # self.streetx-=math.cos
+        if (egoObj.EndOfList):
+            if (egoObj.vxvRef < 1):
                 egoObj.vxvRef += 0.1
-            elif(egoObj.vxvRef > 1):
+            elif (egoObj.vxvRef > 1):
                 egoObj.vxvRef -= 0.1
             else:
                 egoObj.vxvRef = 0
                 self.streetY = 0
-        self.streetY-=egoObj.vxvRef
-        if self.streetY<=-500:
-            self.streetY=0
-        #tesztelés
-        #if(egoObj.iterator >300):
+        self.streetY -= egoObj.vxvRef
+        if self.streetY <= -500:
+            self.streetY = 0
+        # tesztelés
+        # if(egoObj.iterator >300):
         #    egoObj.EndOfList = True
 
     def on_draw(self):
@@ -126,26 +133,46 @@ class MyGame(arcade.Window):
 
         # Get viewport dimensions
         left, screen_width, bottom, screen_height = self.get_viewport()
-        centerX=screen_width/2.0
-        centerY=screen_height/2.0
+        centerX = screen_width/2.0
+        centerY = screen_height/2.0
         # Draw some boxes on the bottom so we can see how they change
         for i in range(4):
-            arcade.draw_texture_rectangle(centerX+self.streetX, i*STREETSIZE+self.streetY, STREETSIZE, STREETSIZE, self.street,egoObj.psiDtOpt)
+            arcade.draw_texture_rectangle(
+                centerX+self.streetX, i*STREETSIZE+self.streetY, STREETSIZE, STREETSIZE, self.street, egoObj.psiDtOpt)
 
-        #auto
-        arcade.draw_texture_rectangle(centerX, centerY, CARSIZE, CARSIZE, self.car)
-        arcade.draw_text("iterator: " + str(egoObj.iterator),screen_width-200,screen_height-20)
-        arcade.draw_text("T: " + egoObj.T,screen_width-200,screen_height-50)
-        arcade.draw_text("axvRef: " + str(egoObj.axvRef),screen_width-200,screen_height-80)
-        arcade.draw_text("ayvRef: " + str(egoObj.ayvRef),screen_width-200,screen_height-110)
-        arcade.draw_text("psiDtOpt: " + str(egoObj.psiDtOpt),screen_width-200,screen_height-140)
-        arcade.draw_text("tAbsRefTime: " + str(egoObj.tAbsRefTime),screen_width-200,screen_height-170)
-        arcade.draw_text("vxvRef: " + str(egoObj.vxvRef),screen_width-200,screen_height-200)
-        arcade.draw_text("vyvRef: " + str(egoObj.vyvRef),screen_width-200,screen_height-230)
+        # auto
+        arcade.draw_texture_rectangle(
+            centerX, centerY, CARSIZE, CARSIZE, self.car)
+        arcade.draw_text("iterator: " + str(egoObj.iterator),
+                         screen_width-200, screen_height-20)
+        arcade.draw_text("T: " + egoObj.T, screen_width-200, screen_height-50)
+        arcade.draw_text("axvRef: " + str(egoObj.axvRef),
+                         screen_width-200, screen_height-80)
+        arcade.draw_text("ayvRef: " + str(egoObj.ayvRef),
+                         screen_width-200, screen_height-110)
+        arcade.draw_text("psiDtOpt: " + str(egoObj.psiDtOpt),
+                         screen_width-200, screen_height-140)
+        arcade.draw_text("tAbsRefTime: " + str(egoObj.tAbsRefTime),
+                         screen_width-200, screen_height-170)
+        arcade.draw_text("vxvRef: " + str(egoObj.vxvRef),
+                         screen_width-200, screen_height-200)
+        arcade.draw_text("vyvRef: " + str(egoObj.vyvRef),
+                         screen_width-200, screen_height-230)
+        # Objects
 
-        #koordinatarendszer
-        arcade.draw_line(centerX-CARWIDTH/2.0,centerY-CARSIZE/AXLEP,centerX+CARWIDTH/2.0,centerY-CARSIZE/AXLEP,arcade.color.YELLOW,5)
-        arcade.draw_line(centerX,centerY+CARSIZE/2.0,centerX,centerY-CARSIZE/2.0,arcade.color.YELLOW,5)
+        # koordinatarendszer
+        arcade.draw_line(centerX-CARWIDTH/2.0, centerY-CARSIZE/AXLEP, centerX +
+                         CARWIDTH/2.0, centerY-CARSIZE/AXLEP, arcade.color.YELLOW, 5)
+        arcade.draw_line(centerX, centerY+CARSIZE/2.0, centerX,
+                         centerY-CARSIZE/2.0, arcade.color.YELLOW, 5)
+
+        origox = centerX
+        origoy = centerY-CARSIZE/AXLEP
+        # radarbalelso
+        radarcarx, radarcary = carspacetoscreenspace(origox, origoy,
+                                                     egoObj.X_POSITION_CORNER_RADAR_LEFT_FRONT,
+                                                     egoObj.Y_POSITION_CORNER_RADAR_LEFT_FRONT, METERTOPIXEL)
+        arcade.draw_point(radarcarx, radarcary, arcade.color.AMARANTH_PINK, 10)
 
         origox=centerX
         origoy=centerY-CARSIZE/AXLEP
@@ -206,24 +233,20 @@ class MyGame(arcade.Window):
         egoObj.Y_POSITION_CORNER_RADAR_LEFT_FRONT,METERTOPIXEL)
         arcade.draw_point(radarcarx,radarcary,arcade.color.AMARANTH_PINK,10)
 
-        #radarjobbelso
-        radarcarx,radarcary=carspacetoscreenspace(origox,origoy,
-        egoObj.X_POSITION_CORNER_RADAR_RIGHT_FRONT,
-        egoObj.Y_POSITION_CORNER_RADAR_RIGHT_FRONT,METERTOPIXEL)
-        arcade.draw_point(radarcarx,radarcary,arcade.color.AMARANTH_PINK,10)
+        # radarbalhatso
+        radarcarx, radarcary = carspacetoscreenspace(origox, origoy,
+                                                     egoObj.X_POSITION_CORNER_RADAR_LEFT_REAR,
+                                                     egoObj.Y_POSITION_CORNER_RADAR_LEFT_REAR, METERTOPIXEL)
+        arcade.draw_point(radarcarx, radarcary, arcade.color.AMARANTH_PINK, 10)
 
-        #radarbalhatso
-        radarcarx,radarcary=carspacetoscreenspace(origox,origoy,
-        egoObj.X_POSITION_CORNER_RADAR_LEFT_REAR,
-        egoObj.Y_POSITION_CORNER_RADAR_LEFT_REAR,METERTOPIXEL)
-        arcade.draw_point(radarcarx,radarcary,arcade.color.AMARANTH_PINK,10)
+        # radarjobbhatso
+        radarcarx, radarcary = carspacetoscreenspace(origox, origoy,
+                                                     egoObj.X_POSITION_CORNER_RADAR_RIGHT_REAR,
+                                                     egoObj.Y_POSITION_CORNER_RADAR_RIGHT_REAR, METERTOPIXEL)
+        arcade.draw_point(radarcarx, radarcary, arcade.color.AMARANTH_PINK, 10)
 
-        #radarjobbhatso
-        radarcarx,radarcary=carspacetoscreenspace(origox,origoy,
-        egoObj.X_POSITION_CORNER_RADAR_RIGHT_REAR,
-        egoObj.Y_POSITION_CORNER_RADAR_RIGHT_REAR,METERTOPIXEL)
-        arcade.draw_point(radarcarx,radarcary,arcade.color.AMARANTH_PINK,10)
-
+        # draw manager for buttons
+        self.button_manager.draw()
 
     def on_key_press(self, key, modifiers):
         """Called whenever a key is pressed. """
@@ -236,7 +259,62 @@ class MyGame(arcade.Window):
             width, height = self.get_size()
             self.set_viewport(0, width, 0, height)
         if key == arcade.key.UP:
-            self.slider+=1
+            self.slider += 1
+
+    # style for buttons
+    teal_style = {
+        "font_name": ("calibri", "arial"),
+        "font_size": 15,
+        "font_color": arcade.color.WHITE,
+        "bg_color": arcade.color.TEAL_BLUE,
+    
+
+        "bg_color_pressed": arcade.color.DARK_GRAY,
+        "border_color_pressed": arcade.color.DARK_GRAY,
+        "font_color_pressed": arcade.color.WHITE,
+    }
+
+    def create_buttons(self):
+        BUTTON_WIDTH = 100
+        PADDING = 10
+
+        self.button_manager = arcade.gui.UIManager()
+        self.button_manager.enable()
+
+        self.v_box = arcade.gui.UIBoxLayout()
+
+        start_button = arcade.gui.UIFlatButton(
+            text="Start", width=BUTTON_WIDTH, style=self.teal_style)
+        self.v_box.add(start_button.with_space_around(
+            top=PADDING, left=PADDING))
+
+        test1_button = arcade.gui.UIFlatButton(
+            text="Test1", width=BUTTON_WIDTH, style=self.teal_style)
+        self.v_box.add(test1_button.with_space_around(
+            top=PADDING, left=PADDING))
+
+        test2_button = arcade.gui.UIFlatButton(
+            text="Test2", width=BUTTON_WIDTH, style=self.teal_style)
+        self.v_box.add(test2_button.with_space_around(
+            top=PADDING, left=PADDING))
+
+        test3_button = arcade.gui.UIFlatButton(
+            text="Test3", width=BUTTON_WIDTH, style=self.teal_style)
+        self.v_box.add(test3_button.with_space_around(
+            top=PADDING, left=PADDING))
+
+        test4_button = arcade.gui.UIFlatButton(
+            text="Test4", width=BUTTON_WIDTH, style=self.teal_style)
+        self.v_box.add(test4_button.with_space_around(
+            top=PADDING, left=PADDING))
+
+        self.button_manager.add(
+            arcade.gui.UIAnchorWidget(
+                anchor_x="left",
+                anchor_y="top",
+                child=self.v_box)
+        )
+
 
 def ui_run():
     MyGame()
