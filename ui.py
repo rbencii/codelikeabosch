@@ -499,8 +499,8 @@ class MyGame(arcade.Window):
     def select_file(self, event, index):
         global choosen_file 
         choosen_file = index
-        self.create_buttons()
         self.setup()
+        self.create_buttons()
 
     def select_car(self, event, index):
         global car_type 
