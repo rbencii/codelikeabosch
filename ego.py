@@ -39,7 +39,7 @@ class Ego:
 
     
     def __update__(self):
-        self.iterator += 1;
+        self.iterator += 1
         row = self.database[self.iterator]
         self.T = row[0]
         self.axvRef = normalize("acceleration", row[1])
@@ -63,10 +63,10 @@ class Ego:
 #"""
 #sample
 
-x = Ego(None)
+"""x = Ego()
 x.printCurrent()
 x.__update__()
 print()
-x.printCurrent() 
+x.printCurrent() """
 
 #"""

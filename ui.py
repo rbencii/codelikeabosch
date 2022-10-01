@@ -1,6 +1,7 @@
 #win: pip3 install arcade
 import arcade
 import os
+from ego import Ego
 
 SPRITE_SCALING = 0.5
 
@@ -13,7 +14,7 @@ SCREEN_TITLE = "Full Screen Example"
 VIEWPORT_MARGIN = 40
 
 MOVEMENT_SPEED = 5
-
+egoObj = Ego()
 
 class Item(arcade.Sprite):
 
@@ -44,8 +45,8 @@ class Item(arcade.Sprite):
 
 def carspacetoscreenspace(screencarcentreX,screencarcentreY,carSpaceX,carSpaceY,metertopixel):
     return {
-        "x": screencarcentreX+(-1*carSpaceY*metertopixel),
-        "y": screencarcentreY+(carSpaceX*metertopixel)
+        "x": screencarcentreX+(-1*(carSpaceY/1000.0)*metertopixel),
+        "y": screencarcentreY+((carSpaceX/1000.0)*metertopixel)
     }
 
 class MyGame(arcade.Window):
@@ -119,26 +120,44 @@ class MyGame(arcade.Window):
         metertopixel=118
 
         #radarbalelso
-        radarcarx=carspacetoscreenspace(origox,origoy,3.4738,0.6286,metertopixel)["x"]
+        radarcarx=carspacetoscreenspace(origox,origoy,
+        egoObj.X_POSITION_CORNER_RADAR_LEFT_FRONT,
+        egoObj.Y_POSITION_CORNER_RADAR_LEFT_FRONT,metertopixel)["x"]
         arcade.draw_text(str(radarcarx),300,300)
-        radarcary=carspacetoscreenspace(origox,origoy,3.4738,0.6286,metertopixel)["y"]
+        radarcary=carspacetoscreenspace(origox,origoy,
+        egoObj.X_POSITION_CORNER_RADAR_LEFT_FRONT,
+        egoObj.Y_POSITION_CORNER_RADAR_LEFT_FRONT,metertopixel)["y"]
         arcade.draw_point(radarcarx,radarcary,arcade.color.AMARANTH_PINK,10)
 
         #radarjobbelso
-        radarcarx=carspacetoscreenspace(origox,origoy,3.4738,-0.6286,metertopixel)["x"]
+        radarcarx=carspacetoscreenspace(origox,origoy,
+        egoObj.X_POSITION_CORNER_RADAR_RIGHT_FRONT,
+        egoObj.Y_POSITION_CORNER_RADAR_RIGHT_FRONT,metertopixel)["x"]
         arcade.draw_text(str(radarcarx),300,300)
-        radarcary=carspacetoscreenspace(origox,origoy,3.4738,-0.6286,metertopixel)["y"]
+        radarcary=carspacetoscreenspace(origox,origoy,
+        egoObj.X_POSITION_CORNER_RADAR_RIGHT_FRONT,
+        egoObj.Y_POSITION_CORNER_RADAR_RIGHT_FRONT,metertopixel)["y"]
         arcade.draw_point(radarcarx,radarcary,arcade.color.AMARANTH_PINK,10)
 
         #radarbalhatso
-        radarcarx=-0.7664*metertopixel
-        radarcary=-0.738*metertopixel
-        arcade.draw_point(origox+radarcary,origoy+radarcarx,arcade.color.AFRICAN_VIOLET,10)
+        radarcarx=carspacetoscreenspace(origox,origoy,
+        egoObj.X_POSITION_CORNER_RADAR_LEFT_REAR,
+        egoObj.Y_POSITION_CORNER_RADAR_LEFT_REAR,metertopixel)["x"]
+        arcade.draw_text(str(radarcarx),300,300)
+        radarcary=carspacetoscreenspace(origox,origoy,
+        egoObj.X_POSITION_CORNER_RADAR_LEFT_REAR,
+        egoObj.Y_POSITION_CORNER_RADAR_LEFT_REAR,metertopixel)["y"]
+        arcade.draw_point(radarcarx,radarcary,arcade.color.AMARANTH_PINK,10)
 
         #radarjobbhatso
-        radarcarx=-0.7664*metertopixel
-        radarcary=0.738*metertopixel
-        arcade.draw_point(origox+radarcary,origoy+radarcarx,arcade.color.AFRICAN_VIOLET,10)
+        radarcarx=carspacetoscreenspace(origox,origoy,
+        egoObj.X_POSITION_CORNER_RADAR_RIGHT_REAR,
+        egoObj.Y_POSITION_CORNER_RADAR_RIGHT_REAR,metertopixel)["x"]
+        arcade.draw_text(str(radarcarx),300,300)
+        radarcary=carspacetoscreenspace(origox,origoy,
+        egoObj.X_POSITION_CORNER_RADAR_RIGHT_REAR,
+        egoObj.Y_POSITION_CORNER_RADAR_RIGHT_REAR,metertopixel)["y"]
+        arcade.draw_point(radarcarx,radarcary,arcade.color.AMARANTH_PINK,10)
 
 
     def on_key_press(self, key, modifiers):
