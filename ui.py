@@ -248,7 +248,7 @@ class MyGame(arcade.Window):
         arcade.draw_point(radarcarx, radarcary, arcade.color.AMARANTH_PINK, 10)
 
         radarAngle = 90+egoObj.ANGLE_AZIMUTH_CORNER_RADAR_LEFT_FRONT
-        tmpList = [radarAngle+62, 88]
+        tmpList = [radarAngle+62, 92]
         tmpList.sort()
         startAngle,endAngle=tuple(tmpList)
         arcade.draw_arc_filled(radarcarx,radarcary,500,500,(15, 145, 242, 70),startAngle,endAngle)
@@ -261,7 +261,7 @@ class MyGame(arcade.Window):
         arcade.draw_point(radarcarx, radarcary, arcade.color.AMARANTH_PINK, 10)
 
         radarAngle = 90+egoObj.ANGLE_AZIMUTH_CORNER_RADAR_LEFT_REAR
-        tmpList = [radarAngle-42, 270]
+        tmpList = [radarAngle-42, 272]
         tmpList.sort()
         startAngle,endAngle=tuple(tmpList)
         arcade.draw_arc_filled(radarcarx,radarcary,500,500,(15, 145, 242, 70),startAngle,endAngle)
@@ -274,7 +274,7 @@ class MyGame(arcade.Window):
         arcade.draw_point(radarcarx, radarcary, arcade.color.AMARANTH_PINK, 10)
 
         radarAngle = 180-(egoObj.ANGLE_AZIMUTH_CORNER_RADAR_RIGHT_REAR)
-        tmpList = [radarAngle+42, 270-2]
+        tmpList = [radarAngle+42, 272]
         tmpList.sort()
         startAngle,endAngle=tuple(tmpList)
         arcade.draw_arc_filled(radarcarx,radarcary,500,500,(15, 145, 242, 70),startAngle,endAngle)
