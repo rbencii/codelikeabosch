@@ -1,5 +1,3 @@
-from operator import contains
-
 def normalize(key, value):
         if 'd' in key:  # distance
             return value / 128
@@ -15,3 +13,7 @@ def normalize(key, value):
 
         elif 'p' in key:  # probability
             return value / 128
+
+        else:
+            raise ValueError('Unknown key: {}'.format(key))
+
