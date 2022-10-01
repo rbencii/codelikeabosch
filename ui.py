@@ -1,7 +1,6 @@
 # win: pip3 install arcade
 
 import functools
-from glob import glob
 import arcade
 import arcade.gui
 import os
@@ -466,7 +465,8 @@ class MyGame(arcade.Window):
         global car_type 
         car_type = index
         self.create_buttons()
-        self.setup()
+        self.car = arcade.load_texture(Cars[car_type])
+
 
     def create_buttons(self):
         global pause
