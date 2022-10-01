@@ -10,9 +10,9 @@ from objectlayer import Objects
 
 SPRITE_SCALING = 0.5
 
-SCREEN_WIDTH = 800
-SCREEN_HEIGHT = 600
-SCREEN_TITLE = "Full Screen Example"
+SCREEN_WIDTH = 1200
+SCREEN_HEIGHT = 800
+SCREEN_TITLE = "Vehicle Radar Help System"
 
 # How many pixels to keep as a minimum margin between the character
 # and the edge of the screen.
@@ -40,7 +40,8 @@ Files = [{"objektumok":"data/PSA_ADAS_W3_FC_2022-09-01_14-49_0054.MF4/Group_349.
          "auto":'data/PSA_ADAS_W3_FC_2022-09-01_15-12_0059.MF4/Group_416.csv'},
          {"objektumok":"data/PSA_ADAS_W3_FC_2022-09-01_15-17_0060.MF4/Group_349.csv",
          "auto":'data/PSA_ADAS_W3_FC_2022-09-01_15-17_0060.MF4/Group_416.csv'}]
-ChoosenFile = 0
+Cars = ["car.png","car2.png"]
+ChoosenFile = 1
 """class Item(arcade.Sprite):
 
     def __init__(self, filename, sprite_scaling):
@@ -101,15 +102,20 @@ class MyGame(arcade.Window):
         width, height = self.get_size()
         self.set_viewport(0, width, 0, height)
         arcade.set_background_color(arcade.color.GRAY)
-        # self.set_update_rate(1/6000)
-        self.car = arcade.load_texture("car2.png")
         self.street = arcade.load_texture("street.png")
+        # self.set_update_rate(1/6000)
+        
+        self.setup()
+
+        self.create_buttons()
+
+    def setup(self,carType=0,):
+        self.car = arcade.load_texture(Cars[carType])
         self.streetX = 0
         self.streetY = 0
         self.slider = 100
         egoObj = Ego(Files[ChoosenFile]["auto"])
         objectLayer = Objects(Files[ChoosenFile]["objektumok"])
-        self.create_buttons()
 
     def on_update(self, delta_time):
         egoObj.__update__()
@@ -349,17 +355,31 @@ class MyGame(arcade.Window):
             self.slider += 1"""
 
     # style for buttons
-    teal_style = {
+    button_style = {
         "font_name": ("calibri", "arial"),
         "font_size": 15,
         "font_color": arcade.color.WHITE,
-        "bg_color": arcade.color.TEAL_BLUE,
-    
-
+        "bg_color": arcade.color.BLUE,
         "bg_color_pressed": arcade.color.DARK_GRAY,
         "border_color_pressed": arcade.color.DARK_GRAY,
         "font_color_pressed": arcade.color.WHITE,
     }
+
+    selected_button_style = {
+        "font_name": ("calibri", "arial"),
+        "font_size": 15,
+        "font_color": arcade.color.WHITE,
+        "bg_color": arcade.color.RED,
+        "bg_color_pressed": arcade.color.DARK_GRAY,
+        "border_color_pressed": arcade.color.DARK_GRAY,
+        "font_color_pressed": arcade.color.WHITE,
+    }
+
+    def choose_file(self, index):
+        ChoosenFile = index
+        egoObj = Ego(Files[ChoosenFile]["auto"])
+        objectLayer = Objects(Files[ChoosenFile]["objektumok"])
+
 
     def create_buttons(self):
         BUTTON_WIDTH = 100
@@ -371,29 +391,18 @@ class MyGame(arcade.Window):
         self.v_box = arcade.gui.UIBoxLayout()
 
         start_button = arcade.gui.UIFlatButton(
-            text="Start", width=BUTTON_WIDTH, style=self.teal_style)
+            text="Start", width=BUTTON_WIDTH, style=self.button_style)
         self.v_box.add(start_button.with_space_around(
             top=PADDING, left=PADDING))
 
-        test1_button = arcade.gui.UIFlatButton(
-            text="Test1", width=BUTTON_WIDTH, style=self.teal_style)
-        self.v_box.add(test1_button.with_space_around(
-            top=PADDING, left=PADDING))
+        ind = 0
+        for ind in range(len(Files)):      
+            button = arcade.gui.UIFlatButton(
+                text="File_" + str(ind+1), width=BUTTON_WIDTH, style=self.button_style)
+            self.v_box.add(button.with_space_around(
+                top=PADDING, left=PADDING))
+            button.on_click = self.choose_file(ind)
 
-        test2_button = arcade.gui.UIFlatButton(
-            text="Test2", width=BUTTON_WIDTH, style=self.teal_style)
-        self.v_box.add(test2_button.with_space_around(
-            top=PADDING, left=PADDING))
-
-        test3_button = arcade.gui.UIFlatButton(
-            text="Test3", width=BUTTON_WIDTH, style=self.teal_style)
-        self.v_box.add(test3_button.with_space_around(
-            top=PADDING, left=PADDING))
-
-        test4_button = arcade.gui.UIFlatButton(
-            text="Test4", width=BUTTON_WIDTH, style=self.teal_style)
-        self.v_box.add(test4_button.with_space_around(
-            top=PADDING, left=PADDING))
 
         self.button_manager.add(
             arcade.gui.UIAnchorWidget(
