@@ -418,11 +418,12 @@ class MyGame(arcade.Window):
     }
 
     def choose_file(self, index):
+        global ChoosenFile
         ChoosenFile = index
-        egoObj = Ego(Files[ChoosenFile]["auto"])
-        objectLayer = Objects(Files[ChoosenFile]["objektumok"])
+        self.setup()
 
     def choose_car(self, index):
+        global ChoosenCar
         ChoosenCar = index
 
 
