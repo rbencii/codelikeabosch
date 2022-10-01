@@ -171,11 +171,7 @@ class MyGame(arcade.Window):
 
     def on_draw(self):
         global pause
-        # draw manager for buttons
-        if pause:
-            self.button_manager.draw()
-            arcade.draw_text("Pause", 10, 20, arcade.color.BLACK, 14)
-            return
+        
         
         """
         Render the screen.
@@ -413,7 +409,8 @@ class MyGame(arcade.Window):
         # draw manager for buttons
         self.button_manager.draw()
 
-
+        if pause:
+            arcade.draw_text("Pause", 10, 20, arcade.color.BLACK, 14)
         
 
     """def on_key_press(self, key, modifiers):
