@@ -1,4 +1,5 @@
 def normalize(key, value):
+        value = int(value)
         if 'd' in key:  # distance
             return value / 128
 
