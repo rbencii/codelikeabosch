@@ -140,6 +140,7 @@ class MyGame(arcade.Window):
         objectLayer = Objects(Files[choosen_file]["objektumok"])
 
     def on_update(self, delta_time):
+        global alert
         self.debugcnt+=delta_time
         self.debugcnt2=delta_time
         global pause
@@ -170,6 +171,15 @@ class MyGame(arcade.Window):
         #    egoObj.EndOfList = True
 
         #ALERT SYSTEM
+        """"for i in objectLayer.realObjects:
+            if (i.keys().__contains__("type")):
+                if(i["type"]=="5" or i["type"]=="4"):
+                    if( Ki megy-e  balra)
+                        alert["TLeft"]["status"] = True
+                        alert["TLeft"]["time"]= float(egoObj.T) + 5
+                    if(" Ki megy-e  jobra")
+            if("Közel van valami kocsi elött")
+            if("Közel van valami kocsi mögött")"""
 
     def on_draw(self):
         global pause
