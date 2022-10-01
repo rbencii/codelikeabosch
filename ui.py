@@ -15,6 +15,11 @@ VIEWPORT_MARGIN = 40
 
 MOVEMENT_SPEED = 5
 egoObj = Ego()
+CARSIZE = 500
+CARWIDTH=CARSIZE/2.4
+STREETSIZE = 500
+AXLEP=3.43
+
 
 class Item(arcade.Sprite):
 
@@ -43,11 +48,11 @@ class Item(arcade.Sprite):
         if self.top > SCREEN_HEIGHT:
             self.change_y *= -1
 
-def carspacetoscreenspace(screencarcentreX,screencarcentreY,carSpaceX,carSpaceY,metertopixel):
-    return {
-        "x": screencarcentreX+(-1*(carSpaceY/1000.0)*metertopixel),
-        "y": screencarcentreY+((carSpaceX/1000.0)*metertopixel)
-    }
+def carspacetoscreenspace(screencarcenterX,screencarcenterY,carSpaceX,carSpaceY,metertopixel):
+    return (
+        screencarcenterX+(-1*(carSpaceY/1000.0)*metertopixel),
+        screencarcenterY+((carSpaceX/1000.0)*metertopixel)
+    )
 
 class MyGame(arcade.Window):
     """ Main application class. """
@@ -92,71 +97,46 @@ class MyGame(arcade.Window):
 
         # Get viewport dimensions
         left, screen_width, bottom, screen_height = self.get_viewport()
-
-        text_size = 18
-        # Draw text on the screen so the user has an idea of what is happening
-        arcade.draw_text("Press F to toggle between full screen and windowed mode, unstretched.",
-                         screen_width // 2, screen_height // 2 - 20,
-                         arcade.color.WHITE, text_size, anchor_x="center")
-
+        centerX=screen_width/2.0
+        centerY=screen_height/2.0
         # Draw some boxes on the bottom so we can see how they change
         for i in range(4):
-            arcade.draw_texture_rectangle(screen_width/2.0, i*500+self.streetY, 500, 500, self.street)
+            arcade.draw_texture_rectangle(centerX, i*STREETSIZE+self.streetY, STREETSIZE, STREETSIZE, self.street)
 
-        carheight=500
-        carwidth=carheight/2.4
-        axlep=3.43
-        arcade.draw_texture_rectangle(screen_width/2.0, screen_height/2.0, carheight, carheight, self.car)
+        #auto
+        arcade.draw_texture_rectangle(centerX, centerY, CARSIZE, CARSIZE, self.car)
 
         #koordinatarendszer
-        arcade.draw_line(screen_width/2.0-carwidth/2.0,screen_height/2.0-carheight/axlep,screen_width/2.0+carwidth/2.0,screen_height/2.0-carheight/axlep,arcade.color.YELLOW,5)
-        arcade.draw_line(screen_width/2.0,screen_height/2.0+carheight/2.0,screen_width/2.0,screen_height/2.0-carheight/2.0,arcade.color.YELLOW,5)
+        arcade.draw_line(centerX-CARWIDTH/2.0,centerY-CARSIZE/AXLEP,centerX+CARWIDTH/2.0,centerY-CARSIZE/AXLEP,arcade.color.YELLOW,5)
+        arcade.draw_line(centerX,centerY+CARSIZE/2.0,centerX,centerY-CARSIZE/2.0,arcade.color.YELLOW,5)
 
-        origox=screen_width/2.0
-        origoy=screen_height/2.0-carheight/axlep
+        origox=centerX
+        origoy=centerY-CARSIZE/AXLEP
         
-        
-
-        metertopixel=carheight/4.65
+        metertopixel=CARSIZE/4.65
 
         #radarbalelso
-        radarcarx=carspacetoscreenspace(origox,origoy,
+        radarcarx,radarcary=carspacetoscreenspace(origox,origoy,
         egoObj.X_POSITION_CORNER_RADAR_LEFT_FRONT,
-        egoObj.Y_POSITION_CORNER_RADAR_LEFT_FRONT,metertopixel)["x"]
-        arcade.draw_text(str(radarcarx),300,300)
-        radarcary=carspacetoscreenspace(origox,origoy,
-        egoObj.X_POSITION_CORNER_RADAR_LEFT_FRONT,
-        egoObj.Y_POSITION_CORNER_RADAR_LEFT_FRONT,metertopixel)["y"]
+        egoObj.Y_POSITION_CORNER_RADAR_LEFT_FRONT,metertopixel)
         arcade.draw_point(radarcarx,radarcary,arcade.color.AMARANTH_PINK,10)
 
         #radarjobbelso
-        radarcarx=carspacetoscreenspace(origox,origoy,
+        radarcarx,radarcary=carspacetoscreenspace(origox,origoy,
         egoObj.X_POSITION_CORNER_RADAR_RIGHT_FRONT,
-        egoObj.Y_POSITION_CORNER_RADAR_RIGHT_FRONT,metertopixel)["x"]
-        arcade.draw_text(str(radarcarx),300,300)
-        radarcary=carspacetoscreenspace(origox,origoy,
-        egoObj.X_POSITION_CORNER_RADAR_RIGHT_FRONT,
-        egoObj.Y_POSITION_CORNER_RADAR_RIGHT_FRONT,metertopixel)["y"]
+        egoObj.Y_POSITION_CORNER_RADAR_RIGHT_FRONT,metertopixel)
         arcade.draw_point(radarcarx,radarcary,arcade.color.AMARANTH_PINK,10)
 
         #radarbalhatso
-        radarcarx=carspacetoscreenspace(origox,origoy,
+        radarcarx,radarcary=carspacetoscreenspace(origox,origoy,
         egoObj.X_POSITION_CORNER_RADAR_LEFT_REAR,
-        egoObj.Y_POSITION_CORNER_RADAR_LEFT_REAR,metertopixel)["x"]
-        arcade.draw_text(str(radarcarx),300,300)
-        radarcary=carspacetoscreenspace(origox,origoy,
-        egoObj.X_POSITION_CORNER_RADAR_LEFT_REAR,
-        egoObj.Y_POSITION_CORNER_RADAR_LEFT_REAR,metertopixel)["y"]
+        egoObj.Y_POSITION_CORNER_RADAR_LEFT_REAR,metertopixel)
         arcade.draw_point(radarcarx,radarcary,arcade.color.AMARANTH_PINK,10)
 
         #radarjobbhatso
-        radarcarx=carspacetoscreenspace(origox,origoy,
+        radarcarx,radarcary=carspacetoscreenspace(origox,origoy,
         egoObj.X_POSITION_CORNER_RADAR_RIGHT_REAR,
-        egoObj.Y_POSITION_CORNER_RADAR_RIGHT_REAR,metertopixel)["x"]
-        arcade.draw_text(str(radarcarx),300,300)
-        radarcary=carspacetoscreenspace(origox,origoy,
-        egoObj.X_POSITION_CORNER_RADAR_RIGHT_REAR,
-        egoObj.Y_POSITION_CORNER_RADAR_RIGHT_REAR,metertopixel)["y"]
+        egoObj.Y_POSITION_CORNER_RADAR_RIGHT_REAR,metertopixel)
         arcade.draw_point(radarcarx,radarcary,arcade.color.AMARANTH_PINK,10)
 
 
