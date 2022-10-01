@@ -243,11 +243,23 @@ class MyGame(arcade.Window):
         egoObj.Y_POSITION_CORNER_RADAR_RIGHT_FRONT,METERTOPIXEL)
         arcade.draw_point(radarcarx,radarcary,arcade.color.AMARANTH_PINK,10)
 
+        radarAngle = 90+egoObj.ANGLE_AZIMUTH_CORNER_RADAR_RIGHT_FRONT
+        tmpList=[radarAngle,90]
+        tmpList.sort()
+        startAngle,endAngle=tuple(tmpList)
+        arcade.draw_arc_filled(radarcarx,radarcary,500,500,arcade.color.AMARANTH_PINK,startAngle,endAngle)
+
         #radarbalelso
         radarcarx,radarcary=carspacetoscreenspace(origox,origoy,
         egoObj.X_POSITION_CORNER_RADAR_LEFT_FRONT,
         egoObj.Y_POSITION_CORNER_RADAR_LEFT_FRONT,METERTOPIXEL)
         arcade.draw_point(radarcarx,radarcary,arcade.color.AMARANTH_PINK,10)
+
+        radarAngle = 90+egoObj.ANGLE_AZIMUTH_CORNER_RADAR_LEFT_FRONT
+        tmpList=[radarAngle,90]
+        tmpList.sort()
+        startAngle,endAngle=tuple(tmpList)
+        arcade.draw_arc_filled(radarcarx,radarcary,500,500,arcade.color.AMARANTH_PINK,startAngle,endAngle)
 
         # radarbalhatso
         radarcarx, radarcary = carspacetoscreenspace(origox, origoy,
@@ -255,17 +267,67 @@ class MyGame(arcade.Window):
                                                      egoObj.Y_POSITION_CORNER_RADAR_LEFT_REAR, METERTOPIXEL)
         arcade.draw_point(radarcarx, radarcary, arcade.color.AMARANTH_PINK, 10)
 
+        radarAngle = 90+egoObj.ANGLE_AZIMUTH_CORNER_RADAR_LEFT_REAR
+        tmpList=[radarAngle,270]
+        tmpList.sort()
+        startAngle,endAngle=tuple(tmpList)
+        arcade.draw_arc_filled(radarcarx,radarcary,500,500,arcade.color.AMARANTH_PINK,startAngle,endAngle)
+
         # radarjobbhatso
         radarcarx, radarcary = carspacetoscreenspace(origox, origoy,
                                                      egoObj.X_POSITION_CORNER_RADAR_RIGHT_REAR,
                                                      egoObj.Y_POSITION_CORNER_RADAR_RIGHT_REAR, METERTOPIXEL)
         arcade.draw_point(radarcarx, radarcary, arcade.color.AMARANTH_PINK, 10)
 
+        radarAngle = 180-egoObj.ANGLE_AZIMUTH_CORNER_RADAR_RIGHT_REAR
+        tmpList=[radarAngle,270]
+        tmpList.sort()
+        startAngle,endAngle=tuple(tmpList)
+        arcade.draw_arc_filled(radarcarx,radarcary,500,500,arcade.color.AMARANTH_PINK,startAngle,endAngle)
+
+
+        # holtter
+        point_list = tuple(map(lambda t : 
+        (carspacetoscreenspace(origox,origoy,t[0],t[1],METERTOPIXEL)[0],
+        carspacetoscreenspace(origox,origoy,t[0],t[1],METERTOPIXEL)[1])
+        ,((-300, 800),
+              (-300, 2300),
+              
+              (2000, 800),
+              (2000, 2300),
+
+              (-300, 800),
+              (2000, 800),
+
+              (-300, 2300),
+              (2000, 2300)
+              )))
+
+        arcade.draw_lines(point_list, arcade.color.RED_DEVIL,3)
+
+        point_list = tuple(map(lambda t : 
+        (carspacetoscreenspace(origox,origoy,t[0],t[1],METERTOPIXEL)[0],
+        carspacetoscreenspace(origox,origoy,t[0],t[1],METERTOPIXEL)[1])
+        ,((-300, -800),
+              (-300, -2300),
+              
+              (2000, -800),
+              (2000, -2300),
+
+              (-300, -800),
+              (2000, -800),
+
+              (-300, -2300),
+              (2000, -2300)
+              )))
+
+        arcade.draw_lines(point_list, arcade.color.RED_DEVIL,3)
+
         # draw manager for buttons
         self.button_manager.draw()
 
-    def on_key_press(self, key, modifiers):
-        """Called whenever a key is pressed. """
+    """def on_key_press(self, key, modifiers):
+        #Called whenever a key is pressed.
         if key == arcade.key.F:
             # User hits f. Flip between full and not full screen.
             self.set_fullscreen(not self.fullscreen)
@@ -275,7 +337,7 @@ class MyGame(arcade.Window):
             width, height = self.get_size()
             self.set_viewport(0, width, 0, height)
         if key == arcade.key.UP:
-            self.slider += 1
+            self.slider += 1"""
 
     # style for buttons
     button_style = {
