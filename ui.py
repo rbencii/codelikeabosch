@@ -41,7 +41,7 @@ STREETLENGTH = 2
 STREETSIZE = {"x": CARWIDTH*STREETLENGTH,"y" :CARSIZE*STREETLENGTH}
 #STREETSIZE = {"x": 600,"y" :400}
 AXLEP = 3.43
-FPS = 144.0
+FPS = 60.0
 STARTT = 0
 
 Files = [{"objektumok": "data/PSA_ADAS_W3_FC_2022-09-01_14-49_0054.MF4/Group_349.csv",
@@ -197,13 +197,13 @@ class MyGame(arcade.Window):
             else:
                 egoObj.vxvRef = 0
                 self.streetY = 0
-        #self.streetY -= egoObj.vxvRef*METERTOPIXEL*delta_time
-        self.streetY -= egoObj.vxvRef
+        self.streetY -= egoObj.vxvRef*METERTOPIXEL*delta_time
+        #self.streetY -= egoObj.vxvRef
         # tesztelés
         # if(egoObj.iterator >300):
         #    egoObj.EndOfList = True
 
-        self.create_slider()
+        #self.create_slider()
        
 
         #ALERT SYSTEM
@@ -254,7 +254,7 @@ class MyGame(arcade.Window):
             if stepper<stepper2:
                 arcade.draw_line(centerX+cos(curAngle)*(stepper)*STREETSIZE["x"],centerY-sin(curAngle)*(stepper)*STREETSIZE["y"],centerX+cos(curAngle2)*(stepper2)*STREETSIZE["x"],centerY-sin(curAngle2)*(stepper2)*STREETSIZE["y"],arcade.color.WHITE,15)
 
-
+       
         
         
         # if len(self.topPoints)>0:
@@ -469,7 +469,7 @@ class MyGame(arcade.Window):
             arcade.draw_text("Pause", 20, 50, arcade.color.BLACK, 14)
         # draw manager for buttons
         self.button_manager.draw()
-        self.slider_manager.draw()
+        #self.slider_manager.draw()
 
         self.alert_Driver_draw()
 
@@ -695,7 +695,7 @@ class MyGame(arcade.Window):
             button.on_click = functools.partial(self.select_car, index=i)
             self.v_box.add(button.with_space_around(top=PADDING, left=PADDING))
             
-        self.create_slider()
+        #self.create_slider()
 
             
 
@@ -706,24 +706,24 @@ class MyGame(arcade.Window):
                 child=self.v_box)
         )
 
-    def create_slider(self):
-        self.slider_manager = arcade.gui.UIManager()
-        self.slider_manager.enable()
-        STEPS = 100
-        ui_slider = UISlider(value=float(egoObj.iterator)/float(egoObj.highestit)*100, width=400, height=50)
-        label = arcade.gui.UILabel(text=f"Iteration: {egoObj.iterator:02.0f}", width=400, height=50, align="center")
+    # def create_slider(self):
+    #     self.slider_manager = arcade.gui.UIManager()
+    #     self.slider_manager.enable()
+    #     STEPS = 100
+    #     ui_slider = UISlider(value=float(egoObj.iterator)/float(egoObj.highestit)*100, width=400, height=50)
+    #     label = arcade.gui.UILabel(text=f"Iteration: {egoObj.iterator:02.0f}", width=400, height=50, align="center")
 
-        @ui_slider.event()
-        def on_change(event: UIOnChangeEvent):  
-            egoObj.setState(int(lerp(1, egoObj.highestit, ui_slider.value/100)))
-            self.objectit = int(lerp(1, objectLayer.highestit, ui_slider.value/100))
-            label.text = f"Iteration: {egoObj.iterator:02.0f}"
-            label.fit_content()
+    #     @ui_slider.event()
+    #     def on_change(event: UIOnChangeEvent):  
+    #         egoObj.setState(int(lerp(1, egoObj.highestit, ui_slider.value/100)))
+    #         self.objectit = int(lerp(1, objectLayer.highestit, ui_slider.value/100))
+    #         label.text = f"Iteration: {egoObj.iterator:02.0f}"
+    #         label.fit_content()
 
         
 
-        self.slider_manager.add(arcade.gui.UIAnchorWidget(child=ui_slider, anchor_x="left", anchor_y="bottom"))
-        self.slider_manager.add(arcade.gui.UIAnchorWidget(child=label, anchor_x="left", anchor_y="bottom"))
+    #     self.slider_manager.add(arcade.gui.UIAnchorWidget(child=ui_slider, anchor_x="left", anchor_y="bottom"))
+    #     self.slider_manager.add(arcade.gui.UIAnchorWidget(child=label, anchor_x="left", anchor_y="bottom"))
         
         
 def ui_run():
