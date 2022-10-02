@@ -42,20 +42,20 @@ CARSIZE = 250
 CARWIDTH = CARSIZE/2.4
 METERTOPIXEL = CARSIZE/4.65
 STREETLENGTH = 2.0
-STREETSIZE = {"x": CARWIDTH*STREETLENGTH,"y" :CARSIZE*STREETLENGTH}
+STREETSIZE = {"x": CARWIDTH*STREETLENGTH, "y": CARSIZE*STREETLENGTH}
 #STREETSIZE = {"x": 600,"y" :400}
 AXLEP = 3.43
 FPS = 60.0
 STARTT = 0
 
 Files = [{"objektumok": "data/PSA_ADAS_W3_FC_2022-09-01_14-49_0054.MF4/Group_349.csv",
-         "auto": 'data/PSA_ADAS_W3_FC_2022-09-01_14-49_0054.MF4/Group_416.csv',"Latitude":'data/PSA_ADAS_W3_FC_2022-09-01_14-49_0054.MF4/Group_342.csv',"Longtitude":'data/PSA_ADAS_W3_FC_2022-09-01_14-49_0054.MF4/Group_343.csv',"HunterGps":'data/PSA_ADAS_W3_FC_2022-09-01_14-49_0054.MF4/Group_340.csv'},
+         "auto": 'data/PSA_ADAS_W3_FC_2022-09-01_14-49_0054.MF4/Group_416.csv', "Latitude": 'data/PSA_ADAS_W3_FC_2022-09-01_14-49_0054.MF4/Group_342.csv', "Longtitude": 'data/PSA_ADAS_W3_FC_2022-09-01_14-49_0054.MF4/Group_343.csv', "HunterGps": 'data/PSA_ADAS_W3_FC_2022-09-01_14-49_0054.MF4/Group_340.csv'},
          {"objektumok": "data/PSA_ADAS_W3_FC_2022-09-01_15-03_0057.MF4/Group_349.csv",
-         "auto": 'data/PSA_ADAS_W3_FC_2022-09-01_15-03_0057.MF4/Group_416.csv',"Latitude":'data/PSA_ADAS_W3_FC_2022-09-01_14-49_0054.MF4/Group_342.csv',"Longtitude":'data/PSA_ADAS_W3_FC_2022-09-01_15-03_0057.MF4/Group_343.csv',"HunterGps":'data/PSA_ADAS_W3_FC_2022-09-01_15-03_0057.MF4/Group_340.csv'},
+         "auto": 'data/PSA_ADAS_W3_FC_2022-09-01_15-03_0057.MF4/Group_416.csv', "Latitude": 'data/PSA_ADAS_W3_FC_2022-09-01_14-49_0054.MF4/Group_342.csv', "Longtitude": 'data/PSA_ADAS_W3_FC_2022-09-01_15-03_0057.MF4/Group_343.csv', "HunterGps": 'data/PSA_ADAS_W3_FC_2022-09-01_15-03_0057.MF4/Group_340.csv'},
          {"objektumok": "data/PSA_ADAS_W3_FC_2022-09-01_15-12_0059.MF4/Group_349.csv",
-         "auto": 'data/PSA_ADAS_W3_FC_2022-09-01_15-12_0059.MF4/Group_416.csv',"Latitude":'data/PSA_ADAS_W3_FC_2022-09-01_15-12_0059.MF4/Group_342.csv',"Longtitude":'data/PSA_ADAS_W3_FC_2022-09-01_15-12_0059.MF4/Group_343.csv',"HunterGps":'data/PSA_ADAS_W3_FC_2022-09-01_15-12_0059.MF4/Group_340.csv'},
+         "auto": 'data/PSA_ADAS_W3_FC_2022-09-01_15-12_0059.MF4/Group_416.csv', "Latitude": 'data/PSA_ADAS_W3_FC_2022-09-01_15-12_0059.MF4/Group_342.csv', "Longtitude": 'data/PSA_ADAS_W3_FC_2022-09-01_15-12_0059.MF4/Group_343.csv', "HunterGps": 'data/PSA_ADAS_W3_FC_2022-09-01_15-12_0059.MF4/Group_340.csv'},
          {"objektumok": "data/PSA_ADAS_W3_FC_2022-09-01_15-17_0060.MF4/Group_349.csv",
-         "auto": 'data/PSA_ADAS_W3_FC_2022-09-01_15-17_0060.MF4/Group_416.csv',"Latitude":'data/PSA_ADAS_W3_FC_2022-09-01_15-17_0060.MF4/Group_342.csv',"Longtitude":'data/PSA_ADAS_W3_FC_2022-09-01_15-17_0060.MF4/Group_343.csv',"HunterGps":'data/PSA_ADAS_W3_FC_2022-09-01_15-17_0060.MF4/Group_340.csv'}]
+         "auto": 'data/PSA_ADAS_W3_FC_2022-09-01_15-17_0060.MF4/Group_416.csv', "Latitude": 'data/PSA_ADAS_W3_FC_2022-09-01_15-17_0060.MF4/Group_342.csv', "Longtitude": 'data/PSA_ADAS_W3_FC_2022-09-01_15-17_0060.MF4/Group_343.csv', "HunterGps": 'data/PSA_ADAS_W3_FC_2022-09-01_15-17_0060.MF4/Group_340.csv'}]
 Cars = ["car.png", "car2.png"]
 choosen_file = 1
 car_type = 1
@@ -89,9 +89,11 @@ pause = False
             self.change_y *= -1
 """
 
-def lerp(A,B,t):
+
+def lerp(A, B, t):
     return A+(B-A)*t
-    
+
+
 def carspacetoscreenspace(screencarcenterX, screencarcenterY, carSpaceX, carSpaceY, METERTOPIXEL):
     return (
         screencarcenterX+(-1*(carSpaceY/1000.0)*METERTOPIXEL),
@@ -125,13 +127,14 @@ class MyGame(arcade.Window):
         arcade.set_background_color(arcade.color.GRAY)
         self.street = arcade.load_texture("street.png")
         self.set_update_rate(1/FPS)
-        self.timecnt=0.0
-        self.debugcnt2=0.0
+        self.timecnt = 0.0
+        self.debugcnt2 = 0.0
 
-        self.objt=arcade.Text("", 0, 0, arcade.color.BABY_BLUE, 12, multiline=True, width=300,anchor_y="bottom")
+        self.objt = arcade.Text("", 0, 0, arcade.color.BABY_BLUE,
+                                12, multiline=True, width=300, anchor_y="bottom")
         self.multi_line_breaks = arcade.Text(
             "",
-            0,0,
+            0, 0,
             arcade.color.BLACK,
             22 / 2,
             multiline=True,
@@ -160,21 +163,22 @@ class MyGame(arcade.Window):
         self.streetY = 0
         self.slider = 100
         self.objectit = 1
-        self.topPoints=[]
-        self.bottomPoints=[]
+        self.topPoints = []
+        self.bottomPoints = []
         egoObj = Ego(Files[choosen_file]["auto"])
         objectLayer = Objects(Files[choosen_file]["objektumok"])
-        gpsObj = GpsObjects(Files[choosen_file]["Latitude"], Files[choosen_file]["Longtitude"], Files[choosen_file]["HunterGps"])
+        gpsObj = GpsObjects(Files[choosen_file]["Latitude"], Files[choosen_file]
+                            ["Longtitude"], Files[choosen_file]["HunterGps"])
 
     # def updateStreet(self):
     #     self.topPoints = []
     #     n=20
-        
+
     #     for i in range(n):
     #         stepper = ((float(i)/float(n-1))+self.streetY/400.0)%1
     #         curAngle=lerp(math.pi/2.0,math.pi/2.0+egoObj.psiDtOpt/2.0,stepper)
     #         #arcade.draw_point(centerX+cos(curAngle)*(i/(n-1))*screen_width/2.0,centerY+sin(curAngle)*(i/(n-1))*screen_height/2.0,arcade.color.PINK_LAVENDER,20)
-    #         self.topPoints.append((cos(curAngle)*(i/(n-1))*STREETSIZE["x"],sin(curAngle)*(i/(n-1))*STREETSIZE["y"])) 
+    #         self.topPoints.append((cos(curAngle)*(i/(n-1))*STREETSIZE["x"],sin(curAngle)*(i/(n-1))*STREETSIZE["y"]))
 
     #     self.bottomPoints = []
     #     for i in range(n):
@@ -184,16 +188,15 @@ class MyGame(arcade.Window):
 
     def on_update(self, delta_time):
         global alert
-        self.timecnt+=delta_time
-        self.debugcnt2=delta_time
-        
+        self.timecnt += delta_time
+        self.debugcnt2 = delta_time
+
         global pause
         if pause:
             # if (self.timecnt % 1) > 0.8:
-                #  objectLayer.setState(self.objectit)
+            #  objectLayer.setState(self.objectit)
             return
 
-        
         egoObj.__update__(delta_time)
         objectLayer.__update__(delta_time)
         if self.timecnt % 1 > 0.1:
@@ -209,35 +212,34 @@ class MyGame(arcade.Window):
             else:
                 egoObj.vxvRef = 0
                 self.streetY = 0
-            
+
         self.streetY -= egoObj.vxvRef*METERTOPIXEL*delta_time
         #self.streetY -= egoObj.vxvRef
         # tesztelés
         # if(egoObj.iterator >300):
         #    egoObj.EndOfList = True
 
-        #self.create_slider()
+        # self.create_slider()
 
-        #gpsObj.update(delta_time)
+        # gpsObj.update(delta_time)
 
         # alerts
         for obj in objectLayer.realObjects:
             if obj["x"] < 10 and obj["x"] > 0 and obj["y"] < 5 and obj["y"] > -5:
-                #closeObjectsFront.append(obj)
+                # closeObjectsFront.append(obj)
                 alert["TooCloseFront"]["status"] = True
-                alert["TooCloseFront"]["time"]= float(egoObj.T) + 2
+                alert["TooCloseFront"]["time"] = float(egoObj.T) + 2
             if obj["x"] < 0 and obj["x"] > -10 and obj["y"] < 5 and obj["y"] > -5:
                 alert["TooCloseRear"]["status"] = True
-                alert["TooCloseRear"]["time"]= float(egoObj.T) + 2
+                alert["TooCloseRear"]["time"] = float(egoObj.T) + 2
 
         for obj in objectLayer.realObjects:
             if obj["x"] < 2 and obj["x"] > -0.3 and obj["y"] < 7 and obj["y"] > 0.3:
                 alert["TLeft"]["status"] = True
-                alert["TLeft"]["time"]= float(egoObj.T) + 2
+                alert["TLeft"]["time"] = float(egoObj.T) + 2
             if obj["x"] < 2 and obj["x"] > -0.3 and obj["y"] < -0.3 and obj["y"] > -7:
                 alert["TRight"]["status"] = True
-                alert["TRight"]["time"]= float(egoObj.T) + 2
-
+                alert["TRight"]["time"] = float(egoObj.T) + 2
 
         # "Stop":{"status": False,"time": 0},
         #     "TLeft": {"status": False,"time": 0},
@@ -245,7 +247,7 @@ class MyGame(arcade.Window):
         #     "TooCloseFront": {"status": False,"time": 0},
         #     "TooCloseRear": {"status": False,"time": 0},
 
-        #ALERT SYSTEM
+        # ALERT SYSTEM
         """"for i in objectLayer.realObjects:
             if (i.keys().__contains__("type")):
                 if(i["type"]=="5" or i["type"]=="4"):
@@ -258,8 +260,7 @@ class MyGame(arcade.Window):
 
     def on_draw(self):
         global pause
-        
-        
+
         """
         Render the screen.
         """
@@ -267,35 +268,36 @@ class MyGame(arcade.Window):
         global origoy
         self.clear()
 
-        
-
         # Get viewport dimensions
         left, screen_width, bottom, screen_height = self.get_viewport()
         centerX = screen_width/2.0
         centerY = screen_height/2.0
         # Draw some boxes on the bottom so we can see how they change
-        n=10
+        n = 10
         for i in range(n):
-            stepper = (i/float(n)+self.streetY/STREETSIZE["y"])%1
-            stepper2 = (i/float(n)+15/400+self.streetY/STREETSIZE["y"])%1
-            curAngle=lerp(math.pi/2.0,math.pi/2.0+egoObj.psiDtOpt/2.0,stepper)
-            curAngle2=lerp(math.pi/2.0,math.pi/2.0+egoObj.psiDtOpt/2.0,stepper2)
-            #arcade.draw_point(centerX-CARWIDTH+cos(curAngle)*(stepper)*STREETSIZE["x"],centerY+sin(curAngle)*(stepper)*STREETSIZE["y"],arcade.color.WHITE,15)
-            if stepper<stepper2:
-                arcade.draw_line(centerX+cos(curAngle)*(stepper)*STREETSIZE["x"],centerY+sin(curAngle)*(stepper)*STREETSIZE["y"],centerX+cos(curAngle2)*(stepper2)*STREETSIZE["x"],centerY+sin(curAngle2)*(stepper2)*STREETSIZE["y"],arcade.color.WHITE,15)
+            stepper = (i/float(n)+self.streetY/STREETSIZE["y"]) % 1
+            stepper2 = (i/float(n)+15/400+self.streetY/STREETSIZE["y"]) % 1
+            curAngle = lerp(math.pi/2.0, math.pi/2.0 +
+                            egoObj.psiDtOpt/2.0, stepper)
+            curAngle2 = lerp(math.pi/2.0, math.pi/2.0 +
+                             egoObj.psiDtOpt/2.0, stepper2)
+            # arcade.draw_point(centerX-CARWIDTH+cos(curAngle)*(stepper)*STREETSIZE["x"],centerY+sin(curAngle)*(stepper)*STREETSIZE["y"],arcade.color.WHITE,15)
+            if stepper < stepper2:
+                arcade.draw_line(centerX+cos(curAngle)*(stepper)*STREETSIZE["x"], centerY+sin(curAngle)*(stepper)*STREETSIZE["y"], centerX+cos(
+                    curAngle2)*(stepper2)*STREETSIZE["x"], centerY+sin(curAngle2)*(stepper2)*STREETSIZE["y"], arcade.color.WHITE, 15)
 
         for i in range(n):
-            stepper = (i/float(n)-self.streetY/STREETSIZE["y"])%1
-            stepper2 = (i/float(n)+15/400-self.streetY/STREETSIZE["y"])%1
-            curAngle=lerp(math.pi/2.0,math.pi/2.0+egoObj.psiDtOpt/2.0,stepper)
-            curAngle2=lerp(math.pi/2.0,math.pi/2.0+egoObj.psiDtOpt/2.0,stepper2)
-            #arcade.draw_point(centerX-CARWIDTH+cos(curAngle)*(stepper)*STREETSIZE["x"],centerY-sin(curAngle)*(stepper)*STREETSIZE["y"],arcade.color.WHITE,15)
-            if stepper<stepper2:
-                arcade.draw_line(centerX+cos(curAngle)*(stepper)*STREETSIZE["x"],centerY-sin(curAngle)*(stepper)*STREETSIZE["y"],centerX+cos(curAngle2)*(stepper2)*STREETSIZE["x"],centerY-sin(curAngle2)*(stepper2)*STREETSIZE["y"],arcade.color.WHITE,15)
+            stepper = (i/float(n)-self.streetY/STREETSIZE["y"]) % 1
+            stepper2 = (i/float(n)+15/400-self.streetY/STREETSIZE["y"]) % 1
+            curAngle = lerp(math.pi/2.0, math.pi/2.0 +
+                            egoObj.psiDtOpt/2.0, stepper)
+            curAngle2 = lerp(math.pi/2.0, math.pi/2.0 +
+                             egoObj.psiDtOpt/2.0, stepper2)
+            # arcade.draw_point(centerX-CARWIDTH+cos(curAngle)*(stepper)*STREETSIZE["x"],centerY-sin(curAngle)*(stepper)*STREETSIZE["y"],arcade.color.WHITE,15)
+            if stepper < stepper2:
+                arcade.draw_line(centerX+cos(curAngle)*(stepper)*STREETSIZE["x"], centerY-sin(curAngle)*(stepper)*STREETSIZE["y"], centerX+cos(
+                    curAngle2)*(stepper2)*STREETSIZE["x"], centerY-sin(curAngle2)*(stepper2)*STREETSIZE["y"], arcade.color.WHITE, 15)
 
-       
-        
-        
         # if len(self.topPoints)>0:
         #     arcade.draw_points(list(map(lambda t: (centerX-CARWIDTH+t[0],centerY+t[1]), self.topPoints)),arcade.color.WHITE,15)
         #     arcade.draw_lines(list(map(lambda t: (centerX-CARWIDTH+t[0],centerY-t[1]), self.bottomPoints[1:-1])),arcade.color.WHITE,15)
@@ -304,22 +306,22 @@ class MyGame(arcade.Window):
         arcade.draw_texture_rectangle(
             centerX, centerY, CARSIZE, CARSIZE, self.car)
 
-        cartext=""
-        cartext+=("iterator: " + str(egoObj.iterator) + "\n"
-        + "T: " + egoObj.T + "\n"
-        + "axvRef: " + str(egoObj.axvRef) + "\n"
-        + "ayvRef: " + str(egoObj.ayvRef) + "\n"
-        + "psiDtOpt: " + str(egoObj.psiDtOpt) + "\n"
-        + "tAbsRefTime: " + str(egoObj.tAbsRefTime) + "\n"
-        + "vxvRef: " + str(egoObj.vxvRef) + "\n"
-        + "vyvRef: " + str(egoObj.vyvRef) + "\n" 
-        # draw debugcounters
-        # + str(self.debugcnt) + "\n" + str(self.debugcnt2)
-        )
+        cartext = ""
+        cartext += ("iterator: " + str(egoObj.iterator) + "\n"
+                    + "T: " + egoObj.T + "\n"
+                    + "axvRef: " + str(egoObj.axvRef) + "\n"
+                    + "ayvRef: " + str(egoObj.ayvRef) + "\n"
+                    + "psiDtOpt: " + str(egoObj.psiDtOpt) + "\n"
+                    + "tAbsRefTime: " + str(egoObj.tAbsRefTime) + "\n"
+                    + "vxvRef: " + str(egoObj.vxvRef) + "\n"
+                    + "vyvRef: " + str(egoObj.vyvRef) + "\n"
+                    # draw debugcounters
+                    # + str(self.debugcnt) + "\n" + str(self.debugcnt2)
+                    )
 
-        self.multi_line_breaks.text=cartext
-        self.multi_line_breaks.x=screen_width-200
-        self.multi_line_breaks.y=screen_height-20
+        self.multi_line_breaks.text = cartext
+        self.multi_line_breaks.x = screen_width-200
+        self.multi_line_breaks.y = screen_height-20
         self.multi_line_breaks.draw()
         # Objects
 
@@ -332,17 +334,18 @@ class MyGame(arcade.Window):
         origox = centerX
         origoy = centerY-CARSIZE/AXLEP
 
-
-        cameraposX,cameraposY=carspacetoscreenspace(origox,origoy,float(objectLayer.cameraPosX),float(objectLayer.cameraPosY),METERTOPIXEL)
-        arcade.draw_point(cameraposX,cameraposY,arcade.color.LIME_GREEN,20)
-        arcade.draw_text("Camera",cameraposX,cameraposY,anchor_x="center",anchor_y="center")
+        cameraposX, cameraposY = carspacetoscreenspace(origox, origoy, float(
+            objectLayer.cameraPosX), float(objectLayer.cameraPosY), METERTOPIXEL)
+        arcade.draw_point(cameraposX, cameraposY, arcade.color.LIME_GREEN, 20)
+        arcade.draw_text("Camera", cameraposX, cameraposY,
+                         anchor_x="center", anchor_y="center")
 
         cameraAngle = 40
         tmpList = [cameraAngle, 145]
         tmpList.sort()
-        startAngle,endAngle=tuple(tmpList)
-        arcade.draw_arc_filled(cameraposX,cameraposY,800,800,(8, 247, 28, 70),startAngle,endAngle)       #rgba(8, 247, 28, 0.23)
-
+        startAngle, endAngle = tuple(tmpList)
+        arcade.draw_arc_filled(cameraposX, cameraposY, 800, 800, (8,
+                               247, 28, 70), startAngle, endAngle)  # rgba(8, 247, 28, 0.23)
 
         # radarjobbelso
         radarcarx, radarcary = carspacetoscreenspace(origox, origoy,
@@ -353,9 +356,11 @@ class MyGame(arcade.Window):
         radarAngle = 90+egoObj.ANGLE_AZIMUTH_CORNER_RADAR_RIGHT_FRONT
         tmpList = [radarAngle-62, 92]
         tmpList.sort()
-        startAngle,endAngle=tuple(tmpList)
-        arcade.draw_arc_filled(radarcarx,radarcary,500,500,(15, 145, 242, 70),startAngle,endAngle)
-        arcade.draw_text("RFCorner Radar",radarcarx,radarcary,anchor_x="left",anchor_y="bottom",multiline=True,width=50)
+        startAngle, endAngle = tuple(tmpList)
+        arcade.draw_arc_filled(radarcarx, radarcary, 500,
+                               500, (15, 145, 242, 70), startAngle, endAngle)
+        arcade.draw_text("RFCorner Radar", radarcarx, radarcary,
+                         anchor_x="left", anchor_y="bottom", multiline=True, width=50)
 
         # radarbalelso
         radarcarx, radarcary = carspacetoscreenspace(origox, origoy,
@@ -366,9 +371,11 @@ class MyGame(arcade.Window):
         radarAngle = 90+egoObj.ANGLE_AZIMUTH_CORNER_RADAR_LEFT_FRONT
         tmpList = [radarAngle+62, 92]
         tmpList.sort()
-        startAngle,endAngle=tuple(tmpList)
-        arcade.draw_arc_filled(radarcarx,radarcary,500,500,(15, 145, 242, 70),startAngle,endAngle)
-        arcade.draw_text("LFCorner Radar",radarcarx,radarcary,anchor_x="right",anchor_y="bottom",multiline=True,width=50)
+        startAngle, endAngle = tuple(tmpList)
+        arcade.draw_arc_filled(radarcarx, radarcary, 500,
+                               500, (15, 145, 242, 70), startAngle, endAngle)
+        arcade.draw_text("LFCorner Radar", radarcarx, radarcary,
+                         anchor_x="right", anchor_y="bottom", multiline=True, width=50)
 
         # radarbalhatso
         radarcarx, radarcary = carspacetoscreenspace(origox, origoy,
@@ -379,9 +386,11 @@ class MyGame(arcade.Window):
         radarAngle = 90+egoObj.ANGLE_AZIMUTH_CORNER_RADAR_LEFT_REAR
         tmpList = [radarAngle-42, 272]
         tmpList.sort()
-        startAngle,endAngle=tuple(tmpList)
-        arcade.draw_arc_filled(radarcarx,radarcary,500,500,(15, 145, 242, 70),startAngle,endAngle)
-        arcade.draw_text("LRCorner Radar",radarcarx,radarcary,anchor_x="right",anchor_y="top",multiline=True,width=50)
+        startAngle, endAngle = tuple(tmpList)
+        arcade.draw_arc_filled(radarcarx, radarcary, 500,
+                               500, (15, 145, 242, 70), startAngle, endAngle)
+        arcade.draw_text("LRCorner Radar", radarcarx, radarcary,
+                         anchor_x="right", anchor_y="top", multiline=True, width=50)
 
         # radarjobbhatso
         radarcarx, radarcary = carspacetoscreenspace(origox, origoy,
@@ -392,9 +401,11 @@ class MyGame(arcade.Window):
         radarAngle = 180-(egoObj.ANGLE_AZIMUTH_CORNER_RADAR_RIGHT_REAR)
         tmpList = [radarAngle+42, 272]
         tmpList.sort()
-        startAngle,endAngle=tuple(tmpList)
-        arcade.draw_arc_filled(radarcarx,radarcary,500,500,(15, 145, 242, 70),startAngle,endAngle)
-        arcade.draw_text("RRCorner Radar",radarcarx,radarcary,anchor_x="left",anchor_y="top",multiline=True,width=50)
+        startAngle, endAngle = tuple(tmpList)
+        arcade.draw_arc_filled(radarcarx, radarcary, 500,
+                               500, (15, 145, 242, 70), startAngle, endAngle)
+        arcade.draw_text("RRCorner Radar", radarcarx, radarcary,
+                         anchor_x="left", anchor_y="top", multiline=True, width=50)
 
         # holtter
         point_list = tuple(map(lambda t:
@@ -437,15 +448,15 @@ class MyGame(arcade.Window):
         # draw black debug point
         # arcade.draw_point(100,self.debugcnt,arcade.color.BLACK,30)
 
-        #Objects
-        #print(len(objectLayer.realObjects)) 
+        # Objects
+        # print(len(objectLayer.realObjects))
         if pause:
             objectText = self.objt.text
         if not pause:
-            objectText=""
+            objectText = ""
 
         if not pause:
-          objectLayer.predict.filterPred(objectLayer.realObjects)
+            objectLayer.predict.filterPred(objectLayer.realObjects)
         for i in range(len(objectLayer.realObjects)):
             objektumx, objektumy = carspacetoscreenspace(
                 origox, origoy, 1000*objectLayer.realObjects[i]["x"], 1000*objectLayer.realObjects[i]["y"], METERTOPIXEL)
@@ -457,36 +468,44 @@ class MyGame(arcade.Window):
             if (objectLayer.realObjects[i].keys().__contains__("type")):
                 if (objectLayer.realObjects[i]["type"] == "0"):
                     arcade.draw_point(objektumx, objektumy,
-                                    arcade.color.ROSE_RED, 20)
-                    arcade.draw_texture_rectangle(objektumx, objektumy,CARSIZE/5.0,CARSIZE/5.0,self.unknownDetect)
+                                      arcade.color.ROSE_RED, 20)
+                    arcade.draw_texture_rectangle(
+                        objektumx, objektumy, CARSIZE/5.0, CARSIZE/5.0, self.unknownDetect)
                 elif (objectLayer.realObjects[i]["type"] == "1"):
                     arcade.draw_point(objektumx, objektumy,
-                                    arcade.color.DARK_BLUE, 35)
-                    arcade.draw_texture_rectangle(objektumx, objektumy,CARSIZE,CARSIZE,self.truckDetect)
+                                      arcade.color.DARK_BLUE, 35)
+                    arcade.draw_texture_rectangle(
+                        objektumx, objektumy, CARSIZE, CARSIZE, self.truckDetect)
                 elif (objectLayer.realObjects[i]["type"] == "2"):
                     arcade.draw_point(objektumx, objektumy,
-                                    arcade.color.FERN_GREEN, 29)
-                    arcade.draw_texture_rectangle(objektumx, objektumy,CARSIZE,CARSIZE,self.carDetect)
+                                      arcade.color.FERN_GREEN, 29)
+                    arcade.draw_texture_rectangle(
+                        objektumx, objektumy, CARSIZE, CARSIZE, self.carDetect)
                 elif (objectLayer.realObjects[i]["type"] == "3"):
                     arcade.draw_point(objektumx, objektumy,
-                                    arcade.color.AMARANTH_PURPLE, 22)
-                    arcade.draw_texture_rectangle(objektumx, objektumy,CARSIZE,CARSIZE,self.motorbikeDetect)
+                                      arcade.color.AMARANTH_PURPLE, 22)
+                    arcade.draw_texture_rectangle(
+                        objektumx, objektumy, CARSIZE, CARSIZE, self.motorbikeDetect)
                 elif (objectLayer.realObjects[i]["type"] == "4"):
                     arcade.draw_point(objektumx, objektumy,
-                                    arcade.color.ANDROID_GREEN, 22)
-                    arcade.draw_texture_rectangle(objektumx, objektumy,CARSIZE,CARSIZE,self.bicycleDetect)
+                                      arcade.color.ANDROID_GREEN, 22)
+                    arcade.draw_texture_rectangle(
+                        objektumx, objektumy, CARSIZE, CARSIZE, self.bicycleDetect)
                 elif (objectLayer.realObjects[i]["type"] == "5"):
                     arcade.draw_point(objektumx, objektumy,
-                                    arcade.color.BABY_PINK, 16)
-                    arcade.draw_texture_rectangle(objektumx, objektumy,CARSIZE,CARSIZE,self.pedestrianDetect)
+                                      arcade.color.BABY_PINK, 16)
+                    arcade.draw_texture_rectangle(
+                        objektumx, objektumy, CARSIZE, CARSIZE, self.pedestrianDetect)
                 elif (objectLayer.realObjects[i]["type"] == "6"):
                     arcade.draw_point(objektumx, objektumy,
-                                    arcade.color.STAR_COMMAND_BLUE, 32)
-                    arcade.draw_texture_rectangle(objektumx, objektumy,CARSIZE,CARSIZE,self.cartruckDetect)
+                                      arcade.color.STAR_COMMAND_BLUE, 32)
+                    arcade.draw_texture_rectangle(
+                        objektumx, objektumy, CARSIZE, CARSIZE, self.cartruckDetect)
             else:
                 arcade.draw_point(objektumx, objektumy,
-                                arcade.color.ROSE_RED, 25)
-                arcade.draw_texture_rectangle(objektumx, objektumy,CARSIZE/5.0,CARSIZE/5.0,self.unknownDetect)
+                                  arcade.color.ROSE_RED, 25)
+                arcade.draw_texture_rectangle(
+                    objektumx, objektumy, CARSIZE/5.0, CARSIZE/5.0, self.unknownDetect)
             # Object text
             if not pause:
                 objectText += ("Object id: " + str(i)+" ")
@@ -520,7 +539,7 @@ class MyGame(arcade.Window):
                     "Y: " + str(objectLayer.realObjects[i]["y"]) + " ")
                 objectText += (
                     "vy: " + str(objectLayer.realObjects[i]["vy"]) + "\n")
-        #pred render
+        # pred render
         for i in range(len(objectLayer.predict.predictions)):
             objektumx, objektumy = carspacetoscreenspace(
                 origox, origoy, 1000*objectLayer.predict.predictions[i]["x"], 1000*objectLayer.predict.predictions[i]["y"], METERTOPIXEL)
@@ -531,7 +550,7 @@ class MyGame(arcade.Window):
             # Object texture
             if (objectLayer.predict.predictions[i].keys().__contains__("type")):
                 arcade.draw_point(objektumx, objektumy, arcade.color.BLACK, 20)
-                
+
             # Object text
             if not pause:
                 objectText += ("Object id: " + str(i)+" ")
@@ -566,25 +585,24 @@ class MyGame(arcade.Window):
                 objectText += (
                     "vy: " + str(objectLayer.predict.predictions[i]["vy"]) + "\n")
 
-        #if not pause:              
+        # if not pause:
             #objectLayer.predict.createPred(objectLayer.realObjects, 1/FPS)
-        
+
         # """if(GPS):
         #     for i in gpsObj.
         #     arcade.draw_point(objektumx, objektumy, arcade.color.BLACK, 20)"""
 
-        self.objt.x=screen_width-300
-        self.objt.text=objectText
+        self.objt.x = screen_width-300
+        self.objt.text = objectText
         self.objt.draw()
         if pause:
             arcade.draw_text("Pause", 20, 50, arcade.color.BLACK, 14)
         # draw manager for buttons
         self.button_manager.draw()
-        #self.slider_manager.draw()
+        # self.slider_manager.draw()
 
         self.alert_Driver_draw()
 
-        
     #  legacy fullscreen stuff
     """def on_key_press(self, key, modifiers):
         #Called whenever a key is pressed.
@@ -621,21 +639,23 @@ class MyGame(arcade.Window):
     }
 
     def on_key_press(self, key, modifiers):
-        global CARSIZE, CARWIDTH, METERTOPIXEL,STREETSIZE, STREETLENGTH
+        global CARSIZE, CARWIDTH, METERTOPIXEL, STREETSIZE, STREETLENGTH
         if key == arcade.key.UP:
-            if STREETLENGTH>0.1:
-                CARSIZE+=10
+            if STREETLENGTH > 0.1:
+                CARSIZE += 10
                 CARWIDTH = CARSIZE/2.4
                 METERTOPIXEL = CARSIZE/4.65
-                STREETLENGTH-=0.05
-                STREETSIZE = {"x": CARWIDTH*STREETLENGTH,"y" :CARSIZE*STREETLENGTH}
+                STREETLENGTH -= 0.05
+                STREETSIZE = {"x": CARWIDTH*STREETLENGTH,
+                              "y": CARSIZE*STREETLENGTH}
         if key == arcade.key.DOWN:
             if CARSIZE > 20:
-                CARSIZE-=10
+                CARSIZE -= 10
                 CARWIDTH = CARSIZE/2.4
                 METERTOPIXEL = CARSIZE/4.65
-                STREETLENGTH+=0.05
-                STREETSIZE = {"x": CARWIDTH*STREETLENGTH,"y" :CARSIZE*STREETLENGTH}
+                STREETLENGTH += 0.05
+                STREETSIZE = {"x": CARWIDTH*STREETLENGTH,
+                              "y": CARSIZE*STREETLENGTH}
 
     def pause_resume(self, event):
         global pause
@@ -646,94 +666,104 @@ class MyGame(arcade.Window):
             pause = True
         self.create_buttons()
 
-    def Gps_On_Off(self,event):
+    def Gps_On_Off(self, event):
         global GPS
         if GPS:
             GPS = False
         else:
             GPS = True
         self.create_buttons()
+
     def select_file(self, event, index):
-        global choosen_file 
+        global choosen_file
         choosen_file = index
         self.setup()
         self.create_buttons()
 
     def select_car(self, event, index):
-        global car_type 
+        global car_type
         car_type = index
         self.create_buttons()
         self.car = arcade.load_texture(Cars[car_type])
+
     def innit_Alerts(self):
         global alert
         left, screen_width, bottom, screen_height = self.get_viewport()
         alert = {
-            "Stop":{"status": False,"time": 0},
-            "TLeft": {"status": False,"time": 0},
-            "TRight": {"status": False,"time": 0},
-            "TooCloseFront": {"status": False,"time": 0},
-            "TooCloseRear": {"status": False,"time": 0},
+            "Stop": {"status": False, "time": 0},
+            "TLeft": {"status": False, "time": 0},
+            "TRight": {"status": False, "time": 0},
+            "TooCloseFront": {"status": False, "time": 0},
+            "TooCloseRear": {"status": False, "time": 0},
         }
         global StopSign, DangerOnRight, DangerOnLeft, DangerOnFront, DangerOnRear, TurnRight, TurnLeft, StopText, SlowText, CarefulOnRear
         point_list = (
-                    (240, screen_height-300),
-                    (340, screen_height-300),
-                    (340, screen_height-250),
-                    (400, screen_height-350),
-                    (340, screen_height-450),
-                    (340, screen_height-400),
-                    (240, screen_height-400))
+            (240, screen_height-300),
+            (340, screen_height-300),
+            (340, screen_height-250),
+            (400, screen_height-350),
+            (340, screen_height-450),
+            (340, screen_height-400),
+            (240, screen_height-400))
         TurnRight = arcade.create_polygon(point_list, arcade.color.YELLOW)
         point_list = (
-                    (230, screen_height-350),
-                    (290, screen_height-250),
-                    (290, screen_height-300),
-                    (390, screen_height-300),
-                    (390, screen_height-400),
-                    (290, screen_height-400),
-                    (290, screen_height-450))
+            (230, screen_height-350),
+            (290, screen_height-250),
+            (290, screen_height-300),
+            (390, screen_height-300),
+            (390, screen_height-400),
+            (290, screen_height-400),
+            (290, screen_height-450))
         TurnLeft = arcade.create_polygon(point_list, arcade.color.YELLOW)
         point_list = (
-                    (230, screen_height-400),
-                    (230, screen_height-300),
-                    (300, screen_height-238),
-                    (382, screen_height-238),
-                    (454, screen_height-300),
-                    (454, screen_height-400),
-                    (382, screen_height-462),
-                    (300, screen_height-462))
+            (230, screen_height-400),
+            (230, screen_height-300),
+            (300, screen_height-238),
+            (382, screen_height-238),
+            (454, screen_height-300),
+            (454, screen_height-400),
+            (382, screen_height-462),
+            (300, screen_height-462))
         StopSign = arcade.create_polygon(point_list, arcade.color.RUBY_RED)
-        StopText = arcade.Text("STOP!!",screen_width/2.0,screen_height-110,arcade.color.RED, 50,bold=True,anchor_x="center")
+        StopText = arcade.Text("STOP!!", screen_width/2.0, screen_height -
+                               110, arcade.color.RED, 50, bold=True, anchor_x="center")
         point_list = ((screen_width-330, 20),
-                    (screen_width-340, 30),
-                    (screen_width-350, 300),
-                    (screen_width-350, screen_height-300),
-                    (screen_width-340, screen_height-30),
-                    (screen_width-330, screen_height-20))
-        DangerOnRight = arcade.create_polygon(point_list, arcade.color.SPANISH_RED)
+                      (screen_width-340, 30),
+                      (screen_width-350, 300),
+                      (screen_width-350, screen_height-300),
+                      (screen_width-340, screen_height-30),
+                      (screen_width-330, screen_height-20))
+        DangerOnRight = arcade.create_polygon(
+            point_list, arcade.color.SPANISH_RED)
         point_list = ((160, 20),
-                    (170, 30),
-                    (180, 300),
-                    (180, screen_height-300),
-                    (170, screen_height-30),
-                    (160, screen_height-20))
-        DangerOnLeft = arcade.create_polygon(point_list, arcade.color.SPANISH_RED)
+                      (170, 30),
+                      (180, 300),
+                      (180, screen_height-300),
+                      (170, screen_height-30),
+                      (160, screen_height-20))
+        DangerOnLeft = arcade.create_polygon(
+            point_list, arcade.color.SPANISH_RED)
         point_list = ((170, screen_height-10),
-                    (180, screen_height-22),
-                    (screen_width/2.0-170, screen_height-30),
-                    (screen_width/2.0+70, screen_height-30),
-                    (screen_width-340, screen_height-22),
-                    (screen_width-330, screen_height-10))
-        DangerOnFront = arcade.create_polygon(point_list, arcade.color.SPANISH_RED)
-        SlowText = arcade.Text("Slow Down!!",screen_width/2.0,screen_height-130,arcade.color.RED, 50,bold=True,anchor_x="center")
+                      (180, screen_height-22),
+                      (screen_width/2.0-170, screen_height-30),
+                      (screen_width/2.0+70, screen_height-30),
+                      (screen_width-340, screen_height-22),
+                      (screen_width-330, screen_height-10))
+        DangerOnFront = arcade.create_polygon(
+            point_list, arcade.color.SPANISH_RED)
+        SlowText = arcade.Text("Slow Down!!", screen_width/2.0, screen_height -
+                               130, arcade.color.RED, 50, bold=True, anchor_x="center")
         point_list = ((170, 10),
-                    (180, 22),
-                    (screen_width/2.0-170, 30),
-                    (screen_width/2.0+70, 30),
-                    (screen_width-340, 22),
-                    (screen_width-330, 10))
-        DangerOnRear = arcade.create_polygon(point_list, arcade.color.SPANISH_RED)
-        CarefulOnRear = arcade.Text("An object is close behind you!!",screen_width/2.0,130,arcade.color.RED, 40,bold=True,anchor_x="center")
+                      (180, 22),
+                      (screen_width/2.0-170, 30),
+                      (screen_width/2.0+70, 30),
+                      (screen_width-340, 22),
+                      (screen_width-330, 10))
+        DangerOnRear = arcade.create_polygon(
+            point_list, arcade.color.SPANISH_RED)
+        CarefulOnRear = arcade.Text("An object is close behind you!!", screen_width /
+                                    2.0, 130, arcade.color.RED, 40, bold=True, anchor_x="center")
+
     def alert_Driver_draw(self):
         global alert
         global StopSign, DangerOnRight, DangerOnLeft, DangerOnFront, DangerOnRear, TurnRight, TurnLeft, StopText, SlowText, CarefulOnRear
@@ -744,7 +774,7 @@ class MyGame(arcade.Window):
                     if i == 'Stop':
                         StopSign.color = arcade.color.SPANISH_RED
                         StopSign.draw()
-                        
+
                     elif i == 'TLeft':
                         TurnLeft.color = arcade.color.YELLOW_ORANGE
                         TurnLeft.draw()
@@ -788,11 +818,11 @@ class MyGame(arcade.Window):
                         DangerOnLeft.draw()
                     elif i == 'TooCloseRight':
                         DangerOnRight.color = arcade.color.SPANISH_RED
-                        DangerOnRight.draw()         
+                        DangerOnRight.draw()
                 if diff <= 0:
                     alert[i]['status'] = False
                     alert[i]['time'] = 0
-        
+
     def create_buttons(self):
         global pause
         BUTTON_WIDTH = 100
@@ -810,7 +840,7 @@ class MyGame(arcade.Window):
             top=PADDING, left=PADDING))
 
         for i in range(len(Files)):
-            if(i == choosen_file):
+            if (i == choosen_file):
                 button = arcade.gui.UIFlatButton(
                     text="Test_" + str(i), width=BUTTON_WIDTH, style=self.selected_button_style)
             else:
@@ -820,7 +850,7 @@ class MyGame(arcade.Window):
             self.v_box.add(button.with_space_around(top=PADDING, left=PADDING))
 
         for i in range(len(Cars)):
-            if(i == car_type):
+            if (i == car_type):
                 button = arcade.gui.UIFlatButton(
                     text="Car_" + str(i + 1), width=BUTTON_WIDTH, style=self.selected_button_style)
             else:
@@ -828,8 +858,8 @@ class MyGame(arcade.Window):
                     text="Car_" + str(i + 1), width=BUTTON_WIDTH, style=self.button_style)
             button.on_click = functools.partial(self.select_car, index=i)
             self.v_box.add(button.with_space_around(top=PADDING, left=PADDING))
-            
-        #self.create_slider()
+
+        # self.create_slider()
         """if(GPS):
             button = arcade.gui.UIFlatButton(
                 text="GPS OFF", width=BUTTON_WIDTH, style=self.selected_button_style)
@@ -854,18 +884,16 @@ class MyGame(arcade.Window):
     #     label = arcade.gui.UILabel(text=f"Iteration: {egoObj.iterator:02.0f}", width=400, height=50, align="center")
 
     #     @ui_slider.event()
-    #     def on_change(event: UIOnChangeEvent):  
+    #     def on_change(event: UIOnChangeEvent):
     #         egoObj.setState(int(lerp(1, egoObj.highestit, ui_slider.value/100)))
     #         self.objectit = int(lerp(1, objectLayer.highestit, ui_slider.value/100))
     #         label.text = f"Iteration: {egoObj.iterator:02.0f}"
     #         label.fit_content()
 
-        
-
     #     self.slider_manager.add(arcade.gui.UIAnchorWidget(child=ui_slider, anchor_x="left", anchor_y="bottom"))
     #     self.slider_manager.add(arcade.gui.UIAnchorWidget(child=label, anchor_x="left", anchor_y="bottom"))
-        
-        
+
+
 def ui_run():
     MyGame()
     arcade.run()

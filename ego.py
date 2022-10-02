@@ -2,6 +2,7 @@ import csv
 import math
 from normalize import normalize
 
+
 class Ego:
     ANGLE_AZIMUTH_CORNER_RADAR_LEFT_FRONT = 42
     ANGLE_AZIMUTH_CORNER_RADAR_LEFT_REAR = 135
@@ -13,7 +14,7 @@ class Ego:
     ANGLE_ELEVATION_CORNER_RADAR_RIGHT_REAR = 0.48
     X_POSITION_CORNER_RADAR_LEFT_FRONT = 3473.8
     X_POSITION_CORNER_RADAR_LEFT_REAR = -766.4
-    X_POSITION_CORNER_RADAR_RIGHT_FRONT = 3473.8 
+    X_POSITION_CORNER_RADAR_RIGHT_FRONT = 3473.8
     X_POSITION_CORNER_RADAR_RIGHT_REAR = -766.4
     Y_POSITION_CORNER_RADAR_LEFT_FRONT = 628.6
     Y_POSITION_CORNER_RADAR_LEFT_REAR = 738
@@ -30,39 +31,38 @@ class Ego:
         self.vyvRef = vyvRef
         self.ayvRef = ayvRef
         self.psiDtOpt = psiDtOpt """
-    
-    def __init__(self, filePath = 'data/PSA_ADAS_W3_FC_2022-09-01_15-12_0059.MF4/Group_416.csv'):
+
+    def __init__(self, filePath='data/PSA_ADAS_W3_FC_2022-09-01_15-12_0059.MF4/Group_416.csv'):
         with open(filePath, 'rt') as f:
-           self.iterator = 1
-           self.highestit = 1
-           reader = csv.reader(f)
-           self.database = list(reader)
-           self.EndOfList = len(self.database)<=self.iterator
-           self.__update__()
+            self.iterator = 1
+            self.highestit = 1
+            reader = csv.reader(f)
+            self.database = list(reader)
+            self.EndOfList = len(self.database) <= self.iterator
+            self.__update__()
 
-    
-    def __update__(self,limitMargin = 0.2):
-        self.EndOfList = len(self.database)<=self.iterator
+    def __update__(self, limitMargin=0.2):
+        self.EndOfList = len(self.database) <= self.iterator
 
-        if(self.EndOfList):
+        if (self.EndOfList):
             return
 
         row = self.database[self.iterator]
         self.T = row[0]
 
-        curT=math.floor(float(self.T)*1000.0)/1000.0
-        limit=curT+limitMargin
+        curT = math.floor(float(self.T)*1000.0)/1000.0
+        limit = curT+limitMargin
 
         found = False
-        while math.floor(float(self.T)*1000.0)/1000.0<limit and not self.EndOfList:
-            self.iterator+=1
-            self.highestit=self.iterator if self.iterator>self.highestit else self.highestit
-            self.EndOfList = len(self.database)<=self.iterator
+        while math.floor(float(self.T)*1000.0)/1000.0 < limit and not self.EndOfList:
+            self.iterator += 1
+            self.highestit = self.iterator if self.iterator > self.highestit else self.highestit
+            self.EndOfList = len(self.database) <= self.iterator
             if not self.EndOfList:
-                self.T=self.database[self.iterator][0]
+                self.T = self.database[self.iterator][0]
             else:
                 return
-        
+
             '''self.iterator+=1
             self.EndOfList = len(self.database)<=self.iterator
             if(self.EndOfList):
@@ -82,7 +82,6 @@ class Ego:
         self.vxvRef = normalize("velocity", row[5])
         self.vyvRef = normalize("velocity", row[6])
 
-
     def setState(self, value):
         self.iterator = value
         row = self.database[value]
@@ -93,9 +92,6 @@ class Ego:
         self.vxvRef = normalize("velocity", row[5])
         self.vyvRef = normalize("velocity", row[6])
 
-    
-
-
     def printCurrent(self):
         print("iterator: " + str(self.iterator))
         print("T: " + self.T)
@@ -105,10 +101,10 @@ class Ego:
         print("tAbsRefTime: " + str(self.tAbsRefTime))
         print("vxvRef: " + str(self.vxvRef))
         print("vyvRef: " + str(self.vyvRef))
-        
-                
-#"""
-#sample
+
+
+# """
+# sample
 
 """x = Ego()
 x.printCurrent()
@@ -116,4 +112,4 @@ x.__update__()
 print()
 x.printCurrent() """
 
-#"""
+# """
