@@ -188,9 +188,10 @@ class MyGame(arcade.Window):
         global pause
         if pause:
             if (self.timecnt % 1) > 0.8:
-                objectLayer.setState(self.objectit)
+                 objectLayer.setState(self.objectit)
             return
 
+        
         egoObj.__update__(delta_time)
         objectLayer.__update__(delta_time)
         # v = s/t
@@ -199,13 +200,12 @@ class MyGame(arcade.Window):
         # self.streetX-=egoObj.vyvRef
         # self.streetx-=math.cos
         if (egoObj.EndOfList):
-            if (egoObj.vxvRef < 1):
-                egoObj.vxvRef += 0.1
-            elif (egoObj.vxvRef > 1):
+            if (egoObj.vxvRef > 1):
                 egoObj.vxvRef -= 0.1
             else:
                 egoObj.vxvRef = 0
                 self.streetY = 0
+            
         self.streetY -= egoObj.vxvRef*METERTOPIXEL*delta_time
         #self.streetY -= egoObj.vxvRef
         # tesztelés
@@ -502,8 +502,7 @@ class MyGame(arcade.Window):
                 origox, origoy, 1000*objectLayer.predict.predictions[i]["x"], 1000*objectLayer.predict.predictions[i]["y"], METERTOPIXEL)
             #print(str(i),end=": ")
             # print(objectLayer.predict.predictions[i])
-            if (objectLayer.predict.predictions[i]["x"] > -0.5 and objectLayer.predict.predictions[i]["x"] < 2):
-                continue
+        
             # Object texture
             if (objectLayer.predict.predictions[i].keys().__contains__("type")):
                 arcade.draw_point(objektumx, objektumy, arcade.color.BLACK, 20)
