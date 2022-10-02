@@ -1,13 +1,15 @@
 class Predict:
+
     def __init__(self):
         self.predictions = []
 
     def createPred(self, objects, time=0.1):  # after render
+        RADIUS = 5
         oldPredictions = self.predictions
         self.predictions = []
         closeObjecs = []
         for obj in objects:
-            if obj["x"] < 10 and obj["x"] > -10 and obj["y"] < 10 and obj["y"] > -10:
+            if obj["x"] < RADIUS and obj["x"] > -RADIUS and obj["y"] < RADIUS and obj["y"] > -RADIUS:
                 closeObjecs.append(obj)
         for obj in closeObjecs:
             self.predictions.append({"x": obj["x"] + time*obj["vx"], "y": obj["y"] + time*obj["vy"], "vx": obj["vx"], "vy": obj["vy"],
@@ -15,7 +17,7 @@ class Predict:
 
         closeObjecs = []
         for obj in oldPredictions:
-            if obj["x"] < 10 and obj["x"] > -10 and obj["y"] < 10 and obj["y"] > -10:
+            if obj["x"] < RADIUS and obj["x"] > -RADIUS and obj["y"] < RADIUS and obj["y"] > -RADIUS:
                 closeObjecs.append(obj)
         for obj in closeObjecs:
             self.predictions.append({"x": obj["x"] + time*obj["vx"], "y": obj["y"] + time*obj["vy"], "vx": obj["vx"],
