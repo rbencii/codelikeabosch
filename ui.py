@@ -13,6 +13,7 @@ from ego import Ego
 from objectlayer import Objects
 from gps import GpsObjects
 
+
 SPRITE_SCALING = 0.5
 
 SCREEN_WIDTH = 1200
@@ -25,6 +26,7 @@ VIEWPORT_MARGIN = 40
 
 MOVEMENT_SPEED = 5
 
+GPS = False
 
 # FILE VALASZTAS
 #egoObj = Ego(filedialog.askopenfilename())
@@ -213,7 +215,8 @@ class MyGame(arcade.Window):
         #    egoObj.EndOfList = True
 
         #self.create_slider()
-       
+
+        #gpsObj.update(delta_time)
 
         # alerts
         for obj in objectLayer.realObjects:
@@ -324,6 +327,12 @@ class MyGame(arcade.Window):
         arcade.draw_point(cameraposX,cameraposY,arcade.color.LIME_GREEN,20)
         arcade.draw_text("Camera",cameraposX,cameraposY,anchor_x="center",anchor_y="center")
 
+        cameraAngle = 40
+        tmpList = [cameraAngle, 145]
+        tmpList.sort()
+        startAngle,endAngle=tuple(tmpList)
+        arcade.draw_arc_filled(cameraposX,cameraposY,800,800,(8, 247, 28, 70),startAngle,endAngle)       #rgba(8, 247, 28, 0.23)
+
 
         # radarjobbelso
         radarcarx, radarcary = carspacetoscreenspace(origox, origoy,
@@ -427,7 +436,7 @@ class MyGame(arcade.Window):
                 origox, origoy, 1000*objectLayer.realObjects[i]["x"], 1000*objectLayer.realObjects[i]["y"], METERTOPIXEL)
             #print(str(i),end=": ")
             # print(objectLayer.realObjects[i])
-            if (objectLayer.realObjects[i]["x"] > -0.5 and objectLayer.realObjects[i]["x"] < 2):
+            if (objectLayer.realObjects[i]["x"] > -0.5 and objectLayer.realObjects[i]["x"] < 2 and objectLayer.realObjects[i]["y"] < 1.5 and objectLayer.realObjects[i]["y"] > -1.5):
                 continue
             # Object texture
             if (objectLayer.realObjects[i].keys().__contains__("type")):
@@ -543,6 +552,10 @@ class MyGame(arcade.Window):
 
         objectLayer.predict.createPred(objectLayer.realObjects, 1/FPS)
         
+        """if(GPS):
+            for i in gpsObj.
+            arcade.draw_point(objektumx, objektumy, arcade.color.BLACK, 20)"""
+
         self.objt.x=screen_width-300
         self.objt.text=objectText
         self.objt.draw()
@@ -616,7 +629,13 @@ class MyGame(arcade.Window):
             pause = True
         self.create_buttons()
 
-
+    def Gps_On_Off(self,event):
+        global GPS
+        if GPS:
+            GPS = False
+        else:
+            GPS = True
+        self.create_buttons()
     def select_file(self, event, index):
         global choosen_file 
         choosen_file = index
@@ -794,8 +813,14 @@ class MyGame(arcade.Window):
             self.v_box.add(button.with_space_around(top=PADDING, left=PADDING))
             
         #self.create_slider()
-
-            
+        """if(GPS):
+            button = arcade.gui.UIFlatButton(
+                text="GPS OFF", width=BUTTON_WIDTH, style=self.selected_button_style)
+        else:
+            button = arcade.gui.UIFlatButton(
+                text="GPS ON", width=BUTTON_WIDTH, style=self.button_style)
+        button.on_click = self.Gps_On_Off
+        self.v_box.add(button.with_space_around(top=PADDING, left=PADDING))"""
 
         self.button_manager.add(
             arcade.gui.UIAnchorWidget(
