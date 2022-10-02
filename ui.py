@@ -37,7 +37,9 @@ origoy = 0
 CARSIZE = 250
 CARWIDTH = CARSIZE/2.4
 METERTOPIXEL = CARSIZE/4.65
-STREETSIZE = 27
+STREETLENGTH = 2
+STREETSIZE = {"x": CARWIDTH*STREETLENGTH,"y" :CARSIZE*STREETLENGTH}
+#STREETSIZE = {"x": 600,"y" :400}
 AXLEP = 3.43
 FPS = 60.0
 STARTT = 0
@@ -148,8 +150,26 @@ class MyGame(arcade.Window):
         self.streetY = 0
         self.slider = 100
         self.objectit = 1
+        self.topPoints=[]
+        self.bottomPoints=[]
         egoObj = Ego(Files[choosen_file]["auto"])
         objectLayer = Objects(Files[choosen_file]["objektumok"])
+
+    # def updateStreet(self):
+    #     self.topPoints = []
+    #     n=20
+        
+    #     for i in range(n):
+    #         stepper = ((float(i)/float(n-1))+self.streetY/400.0)%1
+    #         curAngle=lerp(math.pi/2.0,math.pi/2.0+egoObj.psiDtOpt/2.0,stepper)
+    #         #arcade.draw_point(centerX+cos(curAngle)*(i/(n-1))*screen_width/2.0,centerY+sin(curAngle)*(i/(n-1))*screen_height/2.0,arcade.color.PINK_LAVENDER,20)
+    #         self.topPoints.append((cos(curAngle)*(i/(n-1))*STREETSIZE["x"],sin(curAngle)*(i/(n-1))*STREETSIZE["y"])) 
+
+    #     self.bottomPoints = []
+    #     for i in range(n):
+    #         curAngle=lerp(math.pi/2.0,math.pi/2.0+egoObj.psiDtOpt/2.0,(i/(n-1)))
+    #         #arcade.draw_point(centerX+cos(curAngle)*(i/(n-1))*screen_width/2.0,centerY-sin(curAngle)*(i/(n-1))*screen_height/2.0,arcade.color.PINK_LAVENDER,20)
+    #         self.bottomPoints.append((cos(curAngle)*(i/(n-1))*STREETSIZE["x"],sin(curAngle)*(i/(n-1))*STREETSIZE["y"]))
 
     def on_update(self, delta_time):
         global alert
@@ -164,7 +184,6 @@ class MyGame(arcade.Window):
 
         egoObj.__update__(delta_time)
         objectLayer.__update__(delta_time)
-        
         # v = s/t
         # egoObj.vxvRef = s meter / 1sec
         # s = egoObj.vxvRef
@@ -178,14 +197,13 @@ class MyGame(arcade.Window):
             else:
                 egoObj.vxvRef = 0
                 self.streetY = 0
+        self.streetY -= egoObj.vxvRef*METERTOPIXEL*delta_time
         #self.streetY -= egoObj.vxvRef
-        if self.streetY <= -500:
-            self.streetY = 0
         # tesztelés
         # if(egoObj.iterator >300):
         #    egoObj.EndOfList = True
 
-        self.create_slider()
+        #self.create_slider()
        
 
         # print out close objects
@@ -235,26 +253,31 @@ class MyGame(arcade.Window):
         centerX = screen_width/2.0
         centerY = screen_height/2.0
         # Draw some boxes on the bottom so we can see how they change
-        # for i in range(41):
-        #     anglePart=lerp(egoObj.psiDtOpt/2.0,(math.pi-egoObj.psiDtOpt)/2.0,i/40.0)
-        #     arcade.draw_point(cos(anglePart)*(i-20)*27+centerX,centerY+sin(anglePart)*(i-20)*27,arcade.color.BLACK,20)
-        #          #centerX, i*STREETSIZE, STREETSIZE, STREETSIZE, self.street, lerp(degrees(egoObj.psiDtOpt),360-degrees(egoObj.psiDtOpt),1/40*(i+1)))
-        
-        topPoints = []
-        n=20
+        n=10
         for i in range(n):
-            curAngle=lerp(math.pi/2.0,math.pi/2.0+egoObj.psiDtOpt/2.0,i*(1/(n-1)))
-            #arcade.draw_point(centerX+cos(curAngle)*(i/(n-1))*screen_width/2.0,centerY+sin(curAngle)*(i/(n-1))*screen_height/2.0,arcade.color.PINK_LAVENDER,20)
-            topPoints.append((centerX-CARWIDTH+cos(curAngle)*(i/(n-1))*(screen_width/2.0),centerY+sin(curAngle)*(i/(n-1))*screen_height/2.0)) 
+            stepper = (i/float(n)+self.streetY/STREETSIZE["y"])%1
+            stepper2 = (i/float(n)+15/400+self.streetY/STREETSIZE["y"])%1
+            curAngle=lerp(math.pi/2.0,math.pi/2.0+egoObj.psiDtOpt/2.0,stepper)
+            curAngle2=lerp(math.pi/2.0,math.pi/2.0+egoObj.psiDtOpt/2.0,stepper2)
+            #arcade.draw_point(centerX-CARWIDTH+cos(curAngle)*(stepper)*STREETSIZE["x"],centerY+sin(curAngle)*(stepper)*STREETSIZE["y"],arcade.color.WHITE,15)
+            if stepper<stepper2:
+                arcade.draw_line(centerX+cos(curAngle)*(stepper)*STREETSIZE["x"],centerY+sin(curAngle)*(stepper)*STREETSIZE["y"],centerX+cos(curAngle2)*(stepper2)*STREETSIZE["x"],centerY+sin(curAngle2)*(stepper2)*STREETSIZE["y"],arcade.color.WHITE,15)
 
-        bottomPoints = []
         for i in range(n):
-            curAngle=lerp(math.pi/2.0,math.pi/2.0+egoObj.psiDtOpt/2.0,i*(1/(n-1)))
-            #arcade.draw_point(centerX+cos(curAngle)*(i/(n-1))*screen_width/2.0,centerY-sin(curAngle)*(i/(n-1))*screen_height/2.0,arcade.color.PINK_LAVENDER,20)
-            bottomPoints.append((centerX-CARWIDTH+cos(curAngle)*(i/(n-1))*(screen_width/2.0),centerY-sin(curAngle)*(i/(n-1))*screen_height/2.0))
+            stepper = (i/float(n)-self.streetY/STREETSIZE["y"])%1
+            stepper2 = (i/float(n)+15/400-self.streetY/STREETSIZE["y"])%1
+            curAngle=lerp(math.pi/2.0,math.pi/2.0+egoObj.psiDtOpt/2.0,stepper)
+            curAngle2=lerp(math.pi/2.0,math.pi/2.0+egoObj.psiDtOpt/2.0,stepper2)
+            #arcade.draw_point(centerX-CARWIDTH+cos(curAngle)*(stepper)*STREETSIZE["x"],centerY-sin(curAngle)*(stepper)*STREETSIZE["y"],arcade.color.WHITE,15)
+            if stepper<stepper2:
+                arcade.draw_line(centerX+cos(curAngle)*(stepper)*STREETSIZE["x"],centerY-sin(curAngle)*(stepper)*STREETSIZE["y"],centerX+cos(curAngle2)*(stepper2)*STREETSIZE["x"],centerY-sin(curAngle2)*(stepper2)*STREETSIZE["y"],arcade.color.WHITE,15)
+
+       
         
-        arcade.draw_lines(topPoints,arcade.color.WHITE,15)
-        arcade.draw_lines(bottomPoints[1:-1],arcade.color.WHITE,15)
+        
+        # if len(self.topPoints)>0:
+        #     arcade.draw_points(list(map(lambda t: (centerX-CARWIDTH+t[0],centerY+t[1]), self.topPoints)),arcade.color.WHITE,15)
+        #     arcade.draw_lines(list(map(lambda t: (centerX-CARWIDTH+t[0],centerY-t[1]), self.bottomPoints[1:-1])),arcade.color.WHITE,15)
 
         # auto
         arcade.draw_texture_rectangle(
@@ -464,7 +487,7 @@ class MyGame(arcade.Window):
             arcade.draw_text("Pause", 20, 50, arcade.color.BLACK, 14)
         # draw manager for buttons
         self.button_manager.draw()
-        self.slider_manager.draw()
+        #self.slider_manager.draw()
 
         self.alert_Driver_draw()
 
@@ -690,7 +713,7 @@ class MyGame(arcade.Window):
             button.on_click = functools.partial(self.select_car, index=i)
             self.v_box.add(button.with_space_around(top=PADDING, left=PADDING))
             
-        self.create_slider()
+        #self.create_slider()
 
             
 
@@ -701,24 +724,24 @@ class MyGame(arcade.Window):
                 child=self.v_box)
         )
 
-    def create_slider(self):
-        self.slider_manager = arcade.gui.UIManager()
-        self.slider_manager.enable()
-        STEPS = 100
-        ui_slider = UISlider(value=float(egoObj.iterator)/float(egoObj.highestit)*100, width=400, height=50)
-        label = arcade.gui.UILabel(text=f"Iteration: {egoObj.iterator:02.0f}", width=400, height=50, align="center")
+    # def create_slider(self):
+    #     self.slider_manager = arcade.gui.UIManager()
+    #     self.slider_manager.enable()
+    #     STEPS = 100
+    #     ui_slider = UISlider(value=float(egoObj.iterator)/float(egoObj.highestit)*100, width=400, height=50)
+    #     label = arcade.gui.UILabel(text=f"Iteration: {egoObj.iterator:02.0f}", width=400, height=50, align="center")
 
-        @ui_slider.event()
-        def on_change(event: UIOnChangeEvent):  
-            egoObj.setState(int(lerp(1, egoObj.highestit, ui_slider.value/100)))
-            self.objectit = int(lerp(1, objectLayer.highestit, ui_slider.value/100))
-            label.text = f"Iteration: {egoObj.iterator:02.0f}"
-            label.fit_content()
+    #     @ui_slider.event()
+    #     def on_change(event: UIOnChangeEvent):  
+    #         egoObj.setState(int(lerp(1, egoObj.highestit, ui_slider.value/100)))
+    #         self.objectit = int(lerp(1, objectLayer.highestit, ui_slider.value/100))
+    #         label.text = f"Iteration: {egoObj.iterator:02.0f}"
+    #         label.fit_content()
 
         
 
-        self.slider_manager.add(arcade.gui.UIAnchorWidget(child=ui_slider, anchor_x="left", anchor_y="bottom"))
-        self.slider_manager.add(arcade.gui.UIAnchorWidget(child=label, anchor_x="left", anchor_y="bottom"))
+    #     self.slider_manager.add(arcade.gui.UIAnchorWidget(child=ui_slider, anchor_x="left", anchor_y="bottom"))
+    #     self.slider_manager.add(arcade.gui.UIAnchorWidget(child=label, anchor_x="left", anchor_y="bottom"))
         
         
 def ui_run():
