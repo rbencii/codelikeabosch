@@ -37,10 +37,11 @@ origoy = 0
 CARSIZE = 250
 CARWIDTH = CARSIZE/2.4
 METERTOPIXEL = CARSIZE/4.65
-STREETLENGTH = 3.8
+STREETLENGTH = 2
 STREETSIZE = {"x": CARWIDTH*STREETLENGTH,"y" :CARSIZE*STREETLENGTH}
+#STREETSIZE = {"x": 600,"y" :400}
 AXLEP = 3.43
-FPS = 60.0
+FPS = 144.0
 STARTT = 0
 
 Files = [{"objektumok": "data/PSA_ADAS_W3_FC_2022-09-01_14-49_0054.MF4/Group_349.csv",
@@ -154,19 +155,21 @@ class MyGame(arcade.Window):
         egoObj = Ego(Files[choosen_file]["auto"])
         objectLayer = Objects(Files[choosen_file]["objektumok"])
 
-    def updateStreet(self):
-        self.topPoints = []
-        n=20
-        for i in range(n):
-            curAngle=lerp(math.pi/2.0,math.pi/2.0+egoObj.psiDtOpt/2.0,i*(1/(n-1)))
-            #arcade.draw_point(centerX+cos(curAngle)*(i/(n-1))*screen_width/2.0,centerY+sin(curAngle)*(i/(n-1))*screen_height/2.0,arcade.color.PINK_LAVENDER,20)
-            self.topPoints.append((cos(curAngle)*(i/(n-1))*STREETSIZE["x"],sin(curAngle)*(i/(n-1))*STREETSIZE["y"])) 
+    # def updateStreet(self):
+    #     self.topPoints = []
+    #     n=20
+        
+    #     for i in range(n):
+    #         stepper = ((float(i)/float(n-1))+self.streetY/400.0)%1
+    #         curAngle=lerp(math.pi/2.0,math.pi/2.0+egoObj.psiDtOpt/2.0,stepper)
+    #         #arcade.draw_point(centerX+cos(curAngle)*(i/(n-1))*screen_width/2.0,centerY+sin(curAngle)*(i/(n-1))*screen_height/2.0,arcade.color.PINK_LAVENDER,20)
+    #         self.topPoints.append((cos(curAngle)*(i/(n-1))*STREETSIZE["x"],sin(curAngle)*(i/(n-1))*STREETSIZE["y"])) 
 
-        self.bottomPoints = []
-        for i in range(n):
-            curAngle=lerp(math.pi/2.0,math.pi/2.0+egoObj.psiDtOpt/2.0,i*(1/(n-1)))
-            #arcade.draw_point(centerX+cos(curAngle)*(i/(n-1))*screen_width/2.0,centerY-sin(curAngle)*(i/(n-1))*screen_height/2.0,arcade.color.PINK_LAVENDER,20)
-            self.bottomPoints.append((cos(curAngle)*(i/(n-1))*STREETSIZE["x"],sin(curAngle)*(i/(n-1))*STREETSIZE["y"]))
+    #     self.bottomPoints = []
+    #     for i in range(n):
+    #         curAngle=lerp(math.pi/2.0,math.pi/2.0+egoObj.psiDtOpt/2.0,(i/(n-1)))
+    #         #arcade.draw_point(centerX+cos(curAngle)*(i/(n-1))*screen_width/2.0,centerY-sin(curAngle)*(i/(n-1))*screen_height/2.0,arcade.color.PINK_LAVENDER,20)
+    #         self.bottomPoints.append((cos(curAngle)*(i/(n-1))*STREETSIZE["x"],sin(curAngle)*(i/(n-1))*STREETSIZE["y"]))
 
     def on_update(self, delta_time):
         global alert
@@ -177,13 +180,10 @@ class MyGame(arcade.Window):
         if pause:
             if (self.timecnt % 1) > 0.8:
                 objectLayer.setState(self.objectit)
-            elif (self.timecnt % 1 ) >0.2:
-                self.updateStreet()
             return
 
         egoObj.__update__(delta_time)
         objectLayer.__update__(delta_time)
-        self.updateStreet()
         # v = s/t
         # egoObj.vxvRef = s meter / 1sec
         # s = egoObj.vxvRef
@@ -197,9 +197,8 @@ class MyGame(arcade.Window):
             else:
                 egoObj.vxvRef = 0
                 self.streetY = 0
-        #self.streetY -= egoObj.vxvRef
-        if self.streetY <= -500:
-            self.streetY = 0
+        #self.streetY -= egoObj.vxvRef*METERTOPIXEL*delta_time
+        self.streetY -= egoObj.vxvRef
         # tesztelés
         # if(egoObj.iterator >300):
         #    egoObj.EndOfList = True
@@ -236,15 +235,31 @@ class MyGame(arcade.Window):
         centerX = screen_width/2.0
         centerY = screen_height/2.0
         # Draw some boxes on the bottom so we can see how they change
-        # for i in range(41):
-        #     anglePart=lerp(egoObj.psiDtOpt/2.0,(math.pi-egoObj.psiDtOpt)/2.0,i/40.0)
-        #     arcade.draw_point(cos(anglePart)*(i-20)*27+centerX,centerY+sin(anglePart)*(i-20)*27,arcade.color.BLACK,20)
-        #          #centerX, i*STREETSIZE, STREETSIZE, STREETSIZE, self.street, lerp(degrees(egoObj.psiDtOpt),360-degrees(egoObj.psiDtOpt),1/40*(i+1)))
+        n=10
+        for i in range(n):
+            stepper = (i/float(n)+self.streetY/STREETSIZE["y"])%1
+            stepper2 = (i/float(n)+15/400+self.streetY/STREETSIZE["y"])%1
+            curAngle=lerp(math.pi/2.0,math.pi/2.0+egoObj.psiDtOpt/2.0,stepper)
+            curAngle2=lerp(math.pi/2.0,math.pi/2.0+egoObj.psiDtOpt/2.0,stepper2)
+            #arcade.draw_point(centerX-CARWIDTH+cos(curAngle)*(stepper)*STREETSIZE["x"],centerY+sin(curAngle)*(stepper)*STREETSIZE["y"],arcade.color.WHITE,15)
+            if stepper<stepper2:
+                arcade.draw_line(centerX+cos(curAngle)*(stepper)*STREETSIZE["x"],centerY+sin(curAngle)*(stepper)*STREETSIZE["y"],centerX+cos(curAngle2)*(stepper2)*STREETSIZE["x"],centerY+sin(curAngle2)*(stepper2)*STREETSIZE["y"],arcade.color.WHITE,15)
+
+        for i in range(n):
+            stepper = (i/float(n)-self.streetY/STREETSIZE["y"])%1
+            stepper2 = (i/float(n)+15/400-self.streetY/STREETSIZE["y"])%1
+            curAngle=lerp(math.pi/2.0,math.pi/2.0+egoObj.psiDtOpt/2.0,stepper)
+            curAngle2=lerp(math.pi/2.0,math.pi/2.0+egoObj.psiDtOpt/2.0,stepper2)
+            #arcade.draw_point(centerX-CARWIDTH+cos(curAngle)*(stepper)*STREETSIZE["x"],centerY-sin(curAngle)*(stepper)*STREETSIZE["y"],arcade.color.WHITE,15)
+            if stepper<stepper2:
+                arcade.draw_line(centerX+cos(curAngle)*(stepper)*STREETSIZE["x"],centerY-sin(curAngle)*(stepper)*STREETSIZE["y"],centerX+cos(curAngle2)*(stepper2)*STREETSIZE["x"],centerY-sin(curAngle2)*(stepper2)*STREETSIZE["y"],arcade.color.WHITE,15)
+
+
         
         
-        if len(self.topPoints)>0:
-            arcade.draw_lines(list(map(lambda t: (centerX-CARWIDTH+t[0],centerY+t[1]), self.topPoints)),arcade.color.WHITE,15)
-            arcade.draw_lines(list(map(lambda t: (centerX-CARWIDTH+t[0],centerY-t[1]), self.bottomPoints[1:-1])),arcade.color.WHITE,15)
+        # if len(self.topPoints)>0:
+        #     arcade.draw_points(list(map(lambda t: (centerX-CARWIDTH+t[0],centerY+t[1]), self.topPoints)),arcade.color.WHITE,15)
+        #     arcade.draw_lines(list(map(lambda t: (centerX-CARWIDTH+t[0],centerY-t[1]), self.bottomPoints[1:-1])),arcade.color.WHITE,15)
 
         # auto
         arcade.draw_texture_rectangle(
