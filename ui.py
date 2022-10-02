@@ -189,8 +189,8 @@ class MyGame(arcade.Window):
         
         global pause
         if pause:
-            if (self.timecnt % 1) > 0.8:
-                 objectLayer.setState(self.objectit)
+            # if (self.timecnt % 1) > 0.8:
+                #  objectLayer.setState(self.objectit)
             return
 
         
@@ -429,7 +429,11 @@ class MyGame(arcade.Window):
 
         #Objects
         #print(len(objectLayer.realObjects)) 
-        objectText=""
+        if pause:
+            objectText = self.objt.text
+        if not pause:
+            objectText=""
+
         objectLayer.predict.filterPred(objectLayer.realObjects)
         for i in range(len(objectLayer.realObjects)):
             objektumx, objektumy = carspacetoscreenspace(
@@ -442,69 +446,69 @@ class MyGame(arcade.Window):
             if (objectLayer.realObjects[i].keys().__contains__("type")):
                 if (objectLayer.realObjects[i]["type"] == "0"):
                     arcade.draw_point(objektumx, objektumy,
-                                      arcade.color.ROSE_RED, 20)
+                                    arcade.color.ROSE_RED, 20)
                     arcade.draw_texture_rectangle(objektumx, objektumy,CARSIZE/5.0,CARSIZE/5.0,self.unknownDetect)
                 elif (objectLayer.realObjects[i]["type"] == "1"):
                     arcade.draw_point(objektumx, objektumy,
-                                      arcade.color.DARK_BLUE, 35)
+                                    arcade.color.DARK_BLUE, 35)
                     arcade.draw_texture_rectangle(objektumx, objektumy,CARSIZE,CARSIZE,self.truckDetect)
                 elif (objectLayer.realObjects[i]["type"] == "2"):
                     arcade.draw_point(objektumx, objektumy,
-                                      arcade.color.FERN_GREEN, 29)
+                                    arcade.color.FERN_GREEN, 29)
                     arcade.draw_texture_rectangle(objektumx, objektumy,CARSIZE,CARSIZE,self.carDetect)
                 elif (objectLayer.realObjects[i]["type"] == "3"):
                     arcade.draw_point(objektumx, objektumy,
-                                      arcade.color.AMARANTH_PURPLE, 22)
+                                    arcade.color.AMARANTH_PURPLE, 22)
                     arcade.draw_texture_rectangle(objektumx, objektumy,CARSIZE,CARSIZE,self.motorbikeDetect)
                 elif (objectLayer.realObjects[i]["type"] == "4"):
                     arcade.draw_point(objektumx, objektumy,
-                                      arcade.color.ANDROID_GREEN, 22)
+                                    arcade.color.ANDROID_GREEN, 22)
                     arcade.draw_texture_rectangle(objektumx, objektumy,CARSIZE,CARSIZE,self.bicycleDetect)
                 elif (objectLayer.realObjects[i]["type"] == "5"):
                     arcade.draw_point(objektumx, objektumy,
-                                      arcade.color.BABY_PINK, 16)
+                                    arcade.color.BABY_PINK, 16)
                     arcade.draw_texture_rectangle(objektumx, objektumy,CARSIZE,CARSIZE,self.pedestrianDetect)
                 elif (objectLayer.realObjects[i]["type"] == "6"):
                     arcade.draw_point(objektumx, objektumy,
-                                      arcade.color.STAR_COMMAND_BLUE, 32)
+                                    arcade.color.STAR_COMMAND_BLUE, 32)
                     arcade.draw_texture_rectangle(objektumx, objektumy,CARSIZE,CARSIZE,self.cartruckDetect)
             else:
                 arcade.draw_point(objektumx, objektumy,
-                                  arcade.color.ROSE_RED, 25)
+                                arcade.color.ROSE_RED, 25)
                 arcade.draw_texture_rectangle(objektumx, objektumy,CARSIZE/5.0,CARSIZE/5.0,self.unknownDetect)
             # Object text
-            objectText += ("Object id: " + str(i)+" ")
-            if (objectLayer.realObjects[i].keys().__contains__("type")):
-                if (objectLayer.realObjects[i]["type"] == "0"):
-                    objectText += (
-                        "Type: unknown")
-                elif (objectLayer.realObjects[i]["type"] == "1"):
-                    objectText += ("Type: truck")
-                elif (objectLayer.realObjects[i]["type"] == "2"):
-                    objectText += ("Type: car")
-                elif (objectLayer.realObjects[i]["type"] == "3"):
-                    objectText += (
-                        "Type: motorbike")
-                elif (objectLayer.realObjects[i]["type"] == "4"):
-                    objectText += (
-                        "Type: cyclist")
-                elif (objectLayer.realObjects[i]["type"] == "5"):
-                    objectText += (
-                        "Type: pedestrian")
-                elif (objectLayer.realObjects[i]["type"] == "6"):
-                    objectText += (
-                        "Type: truck/car")
-            else:
-                objectText += ("Type: unknown")
-            objectText += (
-                " vx: " + str(objectLayer.realObjects[i]["vx"]) + "\n")
-            objectText += (
-                "X: " + str(objectLayer.realObjects[i]["x"]) + " ")
-            objectText += (
-                "Y: " + str(objectLayer.realObjects[i]["y"]) + " ")
-            objectText += (
-                "vy: " + str(objectLayer.realObjects[i]["vy"]) + "\n")
-
+            if not pause:
+                objectText += ("Object id: " + str(i)+" ")
+                if (objectLayer.realObjects[i].keys().__contains__("type")):
+                    if (objectLayer.realObjects[i]["type"] == "0"):
+                        objectText += (
+                            "Type: unknown")
+                    elif (objectLayer.realObjects[i]["type"] == "1"):
+                        objectText += ("Type: truck")
+                    elif (objectLayer.realObjects[i]["type"] == "2"):
+                        objectText += ("Type: car")
+                    elif (objectLayer.realObjects[i]["type"] == "3"):
+                        objectText += (
+                            "Type: motorbike")
+                    elif (objectLayer.realObjects[i]["type"] == "4"):
+                        objectText += (
+                            "Type: cyclist")
+                    elif (objectLayer.realObjects[i]["type"] == "5"):
+                        objectText += (
+                            "Type: pedestrian")
+                    elif (objectLayer.realObjects[i]["type"] == "6"):
+                        objectText += (
+                            "Type: truck/car")
+                else:
+                    objectText += ("Type: unknown")
+                objectText += (
+                    " vx: " + str(objectLayer.realObjects[i]["vx"]) + "\n")
+                objectText += (
+                    "X: " + str(objectLayer.realObjects[i]["x"]) + " ")
+                objectText += (
+                    "Y: " + str(objectLayer.realObjects[i]["y"]) + " ")
+                objectText += (
+                    "vy: " + str(objectLayer.realObjects[i]["vy"]) + "\n")
         #pred render
         for i in range(len(objectLayer.predict.predictions)):
             objektumx, objektumy = carspacetoscreenspace(
@@ -517,38 +521,38 @@ class MyGame(arcade.Window):
                 arcade.draw_point(objektumx, objektumy, arcade.color.BLACK, 20)
                 
             # Object text
-            objectText += ("Object id: " + str(i)+" ")
-            if (objectLayer.predict.predictions[i].keys().__contains__("type")):
-                if (objectLayer.predict.predictions[i]["type"] == "0"):
-                    objectText += (
-                        "Type: unknown")
-                elif (objectLayer.predict.predictions[i]["type"] == "1"):
-                    objectText += ("Type: truck")
-                elif (objectLayer.predict.predictions[i]["type"] == "2"):
-                    objectText += ("Type: car")
-                elif (objectLayer.predict.predictions[i]["type"] == "3"):
-                    objectText += (
-                        "Type: motorbike")
-                elif (objectLayer.predict.predictions[i]["type"] == "4"):
-                    objectText += (
-                        "Type: cyclist")
-                elif (objectLayer.predict.predictions[i]["type"] == "5"):
-                    objectText += (
-                        "Type: pedestrian")
-                elif (objectLayer.predict.predictions[i]["type"] == "6"):
-                    objectText += (
-                        "Type: truck/car")
-            else:
-                objectText += ("Type: unknown")
-            objectText += (
-                " vx: " + str(objectLayer.predict.predictions[i]["vx"]) + "\n")
-            objectText += (
-                "X: " + str(objectLayer.predict.predictions[i]["x"]) + " ")
-            objectText += (
-                "Y: " + str(objectLayer.predict.predictions[i]["y"]) + " ")
-            objectText += (
-                "vy: " + str(objectLayer.predict.predictions[i]["vy"]) + "\n")
-
+            if not pause:
+                objectText += ("Object id: " + str(i)+" ")
+                if (objectLayer.predict.predictions[i].keys().__contains__("type")):
+                    if (objectLayer.predict.predictions[i]["type"] == "0"):
+                        objectText += (
+                            "Type: unknown")
+                    elif (objectLayer.predict.predictions[i]["type"] == "1"):
+                        objectText += ("Type: truck")
+                    elif (objectLayer.predict.predictions[i]["type"] == "2"):
+                        objectText += ("Type: car")
+                    elif (objectLayer.predict.predictions[i]["type"] == "3"):
+                        objectText += (
+                            "Type: motorbike")
+                    elif (objectLayer.predict.predictions[i]["type"] == "4"):
+                        objectText += (
+                            "Type: cyclist")
+                    elif (objectLayer.predict.predictions[i]["type"] == "5"):
+                        objectText += (
+                            "Type: pedestrian")
+                    elif (objectLayer.predict.predictions[i]["type"] == "6"):
+                        objectText += (
+                            "Type: truck/car")
+                else:
+                    objectText += ("Type: unknown")
+                objectText += (
+                    " vx: " + str(objectLayer.predict.predictions[i]["vx"]) + "\n")
+                objectText += (
+                    "X: " + str(objectLayer.predict.predictions[i]["x"]) + " ")
+                objectText += (
+                    "Y: " + str(objectLayer.predict.predictions[i]["y"]) + " ")
+                objectText += (
+                    "vy: " + str(objectLayer.predict.predictions[i]["vy"]) + "\n")
         objectLayer.predict.createPred(objectLayer.realObjects, 1/FPS)
         
         """if(GPS):
