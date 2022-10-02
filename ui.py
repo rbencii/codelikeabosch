@@ -526,7 +526,7 @@ class MyGame(arcade.Window):
                 origox, origoy, 1000*objectLayer.predict.predictions[i]["x"], 1000*objectLayer.predict.predictions[i]["y"], METERTOPIXEL)
             #print(str(i),end=": ")
             # print(objectLayer.predict.predictions[i])
-            if (objectLayer.predict.predictions[i]["x"] > -0.3 and objectLayer.realObpredict.predictionsjects[i]["x"] < 0.3 and objectLayer.predict.predictions[i]["y"] < 0.3 and objectLayer.predict.predictions[i]["y"] > -0.3):
+            if (objectLayer.predict.predictions[i]["x"] > -0.3 and objectLayer.predict.predictions[i]["x"] < 0.3 and objectLayer.predict.predictions[i]["y"] < 0.3 and objectLayer.predict.predictions[i]["y"] > -0.3):
                 continue
             # Object texture
             if (objectLayer.predict.predictions[i].keys().__contains__("type")):
