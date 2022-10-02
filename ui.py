@@ -213,8 +213,7 @@ class MyGame(arcade.Window):
         #self.create_slider()
        
 
-        # print out close objects
-        closeObjectsFront = []
+        # alerts
         for obj in objectLayer.realObjects:
             if obj["x"] < 10 and obj["x"] > 0 and obj["y"] < 5 and obj["y"] > -5:
                 #closeObjectsFront.append(obj)
@@ -420,6 +419,7 @@ class MyGame(arcade.Window):
         #Objects
         #print(len(objectLayer.realObjects)) 
         objectText=""
+        objectLayer.predict.filterPred(objectLayer.realObjects)
         for i in range(len(objectLayer.realObjects)):
             objektumx, objektumy = carspacetoscreenspace(
                 origox, origoy, 1000*objectLayer.realObjects[i]["x"], 1000*objectLayer.realObjects[i]["y"], METERTOPIXEL)
@@ -494,6 +494,52 @@ class MyGame(arcade.Window):
             objectText += (
                 "vy: " + str(objectLayer.realObjects[i]["vy"]) + "\n")
 
+        #pred render
+        for i in range(len(objectLayer.predict.predictions)):
+            objektumx, objektumy = carspacetoscreenspace(
+                origox, origoy, 1000*objectLayer.predict.predictions[i]["x"], 1000*objectLayer.predict.predictions[i]["y"], METERTOPIXEL)
+            #print(str(i),end=": ")
+            # print(objectLayer.predict.predictions[i])
+            if (objectLayer.predict.predictions[i]["x"] > -0.5 and objectLayer.predict.predictions[i]["x"] < 2):
+                continue
+            # Object texture
+            if (objectLayer.predict.predictions[i].keys().__contains__("type")):
+                arcade.draw_point(objektumx, objektumy, arcade.color.BLACK, 20)
+                
+            # Object text
+            objectText += ("Object id: " + str(i)+" ")
+            if (objectLayer.predict.predictions[i].keys().__contains__("type")):
+                if (objectLayer.predict.predictions[i]["type"] == "0"):
+                    objectText += (
+                        "Type: unknown")
+                elif (objectLayer.predict.predictions[i]["type"] == "1"):
+                    objectText += ("Type: truck")
+                elif (objectLayer.predict.predictions[i]["type"] == "2"):
+                    objectText += ("Type: car")
+                elif (objectLayer.predict.predictions[i]["type"] == "3"):
+                    objectText += (
+                        "Type: motorbike")
+                elif (objectLayer.predict.predictions[i]["type"] == "4"):
+                    objectText += (
+                        "Type: cyclist")
+                elif (objectLayer.predict.predictions[i]["type"] == "5"):
+                    objectText += (
+                        "Type: pedestrian")
+                elif (objectLayer.predict.predictions[i]["type"] == "6"):
+                    objectText += (
+                        "Type: truck/car")
+            else:
+                objectText += ("Type: unknown")
+            objectText += (
+                " vx: " + str(objectLayer.predict.predictions[i]["vx"]) + "\n")
+            objectText += (
+                "X: " + str(objectLayer.predict.predictions[i]["x"]) + " ")
+            objectText += (
+                "Y: " + str(objectLayer.predict.predictions[i]["y"]) + " ")
+            objectText += (
+                "vy: " + str(objectLayer.predict.predictions[i]["vy"]) + "\n")
+
+        objectLayer.predict.createPred(objectLayer.realObjects, 1/FPS)
         
         self.objt.x=screen_width-300
         self.objt.text=objectText

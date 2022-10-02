@@ -3,6 +3,7 @@ import csv
 import math
 
 from normalize import normalize
+from predict import Predict
 
 
 class Objects:
@@ -21,6 +22,8 @@ class Objects:
         self.cameraPosX = self.database[1][-3]
         self.cameraPosY = self.database[1][-2]
         self.cameraPosZ = self.database[1][-1]
+
+        self.predict = Predict()
         for i in range(2,len(self.database[0])-3,1):
             sor = self.database[0][i].split('.')
             match sor[7]:
@@ -269,6 +272,8 @@ class Objects:
                     j["ay"] = normalize('a',self.rightRearRadarPersonas[i]["ay"])
             if(van and normalize('d',self.rightRearRadarPersonas[i]["x"])!=0 and normalize('d',self.rightRearRadarPersonas[i]["y"])!=0):
                 self.realObjects.append({"z":normalize('d',self.rightRearRadarPersonas[i]["z"]),"x":normalize('d',self.rightRearRadarPersonas[i]["x"]),"y":normalize('d',self.rightRearRadarPersonas[i]["y"]),"vx":normalize('v',self.rightRearRadarPersonas[i]["vx"]),"vy":normalize('v',self.rightRearRadarPersonas[i]["vy"]),"ax":normalize('a',self.rightRearRadarPersonas[i]["ax"]),"ay":normalize('a',self.rightRearRadarPersonas[i]["ay"])})
+        #self.predict.filterPred(self.realObjects)
+
 
 
     def setState(self, value):   
