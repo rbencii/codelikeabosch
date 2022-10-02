@@ -191,6 +191,8 @@ class MyGame(arcade.Window):
 
         egoObj.__update__(delta_time)
         objectLayer.__update__(delta_time)
+        if self.timecnt % 1 > 0.1:
+            objectLayer.predict.createPred(objectLayer.realObjects, 0.1)
         # v = s/t
         # egoObj.vxvRef = s meter / 1sec
         # s = egoObj.vxvRef
@@ -222,6 +224,14 @@ class MyGame(arcade.Window):
             if obj["x"] < 0 and obj["x"] > -10 and obj["y"] < 5 and obj["y"] > -5:
                 alert["TooCloseRear"]["status"] = True
                 alert["TooCloseRear"]["time"]= float(egoObj.T) + 2
+
+        for obj in objectLayer.realObjects:
+            if obj["x"] < 2 and obj["x"] > -0.3 and obj["y"] < 7 and obj["y"] > 0.3:
+                alert["TLeft"]["status"] = True
+                alert["TLeft"]["time"]= float(egoObj.T) + 2
+            if obj["x"] < 2 and obj["x"] > -0.3 and obj["y"] < -0.3 and obj["y"] > -7:
+                alert["TRight"]["status"] = True
+                alert["TRight"]["time"]= float(egoObj.T) + 2
 
 
         # "Stop":{"status": False,"time": 0},
@@ -425,8 +435,7 @@ class MyGame(arcade.Window):
                 origox, origoy, 1000*objectLayer.realObjects[i]["x"], 1000*objectLayer.realObjects[i]["y"], METERTOPIXEL)
             #print(str(i),end=": ")
             # print(objectLayer.realObjects[i])
-            if (objectLayer.realObjects[i]["x"] > -0.5 and objectLayer.realObjects[i]["x"] < 2):
-                continue
+            
             # Object texture
             if (objectLayer.realObjects[i].keys().__contains__("type")):
                 if (objectLayer.realObjects[i]["type"] == "0"):
@@ -500,8 +509,7 @@ class MyGame(arcade.Window):
                 origox, origoy, 1000*objectLayer.predict.predictions[i]["x"], 1000*objectLayer.predict.predictions[i]["y"], METERTOPIXEL)
             #print(str(i),end=": ")
             # print(objectLayer.predict.predictions[i])
-            if (objectLayer.predict.predictions[i]["x"] > -0.5 and objectLayer.predict.predictions[i]["x"] < 2):
-                continue
+            
             # Object texture
             if (objectLayer.predict.predictions[i].keys().__contains__("type")):
                 arcade.draw_point(objektumx, objektumy, arcade.color.BLACK, 20)
@@ -539,7 +547,7 @@ class MyGame(arcade.Window):
             objectText += (
                 "vy: " + str(objectLayer.predict.predictions[i]["vy"]) + "\n")
 
-        objectLayer.predict.createPred(objectLayer.realObjects, 1/FPS)
+        #objectLayer.predict.createPred(objectLayer.realObjects, 1/FPS)
         
         self.objt.x=screen_width-300
         self.objt.text=objectText
