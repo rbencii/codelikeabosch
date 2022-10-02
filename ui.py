@@ -587,7 +587,7 @@ class MyGame(arcade.Window):
                     (382, screen_height-462),
                     (300, screen_height-462))
         StopSign = arcade.create_polygon(point_list, arcade.color.RUBY_RED)
-        StopText = arcade.Text("STOP!!",screen_width/2.0-20,screen_height-70,arcade.color.RED, 50,bold=True)
+        StopText = arcade.Text("STOP!!",screen_width/2.0,screen_height-110,arcade.color.RED, 50,bold=True,anchor_x="center")
         point_list = ((screen_width-330, 20),
                     (screen_width-340, 30),
                     (screen_width-350, 300),
@@ -609,7 +609,7 @@ class MyGame(arcade.Window):
                     (screen_width-340, screen_height-22),
                     (screen_width-330, screen_height-10))
         DangerOnFront = arcade.create_polygon(point_list, arcade.color.SPANISH_RED)
-        SlowText = arcade.Text("Slow Down!!",screen_width/2.0-140,screen_height-100,arcade.color.RED, 50,bold=True)
+        SlowText = arcade.Text("Slow Down!!",screen_width/2.0,screen_height-130,arcade.color.RED, 50,bold=True,anchor_x="center")
         point_list = ((170, 10),
                     (180, 22),
                     (screen_width/2.0-170, 30),
@@ -617,7 +617,7 @@ class MyGame(arcade.Window):
                     (screen_width-340, 22),
                     (screen_width-330, 10))
         DangerOnRear = arcade.create_polygon(point_list, arcade.color.SPANISH_RED)
-        CarefulOnRear = arcade.Text("An object is close behind you!!",screen_width/2.0-300,screen_height-170,arcade.color.RED, 40,bold=True)
+        CarefulOnRear = arcade.Text("An object is close behind you!!",screen_width/2.0,130,arcade.color.RED, 40,bold=True,anchor_x="center")
     def alert_Driver_draw(self):
         global alert
         global StopSign, DangerOnRight, DangerOnLeft, DangerOnFront, DangerOnRear, TurnRight, TurnLeft, StopText, SlowText, CarefulOnRear
