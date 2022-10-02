@@ -39,7 +39,7 @@ origoy = 0
 CARSIZE = 250
 CARWIDTH = CARSIZE/2.4
 METERTOPIXEL = CARSIZE/4.65
-STREETLENGTH = 2
+STREETLENGTH = 2.0
 STREETSIZE = {"x": CARWIDTH*STREETLENGTH,"y" :CARSIZE*STREETLENGTH}
 #STREETSIZE = {"x": 600,"y" :400}
 AXLEP = 3.43
@@ -147,6 +147,13 @@ class MyGame(arcade.Window):
     def setup(self):
         global egoObj, objectLayer, gpsObj, origox, origoy
         self.car = arcade.load_texture(Cars[car_type])
+        self.unknownDetect = arcade.load_texture("unknown.png")
+        self.carDetect = arcade.load_texture("car3.png")
+        self.truckDetect = arcade.load_texture("truck.png")
+        self.cartruckDetect = arcade.load_texture("cartruck.png")
+        self.motorbikeDetect = arcade.load_texture("motorbike.png")
+        self.bicycleDetect = arcade.load_texture("bicycle.png")
+        self.pedestrianDetect = arcade.load_texture("pedestrian.png")
         self.streetX = -100
         self.streetY = 0
         self.slider = 100
@@ -427,27 +434,35 @@ class MyGame(arcade.Window):
                 if (objectLayer.realObjects[i]["type"] == "0"):
                     arcade.draw_point(objektumx, objektumy,
                                       arcade.color.ROSE_RED, 20)
+                    arcade.draw_texture_rectangle(objektumx, objektumy,CARSIZE/5.0,CARSIZE/5.0,self.unknownDetect)
                 elif (objectLayer.realObjects[i]["type"] == "1"):
                     arcade.draw_point(objektumx, objektumy,
                                       arcade.color.DARK_BLUE, 35)
+                    arcade.draw_texture_rectangle(objektumx, objektumy,CARSIZE,CARSIZE,self.truckDetect)
                 elif (objectLayer.realObjects[i]["type"] == "2"):
                     arcade.draw_point(objektumx, objektumy,
                                       arcade.color.FERN_GREEN, 29)
+                    arcade.draw_texture_rectangle(objektumx, objektumy,CARSIZE,CARSIZE,self.carDetect)
                 elif (objectLayer.realObjects[i]["type"] == "3"):
                     arcade.draw_point(objektumx, objektumy,
                                       arcade.color.AMARANTH_PURPLE, 22)
+                    arcade.draw_texture_rectangle(objektumx, objektumy,CARSIZE,CARSIZE,self.motorbikeDetect)
                 elif (objectLayer.realObjects[i]["type"] == "4"):
                     arcade.draw_point(objektumx, objektumy,
                                       arcade.color.ANDROID_GREEN, 22)
+                    arcade.draw_texture_rectangle(objektumx, objektumy,CARSIZE,CARSIZE,self.bicycleDetect)
                 elif (objectLayer.realObjects[i]["type"] == "5"):
                     arcade.draw_point(objektumx, objektumy,
                                       arcade.color.BABY_PINK, 16)
+                    arcade.draw_texture_rectangle(objektumx, objektumy,CARSIZE,CARSIZE,self.pedestrianDetect)
                 elif (objectLayer.realObjects[i]["type"] == "6"):
                     arcade.draw_point(objektumx, objektumy,
                                       arcade.color.STAR_COMMAND_BLUE, 32)
+                    arcade.draw_texture_rectangle(objektumx, objektumy,CARSIZE,CARSIZE,self.cartruckDetect)
             else:
                 arcade.draw_point(objektumx, objektumy,
                                   arcade.color.ROSE_RED, 25)
+                arcade.draw_texture_rectangle(objektumx, objektumy,CARSIZE/5.0,CARSIZE/5.0,self.unknownDetect)
             # Object text
             objectText += ("Object id: " + str(i)+" ")
             if (objectLayer.realObjects[i].keys().__contains__("type")):
@@ -574,6 +589,23 @@ class MyGame(arcade.Window):
         "border_color_pressed": arcade.color.DARK_GRAY,
         "font_color_pressed": arcade.color.WHITE,
     }
+
+    def on_key_press(self, key, modifiers):
+        global CARSIZE, CARWIDTH, METERTOPIXEL,STREETSIZE, STREETLENGTH
+        if key == arcade.key.UP:
+            if STREETLENGTH>0.1:
+                CARSIZE+=10
+                CARWIDTH = CARSIZE/2.4
+                METERTOPIXEL = CARSIZE/4.65
+                STREETLENGTH-=0.05
+                STREETSIZE = {"x": CARWIDTH*STREETLENGTH,"y" :CARSIZE*STREETLENGTH}
+        if key == arcade.key.DOWN:
+            if CARSIZE > 20:
+                CARSIZE-=10
+                CARWIDTH = CARSIZE/2.4
+                METERTOPIXEL = CARSIZE/4.65
+                STREETLENGTH+=0.05
+                STREETSIZE = {"x": CARWIDTH*STREETLENGTH,"y" :CARSIZE*STREETLENGTH}
 
     def pause_resume(self, event):
         global pause
