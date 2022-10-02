@@ -11,6 +11,7 @@ from arcade.gui.events import UIOnChangeEvent, UIOnClickEvent
 import os
 from ego import Ego
 from objectlayer import Objects
+from gps import GpsObjects
 
 SPRITE_SCALING = 0.5
 
@@ -31,6 +32,7 @@ egoObj = {}
 
 objectLayer = {}
 
+gpsObj = {}
 origox = 0
 origoy = 0
 
@@ -45,13 +47,13 @@ FPS = 60.0
 STARTT = 0
 
 Files = [{"objektumok": "data/PSA_ADAS_W3_FC_2022-09-01_14-49_0054.MF4/Group_349.csv",
-         "auto": 'data/PSA_ADAS_W3_FC_2022-09-01_14-49_0054.MF4/Group_416.csv'},
+         "auto": 'data/PSA_ADAS_W3_FC_2022-09-01_14-49_0054.MF4/Group_416.csv',"Latitude":'data/PSA_ADAS_W3_FC_2022-09-01_14-49_0054.MF4/Group_342.csv',"Longtitude":'data/PSA_ADAS_W3_FC_2022-09-01_14-49_0054.MF4/Group_343.csv',"HunterGps":'data/PSA_ADAS_W3_FC_2022-09-01_14-49_0054.MF4/Group_340.csv'},
          {"objektumok": "data/PSA_ADAS_W3_FC_2022-09-01_15-03_0057.MF4/Group_349.csv",
-         "auto": 'data/PSA_ADAS_W3_FC_2022-09-01_15-03_0057.MF4/Group_416.csv'},
+         "auto": 'data/PSA_ADAS_W3_FC_2022-09-01_15-03_0057.MF4/Group_416.csv',"Latitude":'data/PSA_ADAS_W3_FC_2022-09-01_14-49_0054.MF4/Group_342.csv',"Longtitude":'data/PSA_ADAS_W3_FC_2022-09-01_15-03_0057.MF4/Group_343.csv',"HunterGps":'data/PSA_ADAS_W3_FC_2022-09-01_15-03_0057.MF4/Group_340.csv'},
          {"objektumok": "data/PSA_ADAS_W3_FC_2022-09-01_15-12_0059.MF4/Group_349.csv",
-         "auto": 'data/PSA_ADAS_W3_FC_2022-09-01_15-12_0059.MF4/Group_416.csv'},
+         "auto": 'data/PSA_ADAS_W3_FC_2022-09-01_15-12_0059.MF4/Group_416.csv',"Latitude":'data/PSA_ADAS_W3_FC_2022-09-01_15-12_0059.MF4/Group_342.csv',"Longtitude":'data/PSA_ADAS_W3_FC_2022-09-01_15-12_0059.MF4/Group_343.csv',"HunterGps":'data/PSA_ADAS_W3_FC_2022-09-01_15-12_0059.MF4/Group_340.csv'},
          {"objektumok": "data/PSA_ADAS_W3_FC_2022-09-01_15-17_0060.MF4/Group_349.csv",
-         "auto": 'data/PSA_ADAS_W3_FC_2022-09-01_15-17_0060.MF4/Group_416.csv'}]
+         "auto": 'data/PSA_ADAS_W3_FC_2022-09-01_15-17_0060.MF4/Group_416.csv',"Latitude":'data/PSA_ADAS_W3_FC_2022-09-01_15-17_0060.MF4/Group_342.csv',"Longtitude":'data/PSA_ADAS_W3_FC_2022-09-01_15-17_0060.MF4/Group_343.csv',"HunterGps":'data/PSA_ADAS_W3_FC_2022-09-01_15-17_0060.MF4/Group_340.csv'}]
 Cars = ["car.png", "car2.png"]
 choosen_file = 1
 car_type = 1
@@ -143,8 +145,7 @@ class MyGame(arcade.Window):
         STARTT = egoObj.T
 
     def setup(self):
-        global egoObj
-        global objectLayer
+        global egoObj, objectLayer, gpsObj, origox, origoy
         self.car = arcade.load_texture(Cars[car_type])
         self.streetX = -100
         self.streetY = 0
@@ -154,6 +155,7 @@ class MyGame(arcade.Window):
         self.bottomPoints=[]
         egoObj = Ego(Files[choosen_file]["auto"])
         objectLayer = Objects(Files[choosen_file]["objektumok"])
+        gpsObj = GpsObjects(Files[choosen_file]["Latitude"], Files[choosen_file]["Longtitude"], Files[choosen_file]["HunterGps"])
 
     # def updateStreet(self):
     #     self.topPoints = []

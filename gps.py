@@ -1,5 +1,4 @@
 import csv
-from turtle import up
 
 class GpsObjects:
     def __init__(self, filePathLat = 'data/PSA_ADAS_W3_FC_2022-09-01_15-12_0059.MF4/Group_442.csv',filePathLong= 'data/PSA_ADAS_W3_FC_2022-09-01_15-12_0059.MF4/Group_443.csv',filePathHunterGPS='data/PSA_ADAS_W3_FC_2022-09-01_15-12_0059.MF4/Group_440.csv'):
