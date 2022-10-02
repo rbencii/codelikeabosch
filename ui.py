@@ -451,7 +451,7 @@ class MyGame(arcade.Window):
                 origox, origoy, 1000*objectLayer.realObjects[i]["x"], 1000*objectLayer.realObjects[i]["y"], METERTOPIXEL)
             #print(str(i),end=": ")
             # print(objectLayer.realObjects[i])
-            if (objectLayer.realObjects[i]["x"] > -0.5 and objectLayer.realObjects[i]["x"] < 2 and objectLayer.realObjects[i]["y"] < 1.5 and objectLayer.realObjects[i]["y"] > -1.5):
+            if (objectLayer.realObjects[i]["x"] > -0.3 and objectLayer.realObjects[i]["x"] < 0.3 and objectLayer.realObjects[i]["y"] < 0.3 and objectLayer.realObjects[i]["y"] > -0.3):
                 continue
             # Object texture
             if (objectLayer.realObjects[i].keys().__contains__("type")):
@@ -526,7 +526,8 @@ class MyGame(arcade.Window):
                 origox, origoy, 1000*objectLayer.predict.predictions[i]["x"], 1000*objectLayer.predict.predictions[i]["y"], METERTOPIXEL)
             #print(str(i),end=": ")
             # print(objectLayer.predict.predictions[i])
-            
+            if (objectLayer.predict.predictions[i]["x"] > -0.3 and objectLayer.realObpredict.predictionsjects[i]["x"] < 0.3 and objectLayer.predict.predictions[i]["y"] < 0.3 and objectLayer.predict.predictions[i]["y"] > -0.3):
+                continue
             # Object texture
             if (objectLayer.predict.predictions[i].keys().__contains__("type")):
                 arcade.draw_point(objektumx, objektumy, arcade.color.BLACK, 20)
@@ -565,12 +566,12 @@ class MyGame(arcade.Window):
                 objectText += (
                     "vy: " + str(objectLayer.predict.predictions[i]["vy"]) + "\n")
 
-        if not pause:              
+        #if not pause:              
             #objectLayer.predict.createPred(objectLayer.realObjects, 1/FPS)
         
-        """if(GPS):
-            for i in gpsObj.
-            arcade.draw_point(objektumx, objektumy, arcade.color.BLACK, 20)"""
+        # """if(GPS):
+        #     for i in gpsObj.
+        #     arcade.draw_point(objektumx, objektumy, arcade.color.BLACK, 20)"""
 
         self.objt.x=screen_width-300
         self.objt.text=objectText
