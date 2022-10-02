@@ -11,6 +11,8 @@ from arcade.gui.events import UIOnChangeEvent, UIOnClickEvent
 import os
 from ego import Ego
 from objectlayer import Objects
+from gps import GpsObjects
+
 
 SPRITE_SCALING = 0.5
 
@@ -24,6 +26,7 @@ VIEWPORT_MARGIN = 40
 
 MOVEMENT_SPEED = 5
 
+GPS = False
 
 # FILE VALASZTAS
 #egoObj = Ego(filedialog.askopenfilename())
@@ -31,6 +34,7 @@ egoObj = {}
 
 objectLayer = {}
 
+gpsObj = {}
 origox = 0
 origoy = 0
 
@@ -45,13 +49,13 @@ FPS = 60.0
 STARTT = 0
 
 Files = [{"objektumok": "data/PSA_ADAS_W3_FC_2022-09-01_14-49_0054.MF4/Group_349.csv",
-         "auto": 'data/PSA_ADAS_W3_FC_2022-09-01_14-49_0054.MF4/Group_416.csv'},
+         "auto": 'data/PSA_ADAS_W3_FC_2022-09-01_14-49_0054.MF4/Group_416.csv',"Latitude":'data/PSA_ADAS_W3_FC_2022-09-01_14-49_0054.MF4/Group_342.csv',"Longtitude":'data/PSA_ADAS_W3_FC_2022-09-01_14-49_0054.MF4/Group_343.csv',"HunterGps":'data/PSA_ADAS_W3_FC_2022-09-01_14-49_0054.MF4/Group_340.csv'},
          {"objektumok": "data/PSA_ADAS_W3_FC_2022-09-01_15-03_0057.MF4/Group_349.csv",
-         "auto": 'data/PSA_ADAS_W3_FC_2022-09-01_15-03_0057.MF4/Group_416.csv'},
+         "auto": 'data/PSA_ADAS_W3_FC_2022-09-01_15-03_0057.MF4/Group_416.csv',"Latitude":'data/PSA_ADAS_W3_FC_2022-09-01_14-49_0054.MF4/Group_342.csv',"Longtitude":'data/PSA_ADAS_W3_FC_2022-09-01_15-03_0057.MF4/Group_343.csv',"HunterGps":'data/PSA_ADAS_W3_FC_2022-09-01_15-03_0057.MF4/Group_340.csv'},
          {"objektumok": "data/PSA_ADAS_W3_FC_2022-09-01_15-12_0059.MF4/Group_349.csv",
-         "auto": 'data/PSA_ADAS_W3_FC_2022-09-01_15-12_0059.MF4/Group_416.csv'},
+         "auto": 'data/PSA_ADAS_W3_FC_2022-09-01_15-12_0059.MF4/Group_416.csv',"Latitude":'data/PSA_ADAS_W3_FC_2022-09-01_15-12_0059.MF4/Group_342.csv',"Longtitude":'data/PSA_ADAS_W3_FC_2022-09-01_15-12_0059.MF4/Group_343.csv',"HunterGps":'data/PSA_ADAS_W3_FC_2022-09-01_15-12_0059.MF4/Group_340.csv'},
          {"objektumok": "data/PSA_ADAS_W3_FC_2022-09-01_15-17_0060.MF4/Group_349.csv",
-         "auto": 'data/PSA_ADAS_W3_FC_2022-09-01_15-17_0060.MF4/Group_416.csv'}]
+         "auto": 'data/PSA_ADAS_W3_FC_2022-09-01_15-17_0060.MF4/Group_416.csv',"Latitude":'data/PSA_ADAS_W3_FC_2022-09-01_15-17_0060.MF4/Group_342.csv',"Longtitude":'data/PSA_ADAS_W3_FC_2022-09-01_15-17_0060.MF4/Group_343.csv',"HunterGps":'data/PSA_ADAS_W3_FC_2022-09-01_15-17_0060.MF4/Group_340.csv'}]
 Cars = ["car.png", "car2.png"]
 choosen_file = 1
 car_type = 1
@@ -143,8 +147,7 @@ class MyGame(arcade.Window):
         STARTT = egoObj.T
 
     def setup(self):
-        global egoObj
-        global objectLayer
+        global egoObj, objectLayer, gpsObj, origox, origoy
         self.car = arcade.load_texture(Cars[car_type])
         self.unknownDetect = arcade.load_texture("unknown.png")
         self.carDetect = arcade.load_texture("car3.png")
@@ -161,6 +164,7 @@ class MyGame(arcade.Window):
         self.bottomPoints=[]
         egoObj = Ego(Files[choosen_file]["auto"])
         objectLayer = Objects(Files[choosen_file]["objektumok"])
+        gpsObj = GpsObjects(Files[choosen_file]["Latitude"], Files[choosen_file]["Longtitude"], Files[choosen_file]["HunterGps"])
 
     # def updateStreet(self):
     #     self.topPoints = []
@@ -185,10 +189,11 @@ class MyGame(arcade.Window):
         
         global pause
         if pause:
-            if (self.timecnt % 1) > 0.8:
-                objectLayer.setState(self.objectit)
+            # if (self.timecnt % 1) > 0.8:
+                #  objectLayer.setState(self.objectit)
             return
 
+        
         egoObj.__update__(delta_time)
         objectLayer.__update__(delta_time)
         if self.timecnt % 1 > 0.1:
@@ -199,13 +204,12 @@ class MyGame(arcade.Window):
         # self.streetX-=egoObj.vyvRef
         # self.streetx-=math.cos
         if (egoObj.EndOfList):
-            if (egoObj.vxvRef < 1):
-                egoObj.vxvRef += 0.1
-            elif (egoObj.vxvRef > 1):
+            if (egoObj.vxvRef > 1):
                 egoObj.vxvRef -= 0.1
             else:
                 egoObj.vxvRef = 0
                 self.streetY = 0
+            
         self.streetY -= egoObj.vxvRef*METERTOPIXEL*delta_time
         #self.streetY -= egoObj.vxvRef
         # tesztelés
@@ -213,7 +217,8 @@ class MyGame(arcade.Window):
         #    egoObj.EndOfList = True
 
         #self.create_slider()
-       
+
+        #gpsObj.update(delta_time)
 
         # alerts
         for obj in objectLayer.realObjects:
@@ -332,6 +337,12 @@ class MyGame(arcade.Window):
         arcade.draw_point(cameraposX,cameraposY,arcade.color.LIME_GREEN,20)
         arcade.draw_text("Camera",cameraposX,cameraposY,anchor_x="center",anchor_y="center")
 
+        cameraAngle = 40
+        tmpList = [cameraAngle, 145]
+        tmpList.sort()
+        startAngle,endAngle=tuple(tmpList)
+        arcade.draw_arc_filled(cameraposX,cameraposY,800,800,(8, 247, 28, 70),startAngle,endAngle)       #rgba(8, 247, 28, 0.23)
+
 
         # radarjobbelso
         radarcarx, radarcary = carspacetoscreenspace(origox, origoy,
@@ -428,81 +439,87 @@ class MyGame(arcade.Window):
 
         #Objects
         #print(len(objectLayer.realObjects)) 
-        objectText=""
-        objectLayer.predict.filterPred(objectLayer.realObjects)
+        if pause:
+            objectText = self.objt.text
+        if not pause:
+            objectText=""
+
+        if not pause:
+          objectLayer.predict.filterPred(objectLayer.realObjects)
         for i in range(len(objectLayer.realObjects)):
             objektumx, objektumy = carspacetoscreenspace(
                 origox, origoy, 1000*objectLayer.realObjects[i]["x"], 1000*objectLayer.realObjects[i]["y"], METERTOPIXEL)
             #print(str(i),end=": ")
             # print(objectLayer.realObjects[i])
-            
+            if (objectLayer.realObjects[i]["x"] > -0.5 and objectLayer.realObjects[i]["x"] < 2 and objectLayer.realObjects[i]["y"] < 1.5 and objectLayer.realObjects[i]["y"] > -1.5):
+                continue
             # Object texture
             if (objectLayer.realObjects[i].keys().__contains__("type")):
                 if (objectLayer.realObjects[i]["type"] == "0"):
                     arcade.draw_point(objektumx, objektumy,
-                                      arcade.color.ROSE_RED, 20)
+                                    arcade.color.ROSE_RED, 20)
                     arcade.draw_texture_rectangle(objektumx, objektumy,CARSIZE/5.0,CARSIZE/5.0,self.unknownDetect)
                 elif (objectLayer.realObjects[i]["type"] == "1"):
                     arcade.draw_point(objektumx, objektumy,
-                                      arcade.color.DARK_BLUE, 35)
+                                    arcade.color.DARK_BLUE, 35)
                     arcade.draw_texture_rectangle(objektumx, objektumy,CARSIZE,CARSIZE,self.truckDetect)
                 elif (objectLayer.realObjects[i]["type"] == "2"):
                     arcade.draw_point(objektumx, objektumy,
-                                      arcade.color.FERN_GREEN, 29)
+                                    arcade.color.FERN_GREEN, 29)
                     arcade.draw_texture_rectangle(objektumx, objektumy,CARSIZE,CARSIZE,self.carDetect)
                 elif (objectLayer.realObjects[i]["type"] == "3"):
                     arcade.draw_point(objektumx, objektumy,
-                                      arcade.color.AMARANTH_PURPLE, 22)
+                                    arcade.color.AMARANTH_PURPLE, 22)
                     arcade.draw_texture_rectangle(objektumx, objektumy,CARSIZE,CARSIZE,self.motorbikeDetect)
                 elif (objectLayer.realObjects[i]["type"] == "4"):
                     arcade.draw_point(objektumx, objektumy,
-                                      arcade.color.ANDROID_GREEN, 22)
+                                    arcade.color.ANDROID_GREEN, 22)
                     arcade.draw_texture_rectangle(objektumx, objektumy,CARSIZE,CARSIZE,self.bicycleDetect)
                 elif (objectLayer.realObjects[i]["type"] == "5"):
                     arcade.draw_point(objektumx, objektumy,
-                                      arcade.color.BABY_PINK, 16)
+                                    arcade.color.BABY_PINK, 16)
                     arcade.draw_texture_rectangle(objektumx, objektumy,CARSIZE,CARSIZE,self.pedestrianDetect)
                 elif (objectLayer.realObjects[i]["type"] == "6"):
                     arcade.draw_point(objektumx, objektumy,
-                                      arcade.color.STAR_COMMAND_BLUE, 32)
+                                    arcade.color.STAR_COMMAND_BLUE, 32)
                     arcade.draw_texture_rectangle(objektumx, objektumy,CARSIZE,CARSIZE,self.cartruckDetect)
             else:
                 arcade.draw_point(objektumx, objektumy,
-                                  arcade.color.ROSE_RED, 25)
+                                arcade.color.ROSE_RED, 25)
                 arcade.draw_texture_rectangle(objektumx, objektumy,CARSIZE/5.0,CARSIZE/5.0,self.unknownDetect)
             # Object text
-            objectText += ("Object id: " + str(i)+" ")
-            if (objectLayer.realObjects[i].keys().__contains__("type")):
-                if (objectLayer.realObjects[i]["type"] == "0"):
-                    objectText += (
-                        "Type: unknown")
-                elif (objectLayer.realObjects[i]["type"] == "1"):
-                    objectText += ("Type: truck")
-                elif (objectLayer.realObjects[i]["type"] == "2"):
-                    objectText += ("Type: car")
-                elif (objectLayer.realObjects[i]["type"] == "3"):
-                    objectText += (
-                        "Type: motorbike")
-                elif (objectLayer.realObjects[i]["type"] == "4"):
-                    objectText += (
-                        "Type: cyclist")
-                elif (objectLayer.realObjects[i]["type"] == "5"):
-                    objectText += (
-                        "Type: pedestrian")
-                elif (objectLayer.realObjects[i]["type"] == "6"):
-                    objectText += (
-                        "Type: truck/car")
-            else:
-                objectText += ("Type: unknown")
-            objectText += (
-                " vx: " + str(objectLayer.realObjects[i]["vx"]) + "\n")
-            objectText += (
-                "X: " + str(objectLayer.realObjects[i]["x"]) + " ")
-            objectText += (
-                "Y: " + str(objectLayer.realObjects[i]["y"]) + " ")
-            objectText += (
-                "vy: " + str(objectLayer.realObjects[i]["vy"]) + "\n")
-
+            if not pause:
+                objectText += ("Object id: " + str(i)+" ")
+                if (objectLayer.realObjects[i].keys().__contains__("type")):
+                    if (objectLayer.realObjects[i]["type"] == "0"):
+                        objectText += (
+                            "Type: unknown")
+                    elif (objectLayer.realObjects[i]["type"] == "1"):
+                        objectText += ("Type: truck")
+                    elif (objectLayer.realObjects[i]["type"] == "2"):
+                        objectText += ("Type: car")
+                    elif (objectLayer.realObjects[i]["type"] == "3"):
+                        objectText += (
+                            "Type: motorbike")
+                    elif (objectLayer.realObjects[i]["type"] == "4"):
+                        objectText += (
+                            "Type: cyclist")
+                    elif (objectLayer.realObjects[i]["type"] == "5"):
+                        objectText += (
+                            "Type: pedestrian")
+                    elif (objectLayer.realObjects[i]["type"] == "6"):
+                        objectText += (
+                            "Type: truck/car")
+                else:
+                    objectText += ("Type: unknown")
+                objectText += (
+                    " vx: " + str(objectLayer.realObjects[i]["vx"]) + "\n")
+                objectText += (
+                    "X: " + str(objectLayer.realObjects[i]["x"]) + " ")
+                objectText += (
+                    "Y: " + str(objectLayer.realObjects[i]["y"]) + " ")
+                objectText += (
+                    "vy: " + str(objectLayer.realObjects[i]["vy"]) + "\n")
         #pred render
         for i in range(len(objectLayer.predict.predictions)):
             objektumx, objektumy = carspacetoscreenspace(
@@ -515,40 +532,46 @@ class MyGame(arcade.Window):
                 arcade.draw_point(objektumx, objektumy, arcade.color.BLACK, 20)
                 
             # Object text
-            objectText += ("Object id: " + str(i)+" ")
-            if (objectLayer.predict.predictions[i].keys().__contains__("type")):
-                if (objectLayer.predict.predictions[i]["type"] == "0"):
-                    objectText += (
-                        "Type: unknown")
-                elif (objectLayer.predict.predictions[i]["type"] == "1"):
-                    objectText += ("Type: truck")
-                elif (objectLayer.predict.predictions[i]["type"] == "2"):
-                    objectText += ("Type: car")
-                elif (objectLayer.predict.predictions[i]["type"] == "3"):
-                    objectText += (
-                        "Type: motorbike")
-                elif (objectLayer.predict.predictions[i]["type"] == "4"):
-                    objectText += (
-                        "Type: cyclist")
-                elif (objectLayer.predict.predictions[i]["type"] == "5"):
-                    objectText += (
-                        "Type: pedestrian")
-                elif (objectLayer.predict.predictions[i]["type"] == "6"):
-                    objectText += (
-                        "Type: truck/car")
-            else:
-                objectText += ("Type: unknown")
-            objectText += (
-                " vx: " + str(objectLayer.predict.predictions[i]["vx"]) + "\n")
-            objectText += (
-                "X: " + str(objectLayer.predict.predictions[i]["x"]) + " ")
-            objectText += (
-                "Y: " + str(objectLayer.predict.predictions[i]["y"]) + " ")
-            objectText += (
-                "vy: " + str(objectLayer.predict.predictions[i]["vy"]) + "\n")
+            if not pause:
+                objectText += ("Object id: " + str(i)+" ")
+                if (objectLayer.predict.predictions[i].keys().__contains__("type")):
+                    if (objectLayer.predict.predictions[i]["type"] == "0"):
+                        objectText += (
+                            "Type: unknown")
+                    elif (objectLayer.predict.predictions[i]["type"] == "1"):
+                        objectText += ("Type: truck")
+                    elif (objectLayer.predict.predictions[i]["type"] == "2"):
+                        objectText += ("Type: car")
+                    elif (objectLayer.predict.predictions[i]["type"] == "3"):
+                        objectText += (
+                            "Type: motorbike")
+                    elif (objectLayer.predict.predictions[i]["type"] == "4"):
+                        objectText += (
+                            "Type: cyclist")
+                    elif (objectLayer.predict.predictions[i]["type"] == "5"):
+                        objectText += (
+                            "Type: pedestrian")
+                    elif (objectLayer.predict.predictions[i]["type"] == "6"):
+                        objectText += (
+                            "Type: truck/car")
+                else:
+                    objectText += ("Type: unknown")
+                objectText += (
+                    " vx: " + str(objectLayer.predict.predictions[i]["vx"]) + "\n")
+                objectText += (
+                    "X: " + str(objectLayer.predict.predictions[i]["x"]) + " ")
+                objectText += (
+                    "Y: " + str(objectLayer.predict.predictions[i]["y"]) + " ")
+                objectText += (
+                    "vy: " + str(objectLayer.predict.predictions[i]["vy"]) + "\n")
 
-        #objectLayer.predict.createPred(objectLayer.realObjects, 1/FPS)
+        if not pause:              
+            #objectLayer.predict.createPred(objectLayer.realObjects, 1/FPS)
         
+        """if(GPS):
+            for i in gpsObj.
+            arcade.draw_point(objektumx, objektumy, arcade.color.BLACK, 20)"""
+
         self.objt.x=screen_width-300
         self.objt.text=objectText
         self.objt.draw()
@@ -622,7 +645,13 @@ class MyGame(arcade.Window):
             pause = True
         self.create_buttons()
 
-
+    def Gps_On_Off(self,event):
+        global GPS
+        if GPS:
+            GPS = False
+        else:
+            GPS = True
+        self.create_buttons()
     def select_file(self, event, index):
         global choosen_file 
         choosen_file = index
@@ -800,8 +829,14 @@ class MyGame(arcade.Window):
             self.v_box.add(button.with_space_around(top=PADDING, left=PADDING))
             
         #self.create_slider()
-
-            
+        """if(GPS):
+            button = arcade.gui.UIFlatButton(
+                text="GPS OFF", width=BUTTON_WIDTH, style=self.selected_button_style)
+        else:
+            button = arcade.gui.UIFlatButton(
+                text="GPS ON", width=BUTTON_WIDTH, style=self.button_style)
+        button.on_click = self.Gps_On_Off
+        self.v_box.add(button.with_space_around(top=PADDING, left=PADDING))"""
 
         self.button_manager.add(
             arcade.gui.UIAnchorWidget(
