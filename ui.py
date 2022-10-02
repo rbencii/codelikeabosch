@@ -434,7 +434,8 @@ class MyGame(arcade.Window):
         if not pause:
             objectText=""
 
-        objectLayer.predict.filterPred(objectLayer.realObjects)
+        if not pause:
+          objectLayer.predict.filterPred(objectLayer.realObjects)
         for i in range(len(objectLayer.realObjects)):
             objektumx, objektumy = carspacetoscreenspace(
                 origox, origoy, 1000*objectLayer.realObjects[i]["x"], 1000*objectLayer.realObjects[i]["y"], METERTOPIXEL)
@@ -553,7 +554,9 @@ class MyGame(arcade.Window):
                     "Y: " + str(objectLayer.predict.predictions[i]["y"]) + " ")
                 objectText += (
                     "vy: " + str(objectLayer.predict.predictions[i]["vy"]) + "\n")
-        objectLayer.predict.createPred(objectLayer.realObjects, 1/FPS)
+
+        if not pause:              
+            objectLayer.predict.createPred(objectLayer.realObjects, 1/FPS)
         
         """if(GPS):
             for i in gpsObj.
