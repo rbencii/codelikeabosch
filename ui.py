@@ -188,6 +188,24 @@ class MyGame(arcade.Window):
         self.create_slider()
        
 
+        # print out close objects
+        closeObjectsFront = []
+        for obj in objectLayer.realObjects:
+            if obj["x"] < 10 and obj["x"] > 0 and obj["y"] < 5 and obj["y"] > -5:
+                #closeObjectsFront.append(obj)
+                alert["TooCloseFront"]["status"] = True
+                alert["TooCloseFront"]["time"]= float(egoObj.T) + 2
+            if obj["x"] < 0 and obj["x"] > -10 and obj["y"] < 5 and obj["y"] > -5:
+                alert["TooCloseRear"]["status"] = True
+                alert["TooCloseRear"]["time"]= float(egoObj.T) + 2
+
+
+        # "Stop":{"status": False,"time": 0},
+        #     "TLeft": {"status": False,"time": 0},
+        #     "TRight": {"status": False,"time": 0},
+        #     "TooCloseFront": {"status": False,"time": 0},
+        #     "TooCloseRear": {"status": False,"time": 0},
+
         #ALERT SYSTEM
         """"for i in objectLayer.realObjects:
             if (i.keys().__contains__("type")):
@@ -227,13 +245,13 @@ class MyGame(arcade.Window):
         for i in range(n):
             curAngle=lerp(math.pi/2.0,math.pi/2.0+egoObj.psiDtOpt/2.0,i*(1/(n-1)))
             #arcade.draw_point(centerX+cos(curAngle)*(i/(n-1))*screen_width/2.0,centerY+sin(curAngle)*(i/(n-1))*screen_height/2.0,arcade.color.PINK_LAVENDER,20)
-            topPoints.append((centerX-CARWIDTH+cos(curAngle)*(i/(n-1))*screen_width/2.0,centerY+sin(curAngle)*(i/(n-1))*screen_height/2.0)) 
+            topPoints.append((centerX-CARWIDTH+cos(curAngle)*(i/(n-1))*(screen_width/2.0),centerY+sin(curAngle)*(i/(n-1))*screen_height/2.0)) 
 
         bottomPoints = []
         for i in range(n):
             curAngle=lerp(math.pi/2.0,math.pi/2.0+egoObj.psiDtOpt/2.0,i*(1/(n-1)))
             #arcade.draw_point(centerX+cos(curAngle)*(i/(n-1))*screen_width/2.0,centerY-sin(curAngle)*(i/(n-1))*screen_height/2.0,arcade.color.PINK_LAVENDER,20)
-            bottomPoints.append((centerX-CARWIDTH+cos(curAngle)*(i/(n-1))*screen_width/2.0,centerY-sin(curAngle)*(i/(n-1))*screen_height/2.0))
+            bottomPoints.append((centerX-CARWIDTH+cos(curAngle)*(i/(n-1))*(screen_width/2.0),centerY-sin(curAngle)*(i/(n-1))*screen_height/2.0))
         
         arcade.draw_lines(topPoints,arcade.color.WHITE,15)
         arcade.draw_lines(bottomPoints[1:-1],arcade.color.WHITE,15)
@@ -568,7 +586,7 @@ class MyGame(arcade.Window):
                     (screen_width-340, screen_height-22),
                     (screen_width-330, screen_height-10))
         DangerOnFront = arcade.create_polygon(point_list, arcade.color.SPANISH_RED)
-        SlowText = arcade.Text("Slow Down!!",screen_width/2.0-70,screen_height-70,arcade.color.RED, 50,bold=True)
+        SlowText = arcade.Text("Slow Down!!",screen_width/2.0-140,screen_height-100,arcade.color.RED, 50,bold=True)
         point_list = ((170, 10),
                     (180, 22),
                     (screen_width/2.0-170, 30),
@@ -576,13 +594,13 @@ class MyGame(arcade.Window):
                     (screen_width-340, 22),
                     (screen_width-330, 10))
         DangerOnRear = arcade.create_polygon(point_list, arcade.color.SPANISH_RED)
-        CarefulOnRear = arcade.Text("An object is close behind you!!",screen_width/2.0-70,screen_height-70,arcade.color.RED, 40,bold=True)
+        CarefulOnRear = arcade.Text("An object is close behind you!!",screen_width/2.0-300,screen_height-170,arcade.color.RED, 40,bold=True)
     def alert_Driver_draw(self):
         global alert
         global StopSign, DangerOnRight, DangerOnLeft, DangerOnFront, DangerOnRear, TurnRight, TurnLeft, StopText, SlowText, CarefulOnRear
         for i in alert:
             if alert[i]['status'] == True:
-                diff = floor(float(egoObj.T)) - alert[i]['time']
+                diff = -floor(float(egoObj.T)) + floor(alert[i]['time'])
                 if diff % 2 == 0:
                     if i == 'Stop':
                         StopSign.color = arcade.color.SPANISH_RED
