@@ -1,6 +1,8 @@
 # Code #LikeABOSCH Sofware challenge
 Code #LikeABOSCH Hackathon repo for team 6. (ebFLtCAYF in Junction)
 
+Created in 48 hours
+
 Contestants:
 - Csongor Csaba Vargha 
 - Kálmán Balázs Neszlényi 
